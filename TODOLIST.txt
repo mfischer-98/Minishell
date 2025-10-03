@@ -1,7 +1,46 @@
-- Prompt waiting for 
+
+BASIC STRUCTURE
+- Prompt waiting (loop readline)
+- addhistory function
+- EOF and exit command
 
 LEXING
+- split input into tokens (spaces, tabs)
+- special characters (| > >> < <<)
+- handle quotes ' ''  and scape sequences \
+- environment variables $VAR or &?
 
 PARSING
+- Abstract Syntax Tree (AST) or command table
+- validate syntax (things that can go wrong)
+- group tokes into commands etc
+- heredoc <<
 
-EXECUTION
+EXECUTION COMMANDS
+- ls, pwd, echo, cd , export, unset, env, exit
+- search and execute binaries using PATH
+- file redirections (> >> <)
+
+EXECUTION PIPES AND MULTIPLE COMMANDS
+- set up pipes cmd1 | cmd2
+- manage multiple child processes
+- wait for all processes to finish
+- handle exit codes
+
+SIGNALS
+- ctrl+c ctrl+d ctrl+...
+- heredoc with signals (ctrl+c inside heredoc)
+- update exit status $?
+- signal handling during child execution
+
+ERROR HANDLING & MEMORY MANAGEMENT
+- consistent error messages (like bash)
+- no leaks
+- syscall failures (fork, pipe open etc)
+- parsing errors
+
+TESTING & DEBUGGING
+- valgrind, edge cases, different shells, signals
+
+FINAL CHECKS
+- norm, headers, etc
