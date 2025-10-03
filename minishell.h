@@ -8,7 +8,5 @@
 #include <readline/history.h>
 
 int check_exit (char *prompt);
-void check_command(char *prompt);
-void cat();
 
 #endif

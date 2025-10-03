@@ -1,6 +1,6 @@
 NAME = minishell
 
-SRC = main.c exit_process/check_exit.c commands/cat.c commands/check_command.c
+SRC = main.c exit_process/check_exit.c
 
 OBJ = $(SRC:.c=.o)
 
