@@ -1,30 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/03 11:59:42 by mefische          #+#    #+#             */
-/*   Updated: 2025/10/03 11:59:42 by mefische         ###   ########.fr       */
+/*   Created: 2025/04/08 11:33:33 by mefische          #+#    #+#             */
+/*   Updated: 2025/07/02 11:56:12 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int main (void)
+size_t	ft_strlen(const char *s)
 {
-	char	*prompt;
+	int	l;
 
-	while (1)
+	l = 0;
+	if (!s)
+		return (0);
+	while (s[l])
 	{
-		prompt = readline("\x1b[32mmili_fisc@Mel\x1b[0m:~$> ");
-		if (!prompt)
-			exit(0);
-		check_command(prompt);
-		if (!check_exit(prompt))
-			exit(0); //change signal later and add error message
-		ft_printf("%s: command not found\n", prompt);
-		add_history(prompt);
+		l++;
 	}
+	return (l);
 }
+
+/*int	main()
+{
+	printf("%zu", ft_strlen("Hello"));
+}*/

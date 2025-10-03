@@ -1,30 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strlcpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/03 11:59:42 by mefische          #+#    #+#             */
-/*   Updated: 2025/10/03 11:59:42 by mefische         ###   ########.fr       */
+/*   Created: 2025/04/08 12:16:16 by mefische          #+#    #+#             */
+/*   Updated: 2025/04/11 12:23:42 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int main (void)
+size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 {
-	char	*prompt;
+	size_t	i;
 
-	while (1)
+	i = 0;
+	if (size > 0)
 	{
-		prompt = readline("\x1b[32mmili_fisc@Mel\x1b[0m:~$> ");
-		if (!prompt)
-			exit(0);
-		check_command(prompt);
-		if (!check_exit(prompt))
-			exit(0); //change signal later and add error message
-		ft_printf("%s: command not found\n", prompt);
-		add_history(prompt);
+		while (src[i] && i < size - 1)
+		{
+			dst[i] = src[i];
+			i++;
+		}
+		dst[i] = '\0';
 	}
+	return (ft_strlen(src));
 }
+
+/*int	main(void)
+{
+	//char source[] = "lorem";
+	char dest[] = "";
+
+	//printf("%d", strlcpy(dest, source, 15));
+
+	printf("%zu", ft_strlcpy(dest, "", 15));
+	printf("%s", dest);
+}*/

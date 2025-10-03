@@ -1,30 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_unsig_putnbr.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/03 11:59:42 by mefische          #+#    #+#             */
-/*   Updated: 2025/10/03 11:59:42 by mefische         ###   ########.fr       */
+/*   Created: 2025/05/02 12:10:17 by mefische          #+#    #+#             */
+/*   Updated: 2025/07/02 11:54:38 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int main (void)
+int	ft_unsig_putnbr(unsigned int n)
 {
-	char	*prompt;
+	int	count;
 
-	while (1)
+	count = 0;
+	if (n > 9)
 	{
-		prompt = readline("\x1b[32mmili_fisc@Mel\x1b[0m:~$> ");
-		if (!prompt)
-			exit(0);
-		check_command(prompt);
-		if (!check_exit(prompt))
-			exit(0); //change signal later and add error message
-		ft_printf("%s: command not found\n", prompt);
-		add_history(prompt);
+		count += ft_putnbr(n / 10);
+		count += ft_putnbr(n % 10);
 	}
+	if (n <= 9)
+	{
+		n = n + 48;
+		count += write(1, &n, 1);
+	}
+	return (count);
 }

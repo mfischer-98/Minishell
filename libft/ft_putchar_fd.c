@@ -1,30 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_putchar_fd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/03 11:59:42 by mefische          #+#    #+#             */
-/*   Updated: 2025/10/03 11:59:42 by mefische         ###   ########.fr       */
+/*   Created: 2025/04/14 17:59:30 by mefische          #+#    #+#             */
+/*   Updated: 2025/04/23 16:49:49 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int main (void)
+void	ft_putchar_fd(char c, int fd)
 {
-	char	*prompt;
-
-	while (1)
-	{
-		prompt = readline("\x1b[32mmili_fisc@Mel\x1b[0m:~$> ");
-		if (!prompt)
-			exit(0);
-		check_command(prompt);
-		if (!check_exit(prompt))
-			exit(0); //change signal later and add error message
-		ft_printf("%s: command not found\n", prompt);
-		add_history(prompt);
-	}
+	write(fd, &c, 1);
 }
+
+/*# include <fcntl.h> //for open
+
+int	main(void)
+{
+	int		fd;
+	char	c;
+
+	c = 'a';
+	fd = open("z", O_WRONLY | O_CREAT, 0644);
+	if (fd == -1)
+		return (1);
+	ft_putchar_fd(c, fd);
+	close(fd);
+	if (close(fd) == -1)
+		return (1);
+}*/

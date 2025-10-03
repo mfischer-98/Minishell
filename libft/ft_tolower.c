@@ -1,30 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_tolower.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/03 11:59:42 by mefische          #+#    #+#             */
-/*   Updated: 2025/10/03 11:59:42 by mefische         ###   ########.fr       */
+/*   Created: 2025/04/08 11:51:43 by mefische          #+#    #+#             */
+/*   Updated: 2025/04/10 10:29:20 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-
-int main (void)
+int	ft_tolower(int c)
 {
-	char	*prompt;
-
-	while (1)
-	{
-		prompt = readline("\x1b[32mmili_fisc@Mel\x1b[0m:~$> ");
-		if (!prompt)
-			exit(0);
-		check_command(prompt);
-		if (!check_exit(prompt))
-			exit(0); //change signal later and add error message
-		ft_printf("%s: command not found\n", prompt);
-		add_history(prompt);
-	}
+	if (c >= 'A' && c <= 'Z')
+		c += 32;
+	return (c);
 }
+/*
+#include <stdio.h>
+
+int	main(void)
+{
+	printf("%c", ft_tolower('C'));
+	printf("%c", ft_tolower('b'));
+	printf("%c", ft_tolower('5'));
+}*/

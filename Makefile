@@ -1,6 +1,6 @@
 NAME = minishell
 
-SRC = main.c
+SRC = main.c exit_process/check_exit.c commands/cat.c commands/check_command.c
 
 OBJ = $(SRC:.c=.o)
 
@@ -16,7 +16,7 @@ $(LIBFT):
 	$(MAKE) -C $(LIBFT_DIR)
 
 $(NAME): $(OBJ)
-		$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -o $(NAME)
+		$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -o $(NAME) -lreadline
 
 %.o: %.c
 		$(CC) $(CFLAGS) -c $< -o $@

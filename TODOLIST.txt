@@ -1,8 +1,11 @@
+PRETTY DETAILS:
+- set up makefile
+- pretty title when compiling minishell
 
 BASIC STRUCTURE
-- Prompt waiting (loop readline)
-- addhistory function
-- EOF and exit command
+- Prompt waiting (loop readline) ok
+- addhistory function ok
+- EOF and exit command ok
 
 LEXING
 - split input into tokens (spaces, tabs)

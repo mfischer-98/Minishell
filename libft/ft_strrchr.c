@@ -1,30 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strrchr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/03 11:59:42 by mefische          #+#    #+#             */
-/*   Updated: 2025/10/03 11:59:42 by mefische         ###   ########.fr       */
+/*   Created: 2025/04/10 10:31:22 by mefische          #+#    #+#             */
+/*   Updated: 2025/04/11 12:34:18 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int main (void)
+char	*ft_strrchr(const char *s, int c)
 {
-	char	*prompt;
+	int	i;
 
-	while (1)
+	c = (unsigned char) c;
+	i = 0;
+	while (s[i])
+		i++;
+	while (i >= 0)
 	{
-		prompt = readline("\x1b[32mmili_fisc@Mel\x1b[0m:~$> ");
-		if (!prompt)
-			exit(0);
-		check_command(prompt);
-		if (!check_exit(prompt))
-			exit(0); //change signal later and add error message
-		ft_printf("%s: command not found\n", prompt);
-		add_history(prompt);
+		if (s[i] == c)
+			return ((char *)&s[i]);
+		i--;
 	}
+	if (c == '\0')
+		return ((char *)&s[i]);
+	return (NULL);
 }
+
+/*int	main(void)
+{
+	char	*position;
+	const char	str[] = "abcd";
+
+	position = ft_strrchr(str, 'a');
+	printf("%s", position);
+}*/

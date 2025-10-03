@@ -1,30 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_striteri.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/03 11:59:42 by mefische          #+#    #+#             */
-/*   Updated: 2025/10/03 11:59:42 by mefische         ###   ########.fr       */
+/*   Created: 2025/04/14 17:56:18 by mefische          #+#    #+#             */
+/*   Updated: 2025/04/23 17:11:43 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int main (void)
+void	ft_striteri(char *s, void (*f)(unsigned int, char*))
 {
-	char	*prompt;
+	unsigned int	i;
 
-	while (1)
+	i = 0;
+	if (!s || !f)
+		return ;
+	while (s[i])
 	{
-		prompt = readline("\x1b[32mmili_fisc@Mel\x1b[0m:~$> ");
-		if (!prompt)
-			exit(0);
-		check_command(prompt);
-		if (!check_exit(prompt))
-			exit(0); //change signal later and add error message
-		ft_printf("%s: command not found\n", prompt);
-		add_history(prompt);
+		f(i, &s[i]);
+		i++;
 	}
 }
+
+/* #include <stdio.h>
+
+void	function(unsigned int i, char *c)
+{
+	(void) i;
+	*c = ft_tolower(*c);
+}
+
+int	main()
+{
+	char	s[] = "aASIJSIAJ";
+
+	ft_striteri(s, *function);
+	printf("%s\n", s);
+} */
