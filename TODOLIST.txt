@@ -1,5 +1,5 @@
 PRETTY DETAILS:
-- set up makefile
+- set up makefile 
 - pretty title when compiling minishell
 
 BASIC STRUCTURE
@@ -8,7 +8,7 @@ BASIC STRUCTURE
 - EOF and exit command ok
 
 LEXING
-- split input into tokens (spaces, tabs)
+- split input into tokens (spaces, tabs) ok
 - special characters (| > >> < <<)
 - handle quotes ' ''  and scape sequences \
 - environment variables $VAR or &?

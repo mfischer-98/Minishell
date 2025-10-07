@@ -20,10 +20,12 @@ int main (void)
 	{
 		prompt = readline("\x1b[32mmili_fisc@Mel\x1b[0m:~$> ");
 		if (!prompt)
-			exit(0);
-		//check_command(prompt);
+			exit(0);	
 		if (!check_exit(prompt))
+		{
 			exit(0); //change signal later and add error message
+		}
+		handle_input(prompt);
 		ft_printf("%s: command not found\n", prompt);
 		add_history(prompt);
 	}
