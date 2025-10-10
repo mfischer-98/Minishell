@@ -12,7 +12,7 @@
 
 NAME = minishell
 
-SRC = main.c exit_process/check_exit.c parsing/input_parsing.c parsing/parsing_utils.c
+SRC = main.c exit_process/check_exit.c parsing/input_parsing.c parsing/parsing_utils.c banner.c
 
 OBJ = $(SRC:.c=.o)
 

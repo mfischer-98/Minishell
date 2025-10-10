@@ -16,6 +16,7 @@ int main (void)
 {
 	char	*prompt;
 
+	print_banner();
 	while (1)
 	{
 		prompt = readline("\x1b[32mmili_fisc@Mel\x1b[0m:~$> ");
