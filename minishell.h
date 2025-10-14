@@ -16,6 +16,8 @@
 # include <stdlib.h>
 # include "libft/libft.h"
 #include <stdio.h>
+#include <unistd.h>
+#include <limits.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 
@@ -28,12 +30,23 @@
 # define RED "\033[91m"
 # define RESET "\033[0m"
 
-typedef struct s_commands
+
+typedef enum s_node_type
 {
-	char	*input;
-	char	type;
-	struct s_commands *next;
-}			t_commands;
+	NODE_WORD,
+	NODE_PIPE,
+	NODE_OUT, //REDIRECT
+	NODE_IN,
+	NODE_APPEND,
+	NODE_HERE,
+}		t_node_type;
+
+typedef struct s_tokens
+{
+	char		*input;
+	t_node_type	type;
+	struct s_tokens *next;
+}			t_tokens;
 
 // Banner
 void	print_banner(void);
@@ -41,10 +54,15 @@ void	print_banner(void);
 // Input reading
 void	handle_input(char *prompt);
 int		check_exit (char *prompt);
+void	add_type(t_tokens **tokens);
 
 // Utils and list functions
-void	list_add(t_commands **commands, char *input);
-void	free_list(t_commands *commands);
+void	list_add(t_tokens **tokens, char *input);
+void	free_list(t_tokens *tokens);
 char	**free_array(char **array, int n);
+void	print_list(t_tokens *tokens);
+
+//built ins
+void	pwd();
 
 #endif

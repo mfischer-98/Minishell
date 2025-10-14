@@ -6,29 +6,29 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 11:19:33 by mefische          #+#    #+#             */
-/*   Updated: 2025/10/07 12:20:20 by mefische         ###   ########.fr       */
+/*   Updated: 2025/10/14 12:06:11 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	list_add(t_commands **commands, char *input)
+void	list_add(t_tokens **tokens, char *input)
 {
-	t_commands	*new_node;
-	t_commands	*node;
+	t_tokens	*new_node;
+	t_tokens	*node;
 
-	new_node = malloc(sizeof(t_commands));
+	new_node = malloc(sizeof(t_tokens));
 	if (!new_node)
 	{
-		free(commands); //check later
+		free(tokens); //check later
 		return ;
 	}
 	new_node->input = input;
 	new_node->next = NULL;
-	node = *commands;
-	if (*commands == NULL)
+	node = *tokens;
+	if (*tokens == NULL)
 	{
-		*commands = new_node;
+		*tokens = new_node;
 		return ;
 	}
 	while (node->next != NULL)
@@ -50,15 +50,28 @@ char	**free_array(char **array, int n)
 	return (NULL);
 }
 
-void	free_list(t_commands *commands)
+void	print_list(t_tokens *tokens)
 {
-	t_commands	*temp;
+	t_tokens	*temp;
 
-	while (commands != NULL)
+	temp = tokens;
+	while (temp)
 	{
-		temp = commands;
-		commands = commands->next;
+		printf("Input: %s\n", temp->input);
+		printf("Type: %d\n", temp->type);
+		temp = temp->next;
+	}
+}
+
+void	free_list(t_tokens *tokens)
+{
+	t_tokens	*temp;
+
+	while (tokens != NULL)
+	{
+		temp = tokens;
+		tokens = tokens->next;
 		free(temp);
 	}
-	free(commands);
+	free(tokens);
 }
