@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 11:19:33 by mefische          #+#    #+#             */
-/*   Updated: 2025/10/14 12:06:11 by mefische         ###   ########.fr       */
+/*   Updated: 2025/10/22 12:30:44 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,20 +34,6 @@ void	list_add(t_tokens **tokens, char *input)
 	while (node->next != NULL)
 		node = node->next;
 	node->next = new_node;
-}
-
-char	**free_array(char **array, int n)
-{
-	int	i;
-
-	i = 0;
-	while (i < n)
-	{
-		free(array[i]);
-		i++;
-	}
-	free(array);
-	return (NULL);
 }
 
 void	print_list(t_tokens *tokens)

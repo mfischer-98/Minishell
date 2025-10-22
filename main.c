@@ -26,8 +26,9 @@ int main (void)
 		{
 			exit(0); //change signal later and add error message
 		}
-		handle_input(prompt);
+		create_tokens(prompt);
 		//ft_printf("%s: command not found\n", prompt);
 		add_history(prompt);
 	}
+	//free_list(tokens somewhere)
 }

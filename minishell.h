@@ -30,15 +30,17 @@
 # define RED "\033[91m"
 # define RESET "\033[0m"
 
-
 typedef enum s_node_type
 {
+	NODE_UNKNOWN,
 	NODE_WORD,
 	NODE_PIPE,
 	NODE_OUT, //REDIRECT
 	NODE_IN,
 	NODE_APPEND,
 	NODE_HERE,
+	NODE_SINGLE_QUOTE,
+	NODE_DOUBLE_QUOTE,
 }		t_node_type;
 
 typedef struct s_tokens
@@ -50,6 +52,11 @@ typedef struct s_tokens
 
 // Banner
 void	print_banner(void);
+
+//Lexing
+void	create_tokens(char *prompt);
+int		handle_quotes(t_tokens **tokens, char *str, char quote, int start);
+void	add_token(t_tokens **tokens, char *input, t_node_type type);
 
 // Input reading
 void	handle_input(char *prompt);
@@ -64,5 +71,6 @@ void	print_list(t_tokens *tokens);
 
 //built ins
 void	pwd();
+void	env();
 
 #endif
