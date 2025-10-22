@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing_utils.c                                    :+:      :+:    :+:   */
+/*   list_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 11:19:33 by mefische          #+#    #+#             */
-/*   Updated: 2025/10/22 12:30:44 by mefische         ###   ########.fr       */
+/*   Updated: 2025/10/22 16:31:36 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,4 +60,38 @@ void	free_list(t_tokens *tokens)
 		free(temp);
 	}
 	free(tokens);
+}
+
+char	**array_join(t_tokens **tokens)
+{
+	char		**array;
+	t_tokens	*temp;
+	int			i;
+	int			len;
+	
+	len = 0;
+	i = 0;
+	temp = *tokens;
+	while (temp)
+	{
+    	if (temp->type == NODE_WORD)
+        	len++;
+    	temp = temp->next;
+	}
+	array = NULL;
+	array = malloc(sizeof(char *) * (len + 1));
+	if (!array)
+		return NULL;
+	temp = *tokens;
+	while(temp)
+	{
+		if(temp->type == NODE_WORD)
+		{
+			array[i] = temp->input;
+			i++;
+		}
+		temp = temp->next;
+	}
+	array[i] = NULL;
+	return(array);
 }

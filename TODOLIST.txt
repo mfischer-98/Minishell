@@ -1,7 +1,3 @@
-PRETTY DETAILS:
-- set up makefile 
-- pretty title when compiling minishell
-
 BASIC STRUCTURE
 - Prompt waiting (loop readline) ok
 - addhistory function ok
@@ -9,12 +5,11 @@ BASIC STRUCTURE
 
 LEXING
 - split input into tokens (spaces, tabs) ok
-- special characters (| > >> < <<)
-- handle quotes ' ''  and scape sequences \
-- environment variables $VAR or &?
+- special characters (| > >> < <<) ok
+- handle quotes ' '' ok
+- environment variables $VAR or $?* later
 
 PARSING
-- Abstract Syntax Tree (AST) or command table
 - validate syntax (things that can go wrong)
 - group tokes into commands etc
 - heredoc <<

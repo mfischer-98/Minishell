@@ -12,23 +12,25 @@
 
 #include "minishell.h"
 
-int main (void)
+int main (int argc, char **argv, char **envp)
 {
-	char	*prompt;
+	t_tokens	*tokens;
+	char		*prompt;
 
+	(void)argc;
+	(void)argv;
 	print_banner();
 	while (1)
 	{
+		tokens = NULL;
 		prompt = readline("\x1b[32mmili_fisc@Mel\x1b[0m:~$> ");
 		if (!prompt)
 			exit(0);
 		if (!check_exit(prompt))
-		{
 			exit(0); //change signal later and add error message
-		}
-		create_tokens(prompt);
-		//ft_printf("%s: command not found\n", prompt);
+		create_tokens(prompt, &tokens);
+		check_command(&tokens, envp);
 		add_history(prompt);
+		free_list(tokens);
 	}
-	//free_list(tokens somewhere)
 }

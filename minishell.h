@@ -53,8 +53,8 @@ typedef struct s_tokens
 // Banner
 void	print_banner(void);
 
-//Lexing
-void	create_tokens(char *prompt);
+//bvLexing
+void	create_tokens(char *prompt, t_tokens **tokens);
 int		handle_quotes(t_tokens **tokens, char *str, char quote, int start);
 void	add_token(t_tokens **tokens, char *input, t_node_type type);
 
@@ -68,9 +68,13 @@ void	list_add(t_tokens **tokens, char *input);
 void	free_list(t_tokens *tokens);
 char	**free_array(char **array, int n);
 void	print_list(t_tokens *tokens);
+char	**array_join(t_tokens **tokens);
 
-//built ins
+// Built ins
 void	pwd();
 void	env();
+
+// Parsing
+void check_command(t_tokens **tokens, char **envp);
 
 #endif

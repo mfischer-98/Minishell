@@ -1,26 +1,24 @@
 #include "../minishell.h"
 
-void	create_tokens(char *prompt)
+void	create_tokens(char *prompt, t_tokens **tokens)
 {
-	t_tokens	*tokens;
 	int			i;
 	int			start;
 
-	tokens = NULL;
 	i = 0;
 	start = 0;
 	while (prompt[i])
 	{
 		if (prompt[i] == '"' || prompt[i] == '\'')
 		{
-			i = handle_quotes(&tokens, prompt, prompt[i], i + 1);
+			i = handle_quotes(tokens, prompt, prompt[i], i + 1);
 			while (prompt[i] == ' ')
 				i++;
 			start = i;
 		}
 		else if (prompt[i] == ' ' && i > start)
 		{
-			add_token(&tokens, ft_substr(prompt, start, i - start), NODE_UNKNOWN);
+			add_token(tokens, ft_substr(prompt, start, i - start), NODE_UNKNOWN);
 			while (prompt[i] == ' ')
 				i++;
 			start = i;
@@ -29,9 +27,8 @@ void	create_tokens(char *prompt)
 			i++;
 	}
 	if (i > start) //só criamos token se tiver espaço entre eles
-		add_token(&tokens, ft_substr(prompt, start, i - start), NODE_UNKNOWN);
-	add_type(&tokens);
-	print_list(tokens);
+		add_token(tokens, ft_substr(prompt, start, i - start), NODE_UNKNOWN);
+	add_type(tokens);
 	}
 
 int	handle_quotes(t_tokens **tokens, char *str, char quote, int start)
