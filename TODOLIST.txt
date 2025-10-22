@@ -10,6 +10,7 @@ LEXING
 - environment variables $VAR or $?* later
 
 PARSING
+- built ins (cd and env)
 - validate syntax (things that can go wrong)
 - group tokes into commands etc
 - heredoc <<
