@@ -50,10 +50,11 @@ typedef struct s_tokens
 	struct s_tokens *next;
 }			t_tokens;
 
-// typedef struct s_builtins
-// {
-// 	char		**env;
-// }			t_builtins;
+typedef struct s_env
+{
+	char	*env;
+	t_env	*next;
+}			t_env;
 
 // Banner
 void	print_banner(void);

@@ -27,7 +27,7 @@ int main (int argc, char **argv, char **envp)
 		if (!prompt)
 			exit(0);
 		if (!check_exit(prompt))
-			exit(0); //change signal later and add error message
+			exit(0); //function to check exit status
 		create_tokens(prompt, &tokens);
 		check_command(&tokens, envp);
 		add_history(prompt);
