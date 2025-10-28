@@ -50,6 +50,11 @@ typedef struct s_tokens
 	struct s_tokens *next;
 }			t_tokens;
 
+// typedef struct s_builtins
+// {
+// 	char		**env;
+// }			t_builtins;
+
 // Banner
 void	print_banner(void);
 
@@ -72,7 +77,7 @@ char	**array_join(t_tokens **tokens);
 
 // Built ins
 void	pwd();
-void	env();
+int	env(char **commandline, char **envp);
 
 // Parsing
 void check_command(t_tokens **tokens, char **envp);

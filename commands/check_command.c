@@ -15,15 +15,15 @@ void run_command(char **commandline, char **envp)
 {
 	if (!ft_strcmp(commandline[0], "pwd"))
 		pwd();
-	// else if (!ft_strcmp(command, "cd"))
+	// else if (!ft_strcmp(commandline[0], "cd"))
 	// 	cd();
-	// else if (!ft_strcmp(command, "env"))
-	// 	env();
-	// else if (!ft_strcmp(command, "echo"))
+	else if (!ft_strcmp(commandline[0], "env"))
+		env(commandline, envp);
+	// else if (!ft_strcmp(commandline[0], "echo"))
 	// 	echo();
-	// else if (!ft_strcmp(command, "export"))
+	// else if (!ft_strcmp(commandline[0], "export"))
 	// 	export();
-	// else if (!ft_strcmp(command, "unset"))
+	// else if (!ft_strcmp(commandline[0], "unset"))
 	// 	unset();
 	else
 		execve(ft_strjoin(getcwd(NULL, 0), "./minishell"), commandline, envp);
@@ -39,7 +39,7 @@ void check_command(t_tokens **tokens, char **envp)
 		run_command(array_join(tokens), envp);
 	//else if (temp->type == NODE_HERE)
 	else
-		ft_printf("Error?\n");
+		ft_printf("Error\n");
 	// while (temp)
 	// {
 	// 	if (temp->type == NODE_PIPE)
