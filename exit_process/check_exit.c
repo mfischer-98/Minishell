@@ -27,4 +27,4 @@ int check_exit (char *prompt)
 			return (ft_printf("Tem exit\n"), free(trimmed), 0);
 	free(trimmed);
 	return (1);
-}	
+}

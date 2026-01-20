@@ -4,7 +4,7 @@ void	print_banner(void)
 {
 	printf("\n"
 		   YELLOW"   ∧＿∧  \n"
-		   "  (｡"RESET"･"YELLOW"ω"RESET"･"YELLOW"｡)つ"RESET"━☆"MAGENTA" ・*"RESET"。\n"
+		   "  (｡"RESET"･"YELLOW"ω"RESET" ･"YELLOW")つ"RESET"━☆"MAGENTA" ・*"RESET"。\n"
 		   YELLOW " ⊂/    /  "MAGENTA"      ・゜\n"
 		   YELLOW"  しーＪ    "MAGENTA"      °"RESET"。+*"MAGENTA" °。\n"
 		   "                  "MAGENTA" ."RESET"・゜ \n"

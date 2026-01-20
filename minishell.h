@@ -52,14 +52,27 @@ typedef struct s_tokens
 
 typedef struct s_env
 {
-	char	*env;
-	t_env	*next;
+	char			*var;
+	struct s_env	*next;
 }			t_env;
+
+typedef struct s_local_var
+{
+	char				*var;
+	struct s_local_var	*next;
+}			t_local_var;
+
+typedef struct s_mshell_data
+{
+	t_env 		*env_var;
+	t_local_var *local_var;
+	t_tokens	*tokens;
+}			t_mshell_data;
 
 // Banner
 void	print_banner(void);
 
-//bvLexing
+//Lexing
 void	create_tokens(char *prompt, t_tokens **tokens);
 int		handle_quotes(t_tokens **tokens, char *str, char quote, int start);
 void	add_token(t_tokens **tokens, char *input, t_node_type type);
@@ -71,16 +84,29 @@ void	add_type(t_tokens **tokens);
 
 // Utils and list functions
 void	list_add(t_tokens **tokens, char *input);
+void	initialize(t_mshell_data **data, char **envp);
 void	free_list(t_tokens *tokens);
 char	**free_array(char **array, int n);
 void	print_list(t_tokens *tokens);
 char	**array_join(t_tokens **tokens);
+void	check_vars(char *token, t_local_var **local_vars);
+void	add_var(char *token, t_local_var **local_vars);
+void	print_vars(t_local_var *vars);
+void	create_envp(char **vars, t_mshell_data *data);
+void	envp_add(t_mshell_data *data, char *input);
+int		count_array(char **array);
+void	print_env(t_mshell_data *data);
+void	run_command(char **commandline, t_mshell_data *data);
+
+
 
 // Built ins
-void	pwd();
-int	env(char **commandline, char **envp);
+int		pwd();
+int		env(char **commandline, t_mshell_data *data);
+void	export(char *commandline, t_mshell_data *data);
+
 
 // Parsing
-void check_command(t_tokens **tokens, char **envp);
+void check_command(t_mshell_data *data);
 
 #endif

@@ -12,33 +12,34 @@
 
 #include "../minishell.h"
 
-void	pwd(void)
+int	pwd(void)
 {
 	char	*path;
 	
 	path = getcwd(NULL, 0);
-	printf("%s\n", path);
+	if (!path)
+		return(perror("pwd"), 1);
+	ft_printf("%s\n", path);
+	//free(path);
+	return (0);
 }
 
-int	env(char **commandline, char **envp)
+int	env(char **commandline, t_mshell_data *data)
 {
 	int	i;
 
 	i = 0;
-	if (!envp)
+	if (!data->env_var)
 	{
 		perror("Error in environment variables.");
-		return(1); //check exit status
+		return(0);
 	}
 	if (commandline[1])
 	{
-		printf("env: '%s': No such file or directory\n", commandline[1]);
-		return(1);
+		ft_printf("env: '%s': No such file or directory\n", commandline[1]);
+		return(127); //0 on success, 127 if arguments provided
 	}
-	while (envp[i])
-	{
-		printf("%s\n", envp[i]);
-		i++;
-	}
+	print_env(data);
+	//oldpwd, shell level e _="" need cd
 	return(0);
 }
