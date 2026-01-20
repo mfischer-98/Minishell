@@ -4,6 +4,7 @@
 //ver se tem =
 //ver se tem espacos
 //tem que ser export NAME ou export NAME=VALUE
+//ordem alfabetica e "declare -x VAR"
 //se for name
 	//ver se ja exite na env, ver se ja esta no local var
 		//se ja exite na env, nao faz nada
@@ -20,6 +21,10 @@
 
 void	export(char *commandline, t_mshell_data *data)
 {
+	if (ft_strchr(commandline, "="))
+		equal_export();
+	if (ft_strchr(commandline, " "))
+		equal_export();
 	printf("Command: %s", commandline);
 	print_env(data);
 }
