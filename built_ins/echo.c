@@ -12,3 +12,44 @@
 
 #include "../minishell.h"
 
+static int	ft_flag(char *arg)
+{
+	int	i;
+
+    i = 1;
+	if (!arg || arg[0] != '-' || arg[1] != 'n')
+		return (0);
+	while (arg[i])
+	{
+		if (arg[i] != 'n')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+int	ft_echo(char **arg)
+{
+	int	i;
+	int	j;
+
+	if (!arg)
+		return (ft_putchar_fd('\n', 1), 0);
+	j = 1;
+	i = 1;
+	while (arg[i] && ft_flag(arg[i]))
+	{
+		j = 0;
+		i++;
+	}
+	while (arg[i])
+	{
+		ft_putstr_fd(arg[i], 1);
+		if (arg[i + 1])
+			ft_putchar_fd(' ', 1);
+		i++;
+	}
+	if (j)
+		ft_putchar_fd('\n', 1);
+	return (0);
+}

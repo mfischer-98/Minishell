@@ -8,8 +8,8 @@ void run_command(char **commandline, t_mshell_data *data)
 	// 	cd();
 	else if (!ft_strcmp(commandline[0], "env"))
 		env(commandline, data);
-	// else if (!ft_strcmp(commandline[0], "echo"))
-	// 	echo();
+	else if (!ft_strcmp(commandline[0], "echo"))
+		ft_echo(commandline);
 	else if (!ft_strcmp(commandline[0], "export"))
 		export(commandline[1], data);
 	// else if (!ft_strcmp(commandline[0], "unset"))

@@ -103,6 +103,7 @@ void	run_command(char **commandline, t_mshell_data *data);
 // Built ins
 int		pwd();
 int		env(char **commandline, t_mshell_data *data);
+int		ft_echo(char **arg);
 void	export(char *commandline, t_mshell_data *data);
 
 
