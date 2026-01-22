@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/14 12:31:26 by mefische          #+#    #+#             */
-/*   Updated: 2025/10/28 12:25:50 by mefische         ###   ########.fr       */
+/*   Updated: 2026/01/22 15:36:11 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,6 @@ int	pwd(void)
 
 int	env(char **commandline, t_mshell_data *data)
 {
-	int	i;
-
-	i = 0;
 	if (!data->env_var)
 	{
 		perror("Error in environment variables.");

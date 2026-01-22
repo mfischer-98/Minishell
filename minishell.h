@@ -56,16 +56,9 @@ typedef struct s_env
 	struct s_env	*next;
 }			t_env;
 
-typedef struct s_local_var
-{
-	char				*var;
-	struct s_local_var	*next;
-}			t_local_var;
-
 typedef struct s_mshell_data
 {
 	t_env 		*env_var;
-	t_local_var *local_var;
 	t_tokens	*tokens;
 }			t_mshell_data;
 
@@ -89,9 +82,6 @@ void	free_list(t_tokens *tokens);
 char	**free_array(char **array, int n);
 void	print_list(t_tokens *tokens);
 char	**array_join(t_tokens **tokens);
-void	check_vars(char *token, t_local_var **local_vars);
-void	add_var(char *token, t_local_var **local_vars);
-void	print_vars(t_local_var *vars);
 void	create_envp(char **vars, t_mshell_data *data);
 void	envp_add(t_mshell_data *data, char *input);
 int		count_array(char **array);
