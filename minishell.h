@@ -87,6 +87,7 @@ void	envp_add(t_mshell_data *data, char *input);
 int		count_array(char **array);
 void	print_env(t_mshell_data *data);
 void	run_command(char **commandline, t_mshell_data *data);
+t_env*	ft_env_var(t_env *env_list, char *var_name);
 
 
 
@@ -94,7 +95,9 @@ void	run_command(char **commandline, t_mshell_data *data);
 int		pwd();
 int		env(char **commandline, t_mshell_data *data);
 int		ft_echo(char **arg);
+int		ft_cd(t_mshell_data *data, char **args);
 void	export(char *commandline, t_mshell_data *data);
+void	ft_set_env_var(t_env **env_list, char *var_name, char *value);
 
 
 // Parsing
