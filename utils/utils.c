@@ -71,3 +71,32 @@ void	print_vars(t_local_var *vars)
 		temp = temp->next;
 	}
 }
+
+void	ft_set_env_var(t_env **env_list, char *var_name, char *value)
+{
+	t_env	*current;
+	char	*new_entry;
+	size_t	len;
+
+	if (!env_list || !var_name || !value)
+		return ;
+	current = *env_list;
+	while (current)
+	{
+		if (ft_strncmp(current->var, var_name, ft_strlen(var_name)) == 0
+			&& current->var[ft_strlen(var_name)] == '=')
+		{
+			len = ft_strlen(var_name) + ft_strlen(value) + 2;
+			new_entry = malloc(len);
+			if (!new_entry)
+				return ;
+			ft_strlcpy(new_entry, var_name, len);
+			ft_strlcat(new_entry, "=", len);
+			ft_strlcat(new_entry, value, len);
+			free(current->var);
+			current->var = new_entry;
+			return ;
+		}
+		current = current->next;
+	}
+}
