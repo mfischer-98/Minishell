@@ -1,25 +1,75 @@
 #include "../minishell.h"
 
-//commandline = ver se tem 2 aspas
-//ver se tem =
-//ver se tem espacos
-//tem que ser export NAME ou export NAME=VALUE
-//se for name
-	//ver se ja exite na env, ver se ja esta no local var
-		//se ja exite na env, nao faz nada
-		//se ja exite no local var, passa pro env e remove do local var
-		//se nao exite em nenhum dos dois, cria na env com valor vazio
-//se for name=value
-	//ver se ja exite na env, ver se ja esta no local var
-		//se ja exite na env, atualiza o valor
-		//se ja exite no local var, passa pro env e remove do local var e atualiza o valor
-		//se nao exite em nenhum dos dois, cria na env com o valor
-//error messages:
-	//export: 'NAME=VALUE': not a valid identifier
-	//export: 'NAME': not a valid identifier
+//print env in alphabetical order function, need to add
 
-void	export(char *commandline, t_mshell_data *data)
+int	handle_no_equal(char *arg, t_mshell_data *data)
 {
-	printf("Command: %s", commandline);
-	print_env(data);
+	if (!valid_name(arg))
+	{
+		ft_printf("minishell: export: ' %s': is not a valid identifier\n", arg);
+		free(name);
+		return (1);
+	}
+	return (add_env_list(name, NULL, data)); //no value
+}
+
+int	handle_equal(char *arg, t_mshell_data *data)
+{
+	char	*equal_sign;
+	char	*name;
+	char	*value;
+	int		result;
+
+	equal_sign = ft_strchr(arg, '=');
+	name = ft_substr(arg, 0, equal_sign - arg);
+	if (!name)
+		return (1); //nao tem nada antes do igual
+	if (!identifier_valid(name))
+	{
+		ft_printf("minishell: export: ' %s': is not a valid identifier\n", arg);
+		free(name);
+		return (1);
+	}
+	value = ft_no_quotes(equal_sign++);
+	if (!check_env_list(name, data)); //0 = nao está na lista
+		add_env_list(name, value, data);
+	else
+		update_env_list(name, value, data);
+	free(name);
+	free(value);
+	return (result);
+}
+
+int	process_export(char **commandline, t_mshell_data *data)
+{
+	if (arg[0] == '-')
+	{
+		//erro
+		return (2);
+	}
+	//append nao entendi
+	if (ft_strchr(commandline, '='))
+		return (handle_equal(commandline, data));
+	return (handle_no_equal(commandline, data));
+}
+
+int	export(char **commandline, t_mshell_data *data)
+	int	status;
+	int	final_status;
+	int	i;
+
+	if (!data || !commandline)
+		return (1);
+	if (!commandline[1] || !*commandline[1])
+		return (print_env(data)); //this has to be in alphabetical order, still need to make that function
+	status = 0;
+	i = 0;
+	while (commandline[i])
+	{
+		status = process_export(commandline[i], data);
+		if (status != 0)
+			final_status = status; //nao sei ainda ou final status
+		i++;
+	}
+	return (final_status);
 }
