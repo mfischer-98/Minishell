@@ -2,6 +2,8 @@
 
 int	identifier_valid(char *str)
 {
+	int	i;
+
 	if (!str || !*str)
 		return (0);
 	if (!ft_isalpha(str[0]) && str[0] != '_')
@@ -24,7 +26,7 @@ char	*remove_quotes(char *str)
 	if (!str)
 		return (NULL);
 	len = ft_strlen(str);
-	if (len >= 2 && ((str[0] == '"' && str[len - 1] == '"'))
+	if (((len >= 2) && ((str[0] == '"' && str[len - 1] == '"')))
 		|| (str[0] == '\'' && str[len - 1] == '\''))
 		return (ft_substr(str, 1, len - 2));
 	return (ft_strdup(str));
@@ -43,15 +45,14 @@ int	check_env_list(char *str, t_mshell_data *data)
 	temp = data->env_var;
 	while (temp)
 	{
-		if (!ft_strcmp(str, temp.var))
+		if (!ft_strcmp(str, temp->var))
 			return (1);
 		temp = temp->next;
 	}
 	return (0);
 }
 
-int	add_env_list(char	*str, int value, t_mshell_data *data) //add node to list
-{}
+int	add_env_list(char	*str, int value, t_mshell_data *data); //add node to list
+
 
 int	update_env_list(char	*str, int value, t_mshell_data *data); //update value in lis
-{}

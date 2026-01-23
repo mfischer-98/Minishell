@@ -10,10 +10,10 @@ void run_command(char **commandline, t_mshell_data *data)
 		env(commandline, data);
 	else if (!ft_strcmp(commandline[0], "echo"))
 		echo(commandline);
-/* 	else if (!ft_strcmp(commandline[0], "export"))
+	else if (!ft_strcmp(commandline[0], "export"))
 		export(commandline, data);
 	else if (!ft_strcmp(commandline[0], "unset"))
-	 	unset(commandline, data); */
+	 	unset(commandline, data);
 	/* else
 		execve(ft_strjoin(getcwd(NULL, 0), "./minishell"), commandline, envp); */
 }

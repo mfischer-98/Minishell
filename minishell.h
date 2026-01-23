@@ -75,6 +75,9 @@ void	handle_input(char *prompt);
 int		check_exit (char *prompt);
 void	add_type(t_tokens **tokens);
 
+// Parsing
+void check_command(t_mshell_data *data);
+
 // Utils and list functions
 void	list_add(t_tokens **tokens, char *input);
 void	initialize(t_mshell_data **data, char **envp);
@@ -87,7 +90,7 @@ void	envp_add(t_mshell_data *data, char *input);
 int		count_array(char **array);
 void	print_env(t_mshell_data *data);
 void	run_command(char **commandline, t_mshell_data *data);
-t_env*	ft_env_var(t_env *env_list, char *var_name);
+t_env	*ft_env_var(t_env *env_list, char *var_name);
 
 
 
@@ -96,11 +99,17 @@ int		pwd();
 int		env(char **commandline, t_mshell_data *data);
 int		echo(char **arg);
 int		cd(t_mshell_data *data, char **args);
-/* void	export(char *commandline, t_mshell_data *data); */
-void	ft_set_env_var(t_env **env_list, char *var_name, char *value);
+int		export(char **commandline, t_mshell_data *data);
+int		handle_no_equal(char *arg, t_mshell_data *data);
+int		handle_equal(char *arg, t_mshell_data *data);
+int		process_export(char *commandline, t_mshell_data *data);
+int		identifier_valid(char *str);
+char	*remove_quotes(char *str);
+int		check_env_list(char *str, t_mshell_data *data);
+int		add_env_list(char	*str, int value, t_mshell_data *data);
+int		update_env_list(char	*str, int value, t_mshell_data *data);
+void	unset_env(char *str, t_mshell_data *data);
+int		unset(char **commandline, t_mshell_data *data);
 
-
-// Parsing
-void check_command(t_mshell_data *data);
 
 #endif

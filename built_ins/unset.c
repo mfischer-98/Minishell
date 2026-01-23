@@ -10,32 +10,43 @@
 
 void	unset_env(char *str, t_mshell_data *data)
 {
-	t_env	*temp;
+	t_env   *temp;
+    t_env   *prev;
+	int		len;
 
-	if (!str || !data)
-		return ;
-	if (check_env_list(str))
-		return ;
-	temp = data->env_var;
+    if (!str || !data || !data->env_var)
+        return ;
+    prev = NULL;
+    temp = data->env_var;
+	len = ft_strlen(str);
 	while (temp)
-	{
-		if (!ft_strcmp(str, temp.var))
-			//remove node
-		temp = temp->next;
-	}
+    {
+        if (!ft_strcmp(str, temp->var) || (!ft_strncmp(str, temp->var, len) && temp->var[len] == '='))
+        {
+            if (!prev)
+                data->env_var = temp->next;
+            else
+                prev->next = temp->next;
+            free(temp->var);
+            free(temp);
+            return ;
+        }
+        prev = temp;
+        temp = temp->next;
+    }
 }
 
 int	unset(char **commandline, t_mshell_data *data)
 {
-	int	;
+	int	i;
 
 	if (!data)
-		return (1)
+		return (1);
 	if (!commandline[1] || !commandline)
 		return (0);
 	if (commandline[1][0] == '-' && commandline[1][1] != '\0')
 	{
-		ft_printf("unset: -%s: invalid option in minishell\n", commandline[1][1])
+		ft_printf("unset: -%s: invalid option in minishell\n", commandline[1][1]);
 		return (2);
 	}
 	i = 1;
