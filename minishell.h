@@ -94,9 +94,9 @@ t_env*	ft_env_var(t_env *env_list, char *var_name);
 // Built ins
 int		pwd();
 int		env(char **commandline, t_mshell_data *data);
-int		ft_echo(char **arg);
-int		ft_cd(t_mshell_data *data, char **args);
-void	export(char *commandline, t_mshell_data *data);
+int		echo(char **arg);
+int		cd(t_mshell_data *data, char **args);
+/* void	export(char *commandline, t_mshell_data *data); */
 void	ft_set_env_var(t_env **env_list, char *var_name, char *value);
 
 

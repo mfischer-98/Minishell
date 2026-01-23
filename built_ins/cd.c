@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: ntomas-g <ntomas-g@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/14 14:12:02 by mefische          #+#    #+#             */
-/*   Updated: 2025/10/14 14:12:54 by mefische         ###   ########.fr       */
+/*   Updated: 2026/01/23 11:01:53 by ntomas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ static int	ft_try_cdpath(t_mshell_data *data, char *dest, char *old_pwd)
 	return (-1);
 }
 
-int	ft_cd(t_mshell_data *data, char **args)
+int	cd(t_mshell_data *data, char **args)
 {
 	char	*dest;
 	char	*old_pwd;

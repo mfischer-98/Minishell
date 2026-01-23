@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: ntomas-g <ntomas-g@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/14 12:28:00 by mefische          #+#    #+#             */
-/*   Updated: 2025/10/14 12:28:34 by mefische         ###   ########.fr       */
+/*   Updated: 2026/01/23 11:31:40 by ntomas-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static int	ft_flag(char *arg)
 	return (1);
 }
 
-int	ft_echo(char **arg)
+int	echo(char **arg)
 {
 	int	i;
 	int	j;

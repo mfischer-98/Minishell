@@ -4,16 +4,16 @@ void run_command(char **commandline, t_mshell_data *data)
 {
 	if (!ft_strcmp(commandline[0], "pwd"))
 		pwd();
-	// else if (!ft_strcmp(commandline[0], "cd"))
-	// 	cd();
+	/* else if (!ft_strcmp(commandline[0], "cd"))
+	 	cd(data, commandline); */
 	else if (!ft_strcmp(commandline[0], "env"))
 		env(commandline, data);
-	// else if (!ft_strcmp(commandline[0], "echo"))
-	// 	ft_echo(commandline);
-	else if (!ft_strcmp(commandline[0], "export"))
+	else if (!ft_strcmp(commandline[0], "echo"))
+		echo(commandline);
+/* 	else if (!ft_strcmp(commandline[0], "export"))
 		export(commandline, data);
 	else if (!ft_strcmp(commandline[0], "unset"))
-	 	unset(commandline, data);
+	 	unset(commandline, data); */
 	/* else
 		execve(ft_strjoin(getcwd(NULL, 0), "./minishell"), commandline, envp); */
 }
