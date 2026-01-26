@@ -82,32 +82,34 @@ void check_command(t_mshell_data *data);
 void	list_add(t_tokens **tokens, char *input);
 void	initialize(t_mshell_data **data, char **envp);
 void	free_list(t_tokens *tokens);
-char	**free_array(char **array, int n);
+void	free_array(char **array, int n);
 void	print_list(t_tokens *tokens);
 char	**array_join(t_tokens **tokens);
 void	create_envp(char **vars, t_mshell_data *data);
 void	envp_add(t_mshell_data *data, char *input);
-int		count_array(char **array);
+int		env_size(t_env *env_list);
 void	print_env(t_mshell_data *data);
 void	run_command(char **commandline, t_mshell_data *data);
 t_env	*ft_env_var(t_env *env_list, char *var_name);
-
-
 
 // Built ins
 int		pwd();
 int		env(char **commandline, t_mshell_data *data);
 int		echo(char **arg);
 int		cd(t_mshell_data *data, char **args);
+// export
 int		export(char **commandline, t_mshell_data *data);
 int		handle_no_equal(char *arg, t_mshell_data *data);
 int		handle_equal(char *arg, t_mshell_data *data);
 int		process_export(char *commandline, t_mshell_data *data);
 int		identifier_valid(char *str);
-char	*remove_quotes(char *str);
+char	**list_to_array(t_env *env_list, int size);
+void	bubble_sort_export(char **env_array, int size);
+int		print_export(t_mshell_data *data);
 int		check_env_list(char *str, t_mshell_data *data);
-int		add_env_list(char	*str, int value, t_mshell_data *data);
-int		update_env_list(char	*str, int value, t_mshell_data *data);
+int		add_env_list(char *str, t_mshell_data *data);
+int		update_env_list(char *str, t_mshell_data *data);
+// unset
 void	unset_env(char *str, t_mshell_data *data);
 int		unset(char **commandline, t_mshell_data *data);
 

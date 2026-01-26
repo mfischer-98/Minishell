@@ -18,20 +18,6 @@ int	identifier_valid(char *str)
 	return (1);
 }
 
-char	*remove_quotes(char *str)
-{
-	//deixamos com quotes quando fizemos os tokens? se nao tirar isso :)
-	int	len;
-
-	if (!str)
-		return (NULL);
-	len = ft_strlen(str);
-	if (((len >= 2) && ((str[0] == '"' && str[len - 1] == '"')))
-		|| (str[0] == '\'' && str[len - 1] == '\''))
-		return (ft_substr(str, 1, len - 2));
-	return (ft_strdup(str));
-}
-
 // Checks env list and sees if there is a match
 // 	return 1 = match
 // 	return 0 = no match
@@ -39,20 +25,25 @@ char	*remove_quotes(char *str)
 int	check_env_list(char *str, t_mshell_data *data)
 {
 	t_env	*temp;
+	int		len;
 
 	if (!data || !data->env_var || !str)
 		return (0);
+	len = ft_strlen(str);
 	temp = data->env_var;
 	while (temp)
 	{
-		if (!ft_strcmp(str, temp->var))
+		if (!ft_strcmp(str, temp->var) || 
+            (!ft_strncmp(str, temp->var, len) && temp->var[len] == '='))
 			return (1);
 		temp = temp->next;
 	}
 	return (0);
 }
 
-int	add_env_list(char *str, t_mshell_data *data); //add node to list
+//vou precisar de uma check quotes para o valor da variavel, se a pessoa nao colocar, precisamos colocar nós
+
+int	add_env_list(char *str, t_mshell_data *data) //add node to list
 {
 	t_env	*temp;
 	t_env	*new_node;
@@ -61,32 +52,37 @@ int	add_env_list(char *str, t_mshell_data *data); //add node to list
 		return (0);
 	new_node = malloc(sizeof(t_env));
 	if (!new_node)
+	return (1);
+	new_node->var = str;
+	new_node->next = NULL;
+	if (!data->env_var) //empty list edge case
 	{
-		perror("malloc");
-		return (1);
+		data->env_var = new_node;
+		return (0);
 	}
 	temp = data->env_var;
-	while (temp)
+	while (temp->next)
 		temp = temp->next;
-	temp->next = *new_node;
-	new_node->next = NULL;
-	new_node->var = str;
+	temp->next = new_node;
 	return (0);
 }
 
 int	update_env_list(char *str, t_mshell_data *data)
 {
 	t_env	*temp;
-	int		len;
+	int		name_len;
 
 	if (!str || !data || !data->env_var)
-		return ;
+		return (1);
 	temp = data->env_var;
-	len = ft_strlen(str);
+	name_len = 0;
+	while (str[name_len] && str[name_len] != '=')
+		name_len++;
 	while (temp)
 	{
-		if (!ft_strncmp(str, temp->var, len) && (temp->var[len] == '=' || temp->var[len] == '\0')) //\n?
+		if (!ft_strncmp(str, temp->var, name_len) && (temp->var[name_len] == '=' || temp->var[name_len] == '\0')) //\n?
 		{
+			free(temp->var);
 			temp->var = str;
 			return (0);
 		}

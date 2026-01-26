@@ -33,14 +33,19 @@ void	envp_add(t_mshell_data *data, char *input)
 	node->next = new_node;
 }
 
-int count_array(char **array) //nao usei
+int env_size(t_env *env_list)
 {
-    int i;
+	t_env	*temp;
+	int		size;
 
-    i = 0;
-    while(array[i])
-        i++;
-    return (i);
+	temp = env_list;
+	size = 0;
+	while (temp)
+	{
+		temp = temp->next;
+		size++;
+	}
+	return (size);
 }
 
 void	print_env(t_mshell_data *data)
