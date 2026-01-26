@@ -52,7 +52,45 @@ int	check_env_list(char *str, t_mshell_data *data)
 	return (0);
 }
 
-int	add_env_list(char	*str, int value, t_mshell_data *data); //add node to list
+int	add_env_list(char *str, t_mshell_data *data); //add node to list
+{
+	t_env	*temp;
+	t_env	*new_node;
 
+	if (!data || !data->env_var || !str)
+		return (0);
+	new_node = malloc(sizeof(t_env));
+	if (!new_node)
+	{
+		perror("malloc");
+		return (1);
+	}
+	temp = data->env_var;
+	while (temp)
+		temp = temp->next;
+	temp->next = *new_node;
+	new_node->next = NULL;
+	new_node->var = str;
+	return (0);
+}
 
-int	update_env_list(char	*str, int value, t_mshell_data *data); //update value in lis
+int	update_env_list(char *str, t_mshell_data *data)
+{
+	t_env	*temp;
+	int		len;
+
+	if (!str || !data || !data->env_var)
+		return ;
+	temp = data->env_var;
+	len = ft_strlen(str);
+	while (temp)
+	{
+		if (!ft_strncmp(str, temp->var, len) && (temp->var[len] == '=' || temp->var[len] == '\0')) //\n?
+		{
+			temp->var = str;
+			return (0);
+		}
+		temp = temp->next;
+	}
+	return (1);
+}
