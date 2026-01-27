@@ -2,20 +2,38 @@
 
 int	identifier_valid(char *str)
 {
-	int	i;
+	int		i;
+	char	*start;
 
 	if (!str || !*str)
 		return (0);
+	i = 0;
+	start = (char *)str;
+	if (*start == '"' || *start == '\'')
+	{
+		start++;
+		i = 1;
+	}
 	if (!ft_isalpha(str[0]) && str[0] != '_')
 		return (0);
-	i = 0;
-	while (str[i])
+	while (start[i])
 	{
 		if (!ft_isalnum(str[i]) && str[i] != '_')
 			return (0);
 		i++;
 	}
 	return (1);
+}
+
+char	*trim_quotes(char *value)
+{
+	int		len;
+
+	len = ft_strlen(value);
+	if ((value[0] == '"' && value[len - 1] == '"') ||
+		(value[0] == '\'' && value[len - 1] == '\''))
+		return (ft_substr(value, 1, len - 2));
+	return (ft_strdup(value));
 }
 
 // Checks env list and sees if there is a match
@@ -40,8 +58,6 @@ int	check_env_list(char *str, t_mshell_data *data)
 	}
 	return (0);
 }
-
-//vou precisar de uma check quotes para o valor da variavel, se a pessoa nao colocar, precisamos colocar nós
 
 int	add_env_list(char *str, t_mshell_data *data) //add node to list
 {
@@ -80,10 +96,13 @@ int	update_env_list(char *str, t_mshell_data *data)
 		name_len++;
 	while (temp)
 	{
-		if (!ft_strncmp(str, temp->var, name_len) && (temp->var[name_len] == '=' || temp->var[name_len] == '\0')) //\n?
+		if (!ft_strncmp(str, temp->var, name_len) && ((temp->var[name_len] == '=' || temp->var[name_len] == '\0')))
 		{
-			free(temp->var);
-			temp->var = str;
+			if (ft_strchr(str, '='))
+			{
+				free(temp->var);
+				temp->var = str;
+			}
 			return (0);
 		}
 		temp = temp->next;

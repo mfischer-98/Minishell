@@ -121,6 +121,7 @@ int		print_export(t_mshell_data *data);
 int		check_env_list(char *str, t_mshell_data *data);
 int		add_env_list(char *str, t_mshell_data *data);
 int		update_env_list(char *str, t_mshell_data *data);
+char	*trim_quotes(char *value);
 // unset
 void	unset_env(char *str, t_mshell_data *data);
 int		unset(char **commandline, t_mshell_data *data);

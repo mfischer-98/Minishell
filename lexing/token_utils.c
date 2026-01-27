@@ -2,11 +2,8 @@
 
 void handle_quote_start(char *prompt, t_token_state *state)
 {
-	// if (state->i > state->start)
-	// 	add_token(tokens, ft_substr(prompt, state->start, state->i - state->start), NODE_UNKNOWN);
 	state->in_quote = 1;
 	state->quote_char = prompt[state->i];
-	//state->start = state->i;
 	state->i++;
 }
 

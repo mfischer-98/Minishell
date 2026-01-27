@@ -27,16 +27,16 @@ int	handle_equal(char *arg, t_mshell_data *data)
 	equal_sign = ft_strchr(arg, '=');
 	if (!equal_sign)
 		return (1);
-	name = ft_substr(arg, 0, equal_sign - arg); //namelen
+	name = ft_substr(arg, 0, equal_sign - arg);
 	if (!name)
-		return (1); //nao tem nada antes do igual
+		return (1);
 	if (!identifier_valid(name))
 	{
 		ft_printf("minishell: export: `%s': is not a valid identifier\n", trim_left(arg));
 		free(name);
 		return (1);
 	}
-	if (!check_env_list(name, data)) //0 = nao está na lista
+	if (!check_env_list(name, data))
 		add_env_list(arg, data);
 	else
 		update_env_list(arg, data);
@@ -51,7 +51,7 @@ int	process_export(char *commandline, t_mshell_data *data)
 		ft_printf("minishell: export: `%s': not a valid identifier\n", commandline); //or does not support options
 		return (2);
 	}
-	printf("EXPORT PROCESSING: '%s'\n", commandline);
+
 	//append missing
 	if (ft_strchr(commandline, '='))
 		return (handle_equal(commandline, data));
