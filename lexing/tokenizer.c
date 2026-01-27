@@ -69,12 +69,12 @@ void	add_token(t_tokens **tokens, char *input, t_node_type type)
     new_node = malloc(sizeof(t_tokens));
     if (!new_node)
 		return;
-    if (type == NODE_DOUBLE_QUOTE || type == NODE_SINGLE_QUOTE)
-    {
-        char *trimmed = ft_strtrim(input, " \t\n\v\f\r");
-        free(input);
-        input = trimmed;
-    }
+    // if (input[0] != '\0' && (type == NODE_DOUBLE_QUOTE || type == NODE_SINGLE_QUOTE))
+    // {
+    //     char *trimmed = ft_strtrim(input, " \t\n\v\f\r");
+    //     free(input);
+    //     input = trimmed;
+    // }
     new_node->input = input;
     new_node->type = type;
     new_node->next = NULL;

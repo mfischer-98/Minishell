@@ -9,6 +9,8 @@ static char *trim_left(char *str)
 
 int	handle_no_equal(char *arg, t_mshell_data *data)
 {
+	if (arg[0] == '\0')
+		return (0);
 	if (!identifier_valid(arg))
 	{
 		ft_printf("minishell: export: `%s': is not a valid identifier\n", trim_left(arg));
@@ -21,10 +23,10 @@ int	handle_equal(char *arg, t_mshell_data *data)
 {
 	char	*equal_sign;
 	char	*name;
-	int		result;
 
-	result = 0;
 	equal_sign = ft_strchr(arg, '=');
+	if (!equal_sign)
+		return (1);
 	name = ft_substr(arg, 0, equal_sign - arg);
 	if (!name)
 		return (1); //nao tem nada antes do igual
@@ -38,15 +40,15 @@ int	handle_equal(char *arg, t_mshell_data *data)
 		add_env_list(arg, data);
 	else
 		update_env_list(arg, data);
-	return (result);
+	free(name);
+	return (0);
 }
 
 int	process_export(char *commandline, t_mshell_data *data)
 {
 	if (commandline[0] == '-')
 	{
-		ft_printf("minishell: export: `%s': not a valid identifier\n", commandline);
-		//or does not support options
+		ft_printf("minishell: export: `%s': not a valid identifier\n", commandline); //or does not support options
 		return (2);
 	}
 	//append missing
@@ -61,13 +63,14 @@ int	export(char **commandline, t_mshell_data *data)
 	int	final_status;
 	int	i;
 
-	if (!data || !commandline)
+	if (!data || !commandline || !commandline[0])
 		return (1);
-	if (!commandline[1] || !*commandline[1])
+	if (!commandline[1])
 	{
-		print_export(data); //this has to be in alphabetical order, still need to make that function
+		print_export(data);
 		return (0);
 	}
+	// do we need to support append?
 	status = 0;
 	final_status = 0;
 	i = 1; //start on the word next to export
@@ -75,7 +78,7 @@ int	export(char **commandline, t_mshell_data *data)
 	{
 		status = process_export(commandline[i], data);
 		if (status != 0)
-			final_status = status; //nao sei ainda ou final status
+			final_status = status; //not sure if final status is correct
 		i++;
 	}
 	return (final_status);

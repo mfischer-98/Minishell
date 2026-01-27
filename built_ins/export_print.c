@@ -13,7 +13,7 @@ char	**list_to_array(t_env *env_list, int size)
 		return (NULL);
 	while (temp && i < size)
 	{
-		env_array[i] = temp->var;
+		env_array[i] = ft_strdup(temp->var);
 		temp = temp->next;
 		i++;
 	}
@@ -45,6 +45,24 @@ void	bubble_sort_export(char **env_array, int size)
 	}
 }
 
+void	print_variable(char *str)
+{
+	char	*equal_sign;
+	int		name_len;
+	char	*name;
+
+	equal_sign = ft_strchr(str, '=');
+	if (!equal_sign)
+		ft_printf("declare -x %s\n", str);
+	else
+	{
+		name_len = equal_sign - str;
+		name = ft_substr(str, 0, name_len);
+		ft_printf("declare -x %s=\"%s\"\n", name, equal_sign + 1);
+		free(name);
+	}
+}
+
 int print_export(t_mshell_data *data)
 {
 	char	**env_array;
@@ -63,9 +81,9 @@ int print_export(t_mshell_data *data)
 	{
 		//se a var for _ return pulo
 		if (ft_strncmp(env_array[i], "_=", 2) != 0)
-			ft_printf("declare -x %s\n", env_array[i]);
+			print_variable(env_array[i]);
 		i++;
 	}
-	free(env_array); //dar free de cada string
+	free_array(env_array, size);
 	return (0);
 }
