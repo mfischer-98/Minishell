@@ -15,16 +15,17 @@ void	create_tokens(char *prompt, t_tokens **tokens)
 	{
 		if (!in_quote && (prompt[i] == '"' || prompt[i] == '\''))
 		{
-			if (i > start)
+			if (i > start && prompt[i - 1] != '=')
 				add_token(tokens, ft_substr(prompt, start, i - start), NODE_UNKNOWN);
 			in_quote = 1;
 			quote_char = prompt[i];
-			start = i + 1;
+			//start = i;
 			i++;
 		}
 		else if (in_quote && prompt[i] == quote_char)
 		{
-			add_token(tokens, ft_substr(prompt, start, i - start), (quote_char == '"') ? NODE_DOUBLE_QUOTE : NODE_SINGLE_QUOTE);
+			if (!ft_strchr(prompt + start, '='))
+				add_token(tokens, ft_substr(prompt, start, i - start + 1), (quote_char == '"') ? NODE_DOUBLE_QUOTE : NODE_SINGLE_QUOTE);
 			in_quote = 0;
 			i++;
 			while (prompt[i] == ' ')

@@ -27,7 +27,7 @@ int	handle_equal(char *arg, t_mshell_data *data)
 	equal_sign = ft_strchr(arg, '=');
 	if (!equal_sign)
 		return (1);
-	name = ft_substr(arg, 0, equal_sign - arg);
+	name = ft_substr(arg, 0, equal_sign - arg); //namelen
 	if (!name)
 		return (1); //nao tem nada antes do igual
 	if (!identifier_valid(name))
@@ -51,6 +51,7 @@ int	process_export(char *commandline, t_mshell_data *data)
 		ft_printf("minishell: export: `%s': not a valid identifier\n", commandline); //or does not support options
 		return (2);
 	}
+	printf("EXPORT PROCESSING: '%s'\n", commandline);
 	//append missing
 	if (ft_strchr(commandline, '='))
 		return (handle_equal(commandline, data));
