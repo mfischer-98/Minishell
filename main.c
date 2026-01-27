@@ -31,7 +31,7 @@ int main (int argc, char **argv, char **envp)
 		create_tokens(prompt, &data->tokens);
 		check_command(data);
 		add_history(prompt);
-		free_list(data->tokens); //fazer funcao free_data
+		free_list(data->tokens);
 		data->tokens = NULL;
 	}
 }

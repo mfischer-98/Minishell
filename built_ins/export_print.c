@@ -45,22 +45,53 @@ void	bubble_sort_export(char **env_array, int size)
 	}
 }
 
+int	has_quotes(char	*str)
+{
+	int	i;
+	int	single_quotes;
+	int	double_quotes;
+
+	i = 0;
+	single_quotes = 0;
+	double_quotes = 0;
+	while (str[i])
+	{
+		if (str[i] == '\"')
+			double_quotes++;
+		else if (str[i] == '\'')
+			single_quotes++;
+		i++;
+	}
+	return ((double_quotes == 2 && !single_quotes)
+		|| (single_quotes == 2 && !double_quotes));
+}
+
 void	print_variable(char *str)
 {
 	char	*equal_sign;
 	int		name_len;
 	char	*name;
+	char	*value;
+	char	*new_value;
 
 	equal_sign = ft_strchr(str, '=');
 	if (!equal_sign)
-		ft_printf("declare -x %s\n", str);
-	else
 	{
-		name_len = equal_sign - str;
-		name = ft_substr(str, 0, name_len);
-		ft_printf("declare -x %s=\"%s\"\n", name, equal_sign + 1);
-		free(name);
+		ft_printf("declare -x %s\n", str);
+		return ;
 	}
+	name_len = equal_sign - str;
+	name = ft_substr(str, 0, name_len);
+	value = equal_sign + 1;
+	if (has_quotes(str))
+	{
+		new_value = ft_strtrim(value, "\"\'");
+		ft_printf("declare -x %s=\"%s\"\n", name, new_value);
+		free(new_value);
+	}
+	else
+		ft_printf("declare -x %s=\"%s\"\n", name, value);
+	free(name);
 }
 
 int print_export(t_mshell_data *data)
@@ -79,7 +110,6 @@ int print_export(t_mshell_data *data)
 	i = 0;
 	while (i < size)
 	{
-		//se a var for _ return pulo
 		if (ft_strncmp(env_array[i], "_=", 2) != 0)
 			print_variable(env_array[i]);
 		i++;

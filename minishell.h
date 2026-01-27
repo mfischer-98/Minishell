@@ -43,10 +43,18 @@ typedef enum s_node_type
 	NODE_DOUBLE_QUOTE,
 }		t_node_type;
 
+typedef struct s_token_state
+{
+	int		i;
+	int		start;
+	int		in_quote;
+	char	quote_char;
+}			t_token_state;
+
 typedef struct s_tokens
 {
-	char		*input;
-	t_node_type	type;
+	char			*input;
+	t_node_type		type;
 	struct s_tokens *next;
 }			t_tokens;
 
@@ -67,13 +75,17 @@ void	print_banner(void);
 
 //Lexing
 void	create_tokens(char *prompt, t_tokens **tokens);
-int		handle_quotes(t_tokens **tokens, char *str, char quote, int start);
 void	add_token(t_tokens **tokens, char *input, t_node_type type);
+void	handle_space(t_tokens **tokens, char *prompt, t_token_state *state);
+void	handle_quote_end(t_tokens **tokens, char *prompt, t_token_state *state);
+void	handle_quote_start(char *prompt, t_token_state *state);
+void	handle_token_type(t_tokens **tokens, char *prompt, t_token_state *state);
+void	add_type(t_tokens **tokens);
+
 
 // Input reading
 void	handle_input(char *prompt);
 int		check_exit (char *prompt);
-void	add_type(t_tokens **tokens);
 
 // Parsing
 void check_command(t_mshell_data *data);
@@ -109,6 +121,7 @@ int		print_export(t_mshell_data *data);
 int		check_env_list(char *str, t_mshell_data *data);
 int		add_env_list(char *str, t_mshell_data *data);
 int		update_env_list(char *str, t_mshell_data *data);
+char	*trim_quotes(char *value);
 // unset
 void	unset_env(char *str, t_mshell_data *data);
 int		unset(char **commandline, t_mshell_data *data);

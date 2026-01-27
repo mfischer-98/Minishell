@@ -1,93 +1,71 @@
 #include "../minishell.h"
 
-void	create_tokens(char *prompt, t_tokens **tokens)
+void handle_token_type(t_tokens **tokens, char *prompt, t_token_state *state)
 {
-	int			i;
-	int			start;
-	char		in_quote;
-	char		quote_char;
-
-	i = 0;
-	start = 0;
-	in_quote = 0;
-	quote_char = 0;
-	while (prompt[i])
+	if (state->in_quote && prompt[state->i] == '=')
 	{
-		if (!in_quote && (prompt[i] == '"' || prompt[i] == '\''))
-		{
-			if (i > start && prompt[i - 1] != '=')
-				add_token(tokens, ft_substr(prompt, start, i - start), NODE_UNKNOWN);
-			in_quote = 1;
-			quote_char = prompt[i];
-			//start = i;
-			i++;
-		}
-		else if (in_quote && prompt[i] == quote_char)
-		{
-			if (!ft_strchr(prompt + start, '='))
-				add_token(tokens, ft_substr(prompt, start, i - start + 1), (quote_char == '"') ? NODE_DOUBLE_QUOTE : NODE_SINGLE_QUOTE);
-			in_quote = 0;
-			i++;
-			while (prompt[i] == ' ')
-				i++;
-			start = i;
-		}
-		else if (!in_quote && prompt[i] == ' ')
-		{
-			if (i > start)
-				add_token(tokens, ft_substr(prompt, start, i - start), NODE_UNKNOWN);
-			while (prompt[i] == ' ')
-				i++;
-			start = i;
-		}
-		else
-			i++;
+		state->i++;
+		return;
 	}
-	if (i > start)
-		add_token(tokens, ft_substr(prompt, start, i - start), in_quote ? ((quote_char == '"') ? NODE_DOUBLE_QUOTE : NODE_SINGLE_QUOTE) : NODE_UNKNOWN);
-	add_type(tokens);
+	if (!state->in_quote && (prompt[state->i] == '"' || prompt[state->i] == '\''))
+		handle_quote_start(prompt, state);
+	else if (state->in_quote && prompt[state->i] == state->quote_char)
+		handle_quote_end(tokens, prompt, state);
+	else if (!state->in_quote && prompt[state->i] == ' ')
+		handle_space(tokens, prompt, state);
+	else
+		state->i++;
 }
 
-int	handle_quotes(t_tokens **tokens, char *str, char quote, int start)
+void	create_tokens(char *prompt, t_tokens **tokens)
 {
-	int	i;
+	t_token_state	state;
+	t_node_type		type;
 
-	i = start;
-	while (str[i] && str[i] != quote)
-		i++;
-	if (quote == '"')
-		add_token(tokens, ft_substr(str, start, i - start), NODE_DOUBLE_QUOTE);
-	else
-		add_token(tokens, ft_substr(str, start, i - start), NODE_SINGLE_QUOTE);
-	return (i + 1);
+	if (!prompt)
+		return ;
+	state.i = 0;
+	state.start = 0;
+	state.in_quote = 0;
+	state.quote_char = 0;
+	while(prompt[state.i])
+		handle_token_type(tokens, prompt, &state);
+	if (state.i > state.start)
+	{
+		if (state.in_quote)
+		{
+			if (state.quote_char == '"')
+				type = NODE_DOUBLE_QUOTE;
+			else
+				type = NODE_SINGLE_QUOTE;
+		}
+		else
+			type = NODE_UNKNOWN;
+		add_token(tokens, ft_substr(prompt, state.start, state.i - state.start), type);
+	}
+	add_type(tokens);
 }
 
 void	add_token(t_tokens **tokens, char *input, t_node_type type)
 {
-    t_tokens *new_node;
-    t_tokens *node;
+	t_tokens	*new_node;
+	t_tokens	*node;
 
-    new_node = malloc(sizeof(t_tokens));
-    if (!new_node)
+	new_node = malloc(sizeof(t_tokens));
+	if (!new_node)
 		return;
-    // if (input[0] != '\0' && (type == NODE_DOUBLE_QUOTE || type == NODE_SINGLE_QUOTE))
-    // {
-    //     char *trimmed = ft_strtrim(input, " \t\n\v\f\r");
-    //     free(input);
-    //     input = trimmed;
-    // }
-    new_node->input = input;
-    new_node->type = type;
-    new_node->next = NULL;
-    if (*tokens == NULL)
-    {
-        *tokens = new_node;
-        return;
-    }
-    node = *tokens;
-    while (node->next)
-        node = node->next;
-    node->next = new_node;
+	new_node->input = input;
+	new_node->type = type;
+	new_node->next = NULL;
+	if (*tokens == NULL)
+	{
+		*tokens = new_node;
+		return;
+	}
+	node = *tokens;
+	while (node->next)
+		node = node->next;
+	node->next = new_node;
 }
 
 void	add_type(t_tokens **tokens)
