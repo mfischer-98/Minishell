@@ -1,7 +1,6 @@
 #include "../minishell.h"
 
 // Bash variable names:
-
 // Must be non-empty.
 // Must start with a letter or underscore.
 // Remaining chars must be letters, digits, or underscore.
@@ -10,30 +9,30 @@
 
 void	unset_env(char *str, t_mshell_data *data)
 {
-	t_env   *temp;
-    t_env   *prev;
+	t_env	*temp;
+	t_env	*prev;
 	int		len;
 
-    if (!str || !data || !data->env_var)
-        return ;
-    prev = NULL;
-    temp = data->env_var;
+	if (!str || !data || !data->env_var)
+		return ;
+	prev = NULL;
+	temp = data->env_var;
 	len = ft_strlen(str);
 	while (temp)
-    {
-        if (!ft_strcmp(str, temp->var) || (!ft_strncmp(str, temp->var, len) && temp->var[len] == '='))
-        {
-            if (!prev)
-                data->env_var = temp->next;
-            else
-                prev->next = temp->next;
-            free(temp->var);
-            free(temp);
-            return ;
-        }
-        prev = temp;
-        temp = temp->next;
-    }
+	{
+		if (!ft_strcmp(str, temp->var) || (!ft_strncmp(str, temp->var, len) && temp->var[len] == '='))
+		{
+			if (!prev)
+				data->env_var = temp->next;
+			else
+				prev->next = temp->next;
+			free(temp->var);
+			free(temp);
+			return ;
+		}
+		prev = temp;
+		temp = temp->next;
+	}
 }
 
 int	unset(char **commandline, t_mshell_data *data)

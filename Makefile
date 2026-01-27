@@ -12,7 +12,10 @@
 
 NAME = minishell
 
-SRC = main.c exit_process/check_exit.c utils/list_utils.c utils/envp_list.c utils/utils.c banner.c built_ins/pwd_env.c built_ins/export.c built_ins/export_utils.c built_ins/unset.c built_ins/echo.c lexing/tokenizer.c commands/check_command.c 
+SRC = main.c exit_process/check_exit.c \
+		utils/free_data.c utils/list_utils.c utils/envp_list.c utils/utils.c banner.c \
+		lexing/tokenizer.c commands/check_command.c \
+		built_ins/pwd_env.c built_ins/export.c built_ins/export_utils.c built_ins/export_print.c built_ins/unset.c built_ins/echo.c
 
 OBJ = $(SRC:.c=.o)
 

@@ -22,9 +22,13 @@ void check_command(t_mshell_data *data)
 {
 	t_tokens	*temp;
 
+	if (!data || !data->tokens)
+		return ;
 	temp = data->tokens;
 	if (temp->type == NODE_WORD)
+	{
 		run_command(array_join(&data->tokens), data);
+	}
 	//else if (temp->type == NODE_HERE)
 	else
 		ft_printf("Error\n");

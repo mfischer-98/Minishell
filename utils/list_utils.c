@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 11:19:33 by mefische          #+#    #+#             */
-/*   Updated: 2025/10/22 16:31:36 by mefische         ###   ########.fr       */
+/*   Updated: 2026/01/27 10:43:55 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ char	**array_join(t_tokens **tokens)
 	{
 		if(temp->type == NODE_WORD)
 		{
-			array[i] = temp->input;
+			array[i] = ft_strdup(temp->input);
 			i++;
 		}
 		temp = temp->next;
