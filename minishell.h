@@ -107,7 +107,7 @@ t_env	*ft_env_var(t_env *env_list, char *var_name);
 // Built ins
 int		pwd();
 int		env(char **commandline, t_mshell_data *data);
-int		echo(char **arg);
+int		echo(char **arg, t_tokens *tokens);
 int		cd(t_mshell_data *data, char **args);
 // export
 int		export(char **commandline, t_mshell_data *data);

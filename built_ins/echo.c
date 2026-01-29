@@ -28,28 +28,51 @@ static int	ft_flag(char *arg)
 	return (1);
 }
 
-int	echo(char **arg)
+static void	print_arg(char *str)
+{
+	int	len;
+
+	len = ft_strlen(str);
+	if ((str[0] == '"' && str[len - 1] == '"')
+		|| (str[0] == '\'' && str[len - 1] == '\''))
+		write(1, str + 1, len - 2);
+	else
+		ft_putstr_fd(str, 1);
+}
+
+int	echo(char **arg, t_tokens *tokens)
 {
 	int	i;
-	int	j;
+	int	newline;
+	t_tokens	*temp;
 
 	if (!arg)
 		return (ft_putchar_fd('\n', 1), 0);
-	j = 1;
+	temp = tokens;
+	while (temp)
+	{
+		if (temp->type == NODE_DOUBLE_QUOTE || temp->type == NODE_SINGLE_QUOTE)
+		{
+			ft_putstr_fd("Error: unclosed quotes\n", 2);
+			return (127);
+		}
+		temp = temp->next;
+	}
 	i = 1;
+	newline = 1;
 	while (arg[i] && ft_flag(arg[i]))
 	{
-		j = 0;
+		newline = 0;
 		i++;
 	}
 	while (arg[i])
 	{
-		ft_putstr_fd(arg[i], 1);
+		print_arg(arg[i]);
 		if (arg[i + 1])
 			ft_putchar_fd(' ', 1);
 		i++;
 	}
-	if (j)
+	if (newline)
 		ft_putchar_fd('\n', 1);
 	return (0);
 }

@@ -9,7 +9,7 @@ void run_command(char **commandline, t_mshell_data *data)
 	else if (!ft_strcmp(commandline[0], "env"))
 		env(commandline, data);
 	else if (!ft_strcmp(commandline[0], "echo"))
-		echo(commandline);
+		echo(commandline, data->tokens);
 	else if (!ft_strcmp(commandline[0], "export"))
 		export(commandline, data);
 	else if (!ft_strcmp(commandline[0], "unset"))

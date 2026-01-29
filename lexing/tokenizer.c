@@ -71,6 +71,7 @@ void	add_token(t_tokens **tokens, char *input, t_node_type type)
 void	add_type(t_tokens **tokens)
 {
 	t_tokens	*temp;
+	int			len;
 
 	temp = *tokens;
 	//se o token tiver ", só acaba quando achar outras "
@@ -86,7 +87,14 @@ void	add_type(t_tokens **tokens)
 			temp->type = NODE_OUT;
 		else if (!ft_strcmp(temp->input, "<"))
 			temp->type = NODE_IN;
-		else if (temp->type == NODE_UNKNOWN || temp->type == NODE_SINGLE_QUOTE || temp->type == NODE_DOUBLE_QUOTE) // aspas possivelmente nao palavra
+		else if (temp->type == NODE_DOUBLE_QUOTE || temp->type == NODE_SINGLE_QUOTE)
+		{
+			len = ft_strlen(temp->input);
+			if (len >= 2 && temp->input[0] == temp->input[len - 1] 
+				&& (temp->input[0] == '"' || temp->input[0] == '\''))
+				temp->type = NODE_WORD;
+		}
+		else if (temp->type == NODE_UNKNOWN)
 			temp->type = NODE_WORD;
 		temp = temp->next;
 	}
