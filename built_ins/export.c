@@ -44,18 +44,21 @@ int	handle_equal(char *arg, t_mshell_data *data)
 	return (0);
 }
 
-int	process_export(char *commandline, t_mshell_data *data)
+int	process_export(char *str, t_mshell_data *data)
 {
-	if (commandline[0] == '-')
+	char	*new_str;
+
+	if (str[0] == '-')
 	{
-		ft_printf("minishell: export: `%s': not a valid identifier\n", commandline); //or does not support options
+		ft_printf("minishell: export: `%s': not a valid identifier\n", str);
 		return (2);
 	}
-
-	//append missing
-	if (ft_strchr(commandline, '='))
-		return (handle_equal(commandline, data));
-	return (handle_no_equal(commandline, data));
+	new_str = trim_outer_quotes(str);
+	if (ft_strnstr(new_str, "+=", ft_strlen(new_str)))
+		return (handle_append(new_str, data));
+	if (ft_strchr(new_str, '='))
+		return (handle_equal(new_str, data));
+	return (handle_no_equal(new_str, data));
 }
 
 int	export(char **commandline, t_mshell_data *data)
@@ -71,7 +74,6 @@ int	export(char **commandline, t_mshell_data *data)
 		print_export(data);
 		return (0);
 	}
-	// do we need to support append?
 	status = 0;
 	final_status = 0;
 	i = 1; //start on the word next to export
