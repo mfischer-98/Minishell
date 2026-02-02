@@ -87,8 +87,10 @@ void	add_type(t_tokens **tokens);
 void	handle_input(char *prompt);
 int		check_exit (char *prompt);
 
-// Parsing
-void check_command(t_mshell_data *data);
+// Parser Expander
+void	check_command(t_mshell_data *data);
+char	*get_env_var(char *token, t_mshell_data *data);
+char	*expand_tokens(char *token, t_mshell_data *data);
 
 // Utils and list functions
 void	list_add(t_tokens **tokens, char *input);
@@ -101,7 +103,7 @@ void	create_envp(char **vars, t_mshell_data *data);
 void	envp_add(t_mshell_data *data, char *input);
 int		env_size(t_env *env_list);
 void	print_env(t_mshell_data *data);
-void	run_command(char **commandline, t_mshell_data *data);
+void	run_builtin(char **commandline, t_mshell_data *data);
 t_env	*ft_env_var(t_env *env_list, char *var_name);
 
 // Built ins
