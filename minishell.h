@@ -121,7 +121,12 @@ int		print_export(t_mshell_data *data);
 int		check_env_list(char *str, t_mshell_data *data);
 int		add_env_list(char *str, t_mshell_data *data);
 int		update_env_list(char *str, t_mshell_data *data);
-char	*trim_quotes(char *value);
+char	*trim_outer_quotes(char	*str);
+int		get_name_len(char	*str);
+char	*get_append_value(char	*str);
+char	*get_old_var(char *name, int len, t_mshell_data *data);
+char	*build_var(char *name, char *old_var, char *new_value);
+int		handle_append(char *str, t_mshell_data *data);
 // unset
 void	unset_env(char *str, t_mshell_data *data);
 int		unset(char **commandline, t_mshell_data *data);

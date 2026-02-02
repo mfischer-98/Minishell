@@ -25,17 +25,6 @@ int	identifier_valid(char *str)
 	return (1);
 }
 
-char	*trim_quotes(char *value)
-{
-	int		len;
-
-	len = ft_strlen(value);
-	if ((value[0] == '"' && value[len - 1] == '"') ||
-		(value[0] == '\'' && value[len - 1] == '\''))
-		return (ft_substr(value, 1, len - 2));
-	return (ft_strdup(value));
-}
-
 // Checks env list and sees if there is a match
 // 	return 1 = match
 // 	return 0 = no match

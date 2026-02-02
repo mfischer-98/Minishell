@@ -45,25 +45,20 @@ void	bubble_sort_export(char **env_array, int size)
 	}
 }
 
-int	has_quotes(char	*str)
+char	*trim_outer_quotes(char	*str)
 {
-	int	i;
-	int	single_quotes;
-	int	double_quotes;
+	int	len;
 
-	i = 0;
-	single_quotes = 0;
-	double_quotes = 0;
-	while (str[i])
+	if (!str || !*str)
+		return (ft_strdup(""));
+
+	len = ft_strlen(str);
+	if ((str[0] == '\'' || str[0] == '\"') && str[len - 1] == str[0])
 	{
-		if (str[i] == '\"')
-			double_quotes++;
-		else if (str[i] == '\'')
-			single_quotes++;
-		i++;
+		len -= 2;
+		return (ft_substr(str, 1, len));
 	}
-	return ((double_quotes == 2 && !single_quotes)
-		|| (single_quotes == 2 && !double_quotes));
+	return (ft_strdup(str));
 }
 
 void	print_variable(char *str)
@@ -83,9 +78,9 @@ void	print_variable(char *str)
 	name_len = equal_sign - str;
 	name = ft_substr(str, 0, name_len);
 	value = equal_sign + 1;
-	if (has_quotes(str))
+	if (ft_strchr(value, '\'') || ft_strchr(value, '\"'))
 	{
-		new_value = ft_strtrim(value, "\"\'");
+		new_value = trim_outer_quotes(value);
 		ft_printf("declare -x %s=\"%s\"\n", name, new_value);
 		free(new_value);
 	}
