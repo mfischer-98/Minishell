@@ -29,7 +29,7 @@ int main (int argc, char **argv, char **envp)
 		if (!check_exit(prompt))
 			exit(0); //function to check exit status
 		create_tokens(prompt, &data->tokens);
-		check_command(data);
+		executor(data);
 		add_history(prompt);
 		free_list(data->tokens);
 		data->tokens = NULL;
