@@ -10,13 +10,14 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+
 #include "../minishell.h"
 
 static int	ft_flag(char *arg)
 {
 	int	i;
 
-    i = 1;
+	i = 1;
 	if (!arg || arg[0] != '-' || arg[1] != 'n')
 		return (0);
 	while (arg[i])
@@ -53,7 +54,8 @@ int	echo(char **arg, t_tokens *tokens)
 	{
 		if (temp->type == NODE_DOUBLE_QUOTE || temp->type == NODE_SINGLE_QUOTE)
 		{
-			ft_putstr_fd("Error: unclosed quotes\n", 2);
+			
+			ft_putstr_fd("Error: unclosed quotes!\n", 2);
 			return (127);
 		}
 		temp = temp->next;

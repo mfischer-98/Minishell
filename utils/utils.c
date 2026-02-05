@@ -10,5 +10,6 @@ void	initialize(t_mshell_data **data, char **envp)
 	}
 	(*data)->tokens = NULL;
 	(*data)->env_var = NULL;
+	(*data)->exit_status = 0;
 	create_envp(envp, *data);
 }

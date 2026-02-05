@@ -30,8 +30,9 @@ void check_command(t_mshell_data *data)
 	temp = data->tokens;
 	while (temp)
 	{
-		if (temp->type == NODE_WORD)
+		if (temp->type == NODE_WORD || temp->type == NODE_SINGLE_QUOTE)
 		{
+			temp->type = NODE_WORD; //precisa para nao ter erro de unclosed quotes, weird
 			expanded = expand_tokens(temp->input, data);
 			free(temp->input);
 			temp->input = expanded;

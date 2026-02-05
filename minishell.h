@@ -68,6 +68,7 @@ typedef struct s_mshell_data
 {
 	t_env 		*env_var;
 	t_tokens	*tokens;
+	int			exit_status;
 }			t_mshell_data;
 
 // Banner

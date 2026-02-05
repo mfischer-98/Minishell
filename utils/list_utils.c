@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 11:19:33 by mefische          #+#    #+#             */
-/*   Updated: 2026/01/27 10:43:55 by mefische         ###   ########.fr       */
+/*   Updated: 2026/02/05 17:26:38 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,9 +74,9 @@ char	**array_join(t_tokens **tokens)
 	temp = *tokens;
 	while (temp)
 	{
-    	if (temp->type == NODE_WORD)
-        	len++;
-    	temp = temp->next;
+		if (temp->type == NODE_WORD || temp->type == NODE_SINGLE_QUOTE)
+			len++;
+		temp = temp->next;
 	}
 	array = NULL;
 	array = malloc(sizeof(char *) * (len + 1));
@@ -85,7 +85,7 @@ char	**array_join(t_tokens **tokens)
 	temp = *tokens;
 	while(temp)
 	{
-		if(temp->type == NODE_WORD)
+		if(temp->type == NODE_WORD || temp->type == NODE_SINGLE_QUOTE)
 		{
 			array[i] = ft_strdup(temp->input);
 			i++;
