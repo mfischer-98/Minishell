@@ -81,7 +81,7 @@ int	export(char **commandline, t_mshell_data *data)
 	{
 		status = process_export(commandline[i], data);
 		if (status != 0)
-			final_status = status; //not sure if final status is correct
+			final_status = status;//not sure if final status is correct
 		i++;
 	}
 	return (final_status);

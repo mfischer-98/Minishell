@@ -65,10 +65,20 @@ typedef struct s_env
 	struct s_env	*next;
 }			t_env;
 
+typedef struct s_expander
+{
+	char	*result;
+	int		i;
+	int		in_double;
+	int		in_single;
+}			t_expander;
+
 typedef struct s_mshell_data
 {
 	t_env 		*env_var;
 	t_tokens	*tokens;
+	t_expander	*expander;
+	int			exit_status;
 }			t_mshell_data;
 
 // Banner
@@ -83,17 +93,21 @@ void	handle_quote_start(char *prompt, t_token_state *state);
 void	handle_token_type(t_tokens **tokens, char *prompt, t_token_state *state);
 void	add_type(t_tokens **tokens);
 
-
 // Input reading
 void	handle_input(char *prompt);
 int		check_exit (char *prompt);
 
+// Parser Expander
+void	check_command(t_mshell_data *data);
+char	*get_env_var(char *token, t_mshell_data *data);
+char	*expand_tokens(char *token, t_mshell_data *data);
 // Parsing
 void executor(t_mshell_data *data);
 
 // Utils and list functions
 void	list_add(t_tokens **tokens, char *input);
 void	initialize(t_mshell_data **data, char **envp);
+void	init_expander(t_expander **expander);
 void	free_list(t_tokens *tokens);
 void	free_array(char **array, int n);
 void	print_list(t_tokens *tokens);
@@ -102,13 +116,13 @@ void	create_envp(char **vars, t_mshell_data *data);
 void	envp_add(t_mshell_data *data, char *input);
 int		env_size(t_env *env_list);
 void	print_env(t_mshell_data *data);
-void	run_command(char **commandline, t_mshell_data *data);
+void	run_builtin(char **commandline, t_mshell_data *data);
 t_env	*ft_env_var(t_env *env_list, char *var_name);
 
 // Built ins
 int		pwd();
 int		env(char **commandline, t_mshell_data *data);
-int		echo(char **arg, t_tokens *tokens);
+int		echo(char **arg);
 int		cd(t_mshell_data *data, char **args);
 // export
 int		export(char **commandline, t_mshell_data *data);
