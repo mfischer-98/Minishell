@@ -56,7 +56,7 @@ char	*trim_outer_quotes(char	*str)
 	if ((str[0] == '\'' || str[0] == '\"') && str[len - 1] == str[0])
 	{
 		len -= 2;
-		return (ft_substr(str, 1, len));
+		return (ft_substr(str, 1, len - 2));
 	}
 	return (ft_strdup(str));
 }

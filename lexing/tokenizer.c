@@ -8,11 +8,20 @@ void handle_token_type(t_tokens **tokens, char *prompt, t_token_state *state)
 		return;
 	}
 	if (!state->in_quote && (prompt[state->i] == '"' || prompt[state->i] == '\''))
+	{
 		handle_quote_start(prompt, state);
+		return ;
+	}
 	else if (state->in_quote && prompt[state->i] == state->quote_char)
+	{
 		handle_quote_end(tokens, prompt, state);
+		return ;
+	}
 	else if (!state->in_quote && prompt[state->i] == ' ')
+	{
 		handle_space(tokens, prompt, state);
+		return ;
+	}
 	else
 		state->i++;
 }
