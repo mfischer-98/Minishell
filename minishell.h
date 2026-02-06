@@ -20,6 +20,7 @@
 #include <limits.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <sys/wait.h>
 
 //COLORS
 # define CYAN "\033[96m"
@@ -100,6 +101,8 @@ int		check_exit (char *prompt);
 void	check_command(t_mshell_data *data);
 char	*get_env_var(char *token, t_mshell_data *data);
 char	*expand_tokens(char *token, t_mshell_data *data);
+// Parsing
+void executor(t_mshell_data *data);
 
 // Utils and list functions
 void	list_add(t_tokens **tokens, char *input);
