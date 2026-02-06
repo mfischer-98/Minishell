@@ -1,14 +1,13 @@
 #include "../minishell.h"
 
-//Expander
-//If $VAR:
-//		1- If VAR exists -> replace by value
-//		2- If VAR does not exist new line
-//		3- id '$VAR' -> do not expand
-//If $?: replace by exit status number
+/*Expander
+** If $VAR:
+		1- If VAR exists -> replace by value
+		2- If VAR does not exist new line
+		3- id '$VAR' -> do not expand
+** If $?: replace by exit status number
 
-
-/*
+** Get_var_len
 ** Calculates valid variable name length after $
 ** Valid: [a-zA-Z_][a-zA-Z0-9_]*
 ** Returns: length or 0 if invalid
