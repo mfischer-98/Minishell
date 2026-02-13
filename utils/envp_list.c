@@ -1,15 +1,27 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   envp_list.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/02/13 09:21:33 by mefische          #+#    #+#             */
+/*   Updated: 2026/02/13 10:29:01 by mefische         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
-void create_envp(char **vars, t_mshell_data *data)
+void	create_envp(char **vars, t_mshell_data *data)
 {
-    int     i;
+	int	i;
 
-    i = 0;
-    while (vars[i])
-    {
-        envp_add(data, vars[i]);
-        i++;
-    }
+	i = 0;
+	while (vars[i])
+	{
+		envp_add(data, vars[i]);
+		i++;
+	}
 }
 
 void	envp_add(t_mshell_data *data, char *input)
@@ -27,13 +39,13 @@ void	envp_add(t_mshell_data *data, char *input)
 		(*data).env_var = new_node;
 		return ;
 	}
-    node = (*data).env_var;
+	node = (*data).env_var;
 	while (node->next != NULL)
 		node = node->next;
 	node->next = new_node;
 }
 
-int env_size(t_env *env_list)
+int	env_size(t_env *env_list)
 {
 	t_env	*temp;
 	int		size;

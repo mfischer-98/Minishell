@@ -11,16 +11,16 @@
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
-#define MINISHELL_H
+# define MINISHELL_H
 
 # include <stdlib.h>
 # include "libft/libft.h"
-#include <stdio.h>
-#include <unistd.h>
-#include <limits.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <sys/wait.h>
+# include <stdio.h>
+# include <unistd.h>
+# include <limits.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <sys/wait.h>
 
 //COLORS
 # define CYAN "\033[96m"
@@ -56,7 +56,7 @@ typedef struct s_tokens
 {
 	char			*input;
 	t_node_type		type;
-	struct s_tokens *next;
+	struct s_tokens	*next;
 }			t_tokens;
 
 typedef struct s_env
@@ -75,7 +75,7 @@ typedef struct s_expander
 
 typedef struct s_mshell_data
 {
-	t_env 		*env_var;
+	t_env		*env_var;
 	t_tokens	*tokens;
 	t_expander	*expander;
 	int			exit_status;
@@ -90,19 +90,19 @@ void	add_token(t_tokens **tokens, char *input, t_node_type type);
 void	handle_space(t_tokens **tokens, char *prompt, t_token_state *state);
 void	handle_quote_end(t_tokens **tokens, char *prompt, t_token_state *state);
 void	handle_quote_start(char *prompt, t_token_state *state);
-void	handle_token_type(t_tokens **tokens, char *prompt, t_token_state *state);
+void	handle_tok_type(t_tokens **tokens, char *prompt, t_token_state *state);
 void	add_type(t_tokens **tokens);
 
 // Input reading
 void	handle_input(char *prompt);
-int		check_exit (char *prompt);
 
 // Parser Expander
 void	check_command(t_mshell_data *data);
 char	*get_env_var(char *token, t_mshell_data *data);
 char	*expand_tokens(char *token, t_mshell_data *data);
-// Parsing
-void executor(t_mshell_data *data);
+
+// Executor
+void	executor(t_mshell_data *data);
 
 // Utils and list functions
 void	list_add(t_tokens **tokens, char *input);
@@ -120,10 +120,11 @@ void	run_builtin(char **commandline, t_mshell_data *data);
 t_env	*ft_env_var(t_env *env_list, char *var_name);
 
 // Built ins
-int		pwd();
+int		pwd(void);
 int		env(char **commandline, t_mshell_data *data);
 int		echo(char **arg);
 int		cd(t_mshell_data *data, char **args);
+int		check_exit(char **command, t_mshell_data *data);
 // export
 int		export(char **commandline, t_mshell_data *data);
 int		handle_no_equal(char *arg, t_mshell_data *data);
@@ -145,6 +146,5 @@ int		handle_append(char *str, t_mshell_data *data);
 // unset
 void	unset_env(char *str, t_mshell_data *data);
 int		unset(char **commandline, t_mshell_data *data);
-
 
 #endif

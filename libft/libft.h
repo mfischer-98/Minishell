@@ -43,7 +43,7 @@ int		ft_tolower(int c);
 char	*ft_strchr(const char *s, int c);
 char	*ft_strrchr(const char *s, int c);
 int		ft_strcmp(const char *s1, const char *s2);
-int	ft_strncmp(const char *s1, const char *s2, size_t n);
+int		ft_strncmp(const char *s1, const char *s2, size_t n);
 void	*ft_memchr(const void *s, int c, size_t n);
 int		ft_memcmp(const void *s1, const void *s2, size_t n);
 char	*ft_strnstr(const char *big, const char *little, size_t len);
@@ -62,24 +62,6 @@ void	ft_putstr_fd(char *s, int fd);
 void	ft_putendl_fd(char *s, int fd);
 void	ft_putnbr_fd(int n, int fd);
 
-//BONUS
-
-typedef struct s_list
-{
-	void			*content;
-	struct s_list	*next;
-}	t_list;
-
-t_list	*ft_lstnew(void *content);
-void	ft_lstclear(t_list **lst, void (*del)(void *));
-void	ft_lstdelone(t_list *lst, void (*del)(void *));
-void	ft_lstiter(t_list *lst, void (*f)(void *));
-void	ft_lstadd_front(t_list **lst, t_list *new);
-t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
-int		ft_lstsize(t_list *lst);
-t_list	*ft_lstlast(t_list *lst);
-void	ft_lstadd_back(t_list **lst, t_list *new);
-
 //get_next_line
 char	*get_next_line(int fd);
 char	*get_next_line(int fd);
@@ -89,12 +71,12 @@ char	*ft_gnlstrndup(char *s, size_t line_len);
 char	*ft_gnlstrjoin(char *s1, char *s2);
 
 //printf
-int	ft_printf(const char *f, ...);
-int	ft_putchar(char c);
-int	ft_putstr(char *s);
-int	ft_putnbr(int n);
-int	ft_unsig_putnbr(unsigned int n);
-int	ft_printhexa(unsigned long n, char *base);
-int	ft_pointer(void *ptr);
+int		ft_printf(const char *f, ...);
+int		ft_putchar(char c);
+int		ft_putstr(char *s);
+int		ft_putnbr(int n);
+int		ft_unsig_putnbr(unsigned int n);
+int		ft_printhexa(unsigned long n, char *base);
+int		ft_pointer(void *ptr);
 
 #endif

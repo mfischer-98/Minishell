@@ -3,13 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ntomas-g <ntomas-g@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/14 12:28:00 by mefische          #+#    #+#             */
-/*   Updated: 2026/01/23 11:31:40 by ntomas-g         ###   ########.fr       */
+/*   Created: 2026/02/13 09:20:49 by mefische          #+#    #+#             */
+/*   Updated: 2026/02/13 09:20:49 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "../minishell.h"
 

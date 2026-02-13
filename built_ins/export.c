@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/02/13 09:21:04 by mefische          #+#    #+#             */
+/*   Updated: 2026/02/13 10:29:44 by mefische         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
-static char *trim_left(char *str)
+static char	*trim_left(char *str)
 {
 	while (*str == ' ' || *str == '\t')
 		str++;
@@ -76,7 +88,7 @@ int	export(char **commandline, t_mshell_data *data)
 	}
 	status = 0;
 	final_status = 0;
-	i = 1; //start on the word next to export
+	i = 1;
 	while (commandline[i])
 	{
 		status = process_export(commandline[i], data);

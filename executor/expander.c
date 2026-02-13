@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expander.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/02/13 09:21:16 by mefische          #+#    #+#             */
+/*   Updated: 2026/02/13 10:21:28 by mefische         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 /*Expander
@@ -47,16 +59,16 @@ static int	handle_quotes(char c, t_expander *expander)
 }
 
 // Finds environment variable value in the list
-char	*get_env_var(char *token, t_mshell_data *data) 
+char	*get_env_var(char *token, t_mshell_data *data)
 {
 	t_env	*temp;
 	int		len;
 
 	temp = data->env_var;
 	len = ft_strlen(token);
-	while(temp)
+	while (temp)
 	{
-		if (!ft_strncmp(token, temp->var, len) 
+		if (!ft_strncmp(token, temp->var, len)
 			&& ((temp->var[len] == '=' || temp->var[len] == '\0')))
 			return (ft_strdup(temp->var + len + 1));
 		temp = temp->next;
@@ -108,10 +120,10 @@ char	*expand_tokens(char *input, t_mshell_data *data)
 	{
 		if (handle_quotes(input[exp->i], exp))
 			continue ;
-		if (input[exp->i] == '$' && !exp->in_single) 
+		if (input[exp->i] == '$' && !exp->in_single)
 		{
 			handle_var(input, data);
-			continue;
+			continue ;
 		}
 		temp = ft_substr(&input[exp->i], 0, 1);
 		exp->result = ft_strjoin(exp->result, temp);

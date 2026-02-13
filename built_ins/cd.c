@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/14 14:12:02 by mefische          #+#    #+#             */
-/*   Updated: 2026/02/02 14:41:13 by mefische         ###   ########.fr       */
+/*   Updated: 2026/02/13 10:10:59 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,8 @@ static int	ft_try_cdpath(t_mshell_data *data, char *dest, char *old_pwd)
 		ft_strlcat(full, "/", PATH_MAX);
 		ft_strlcat(full, dest, PATH_MAX);
 		if (!chdir(full))
-			return (ft_putendl_fd(full, 1), free_array(paths, i + 1), ft_cd_env(data, old_pwd));
+			return (ft_putendl_fd(full, 1),
+				free_array(paths, i + 1), ft_cd_env(data, old_pwd));
 	}
 	free_array(paths, i);
 	return (-1);
@@ -88,11 +89,13 @@ int	cd(t_mshell_data *data, char **args)
 	if (args[1] && args[2])
 		return (ft_putstr_fd("cd: too many arguments\n", 2), 1);
 	dest = ft_destination(data, args[1]);
-	if (!dest || !(old_pwd = getcwd(NULL, 0)))
+	old_pwd = getcwd(NULL, 0);
+	if (!dest || !old_pwd)
 		return (1);
 	if (!chdir(dest))
 		return (ft_cd_env(data, old_pwd));
-	if (dest[0] != '/' && (result = ft_try_cdpath(data, dest, old_pwd)) >= 0)
+	result = ft_try_cdpath(data, dest, old_pwd);
+	if (dest[0] != '/' && result >= 0)
 		return (free(old_pwd), result);
 	ft_putstr_fd("cd: ", 2);
 	ft_putstr_fd(dest, 2);

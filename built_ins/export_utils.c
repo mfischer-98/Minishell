@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export_utils.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/02/13 09:21:01 by mefische          #+#    #+#             */
+/*   Updated: 2026/02/13 10:03:19 by mefische         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 int	identifier_valid(char *str)
@@ -25,9 +37,10 @@ int	identifier_valid(char *str)
 	return (1);
 }
 
-// Checks env list and sees if there is a match
-// 	return 1 = match
-// 	return 0 = no match
+/* Checks env list and sees if there is a match
+	return 1 = match
+	return 0 = no match
+*/
 
 int	check_env_list(char *str, t_mshell_data *data)
 {
@@ -40,15 +53,15 @@ int	check_env_list(char *str, t_mshell_data *data)
 	temp = data->env_var;
 	while (temp)
 	{
-		if (!ft_strcmp(str, temp->var) || 
-            (!ft_strncmp(str, temp->var, len) && temp->var[len] == '='))
+		if (!ft_strcmp(str, temp->var)
+			|| (!ft_strncmp(str, temp->var, len) && temp->var[len] == '='))
 			return (1);
 		temp = temp->next;
 	}
 	return (0);
 }
 
-int	add_env_list(char *str, t_mshell_data *data) //add node to list
+int	add_env_list(char *str, t_mshell_data *data)
 {
 	t_env	*temp;
 	t_env	*new_node;
@@ -57,10 +70,10 @@ int	add_env_list(char *str, t_mshell_data *data) //add node to list
 		return (0);
 	new_node = malloc(sizeof(t_env));
 	if (!new_node)
-	return (1);
+		return (1);
 	new_node->var = str;
 	new_node->next = NULL;
-	if (!data->env_var) //empty list edge case
+	if (!data->env_var)
 	{
 		data->env_var = new_node;
 		return (0);
@@ -85,7 +98,8 @@ int	update_env_list(char *str, t_mshell_data *data)
 		name_len++;
 	while (temp)
 	{
-		if (!ft_strncmp(str, temp->var, name_len) && ((temp->var[name_len] == '=' || temp->var[name_len] == '\0')))
+		if (!ft_strncmp(str, temp->var, name_len)
+			&& ((temp->var[name_len] == '=' || temp->var[name_len] == '\0')))
 		{
 			if (ft_strchr(str, '='))
 			{

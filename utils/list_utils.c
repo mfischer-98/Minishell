@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 11:19:33 by mefische          #+#    #+#             */
-/*   Updated: 2026/02/06 10:12:56 by mefische         ###   ########.fr       */
+/*   Updated: 2026/02/13 09:46:06 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	list_add(t_tokens **tokens, char *input)
 	new_node = malloc(sizeof(t_tokens));
 	if (!new_node)
 	{
-		free(tokens); //check later
+		free(tokens);
 		return ;
 	}
 	new_node->input = input;
@@ -68,7 +68,7 @@ char	**array_join(t_tokens **tokens)
 	t_tokens	*temp;
 	int			i;
 	int			size;
-	
+
 	size = 0;
 	i = 0;
 	temp = *tokens;
@@ -79,16 +79,16 @@ char	**array_join(t_tokens **tokens)
 	}
 	array = malloc(sizeof(char *) * (size + 1));
 	if (!array)
-		return NULL;
+		return (NULL);
 	temp = *tokens;
-	while(temp && i < size)
+	while (temp && i < size)
 	{
 		array[i] = ft_strdup(temp->input);
-		if (!array[i]) 
+		if (!array[i])
 			return (free_array(array, i), NULL);
 		temp = temp->next;
 		i++;
 	}
 	array[i] = NULL;
-	return(array);
+	return (array);
 }

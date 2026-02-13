@@ -1,13 +1,26 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tokenizer.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/02/13 09:21:26 by mefische          #+#    #+#             */
+/*   Updated: 2026/02/13 09:21:26 by mefische         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
-void handle_token_type(t_tokens **tokens, char *prompt, t_token_state *state)
+void	handle_tok_type(t_tokens **tokens, char *prompt, t_token_state *state)
 {
 	if (state->in_quote && prompt[state->i] == '=')
 	{
 		state->i++;
-		return;
+		return ;
 	}
-	if (!state->in_quote && (prompt[state->i] == '"' || prompt[state->i] == '\''))
+	if (!state->in_quote && (prompt[state->i] == '"'
+			|| prompt[state->i] == '\''))
 	{
 		handle_quote_start(prompt, state);
 		return ;
@@ -37,8 +50,8 @@ void	create_tokens(char *prompt, t_tokens **tokens)
 	state.start = 0;
 	state.in_quote = 0;
 	state.quote_char = 0;
-	while(prompt[state.i])
-		handle_token_type(tokens, prompt, &state);
+	while (prompt[state.i])
+		handle_tok_type(tokens, prompt, &state);
 	if (state.i > state.start)
 	{
 		if (state.in_quote)
@@ -62,14 +75,14 @@ void	add_token(t_tokens **tokens, char *input, t_node_type type)
 
 	new_node = malloc(sizeof(t_tokens));
 	if (!new_node)
-		return;
+		return ;
 	new_node->input = input;
 	new_node->type = type;
 	new_node->next = NULL;
 	if (*tokens == NULL)
 	{
 		*tokens = new_node;
-		return;
+		return ;
 	}
 	node = *tokens;
 	while (node->next)
@@ -83,7 +96,6 @@ void	add_type(t_tokens **tokens)
 	int			len;
 
 	temp = *tokens;
-	//se o token tiver ", só acaba quando achar outras "
 	while (temp != NULL)
 	{
 		if (!ft_strcmp(temp->input, "|"))
@@ -99,7 +111,7 @@ void	add_type(t_tokens **tokens)
 		else if (temp->type == NODE_DOUBLE_QUOTE || temp->type == NODE_SINGLE_QUOTE)
 		{
 			len = ft_strlen(temp->input);
-			if (len >= 2 && temp->input[0] == temp->input[len - 1] 
+			if (len >= 2 && temp->input[0] == temp->input[len - 1]
 				&& (temp->input[0] == '"' || temp->input[0] == '\''))
 				temp->type = NODE_WORD;
 		}

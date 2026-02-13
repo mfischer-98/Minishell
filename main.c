@@ -12,11 +12,11 @@
 
 #include "minishell.h"
 
-int main (int argc, char **argv, char **envp)
+int	main(int argc, char **argv, char **envp)
 {
 	t_mshell_data	*data;
 	char			*prompt;
-	
+
 	(void)argc;
 	(void)argv;
 	print_banner();
@@ -26,8 +26,6 @@ int main (int argc, char **argv, char **envp)
 		prompt = readline("\x1b[32mminishell\x1b[0m> ");
 		if (!prompt)
 			exit(0);
-		if (!check_exit(prompt))
-			exit(0); //function to check exit status
 		create_tokens(prompt, &data->tokens);
 		executor(data);
 		add_history(prompt);
