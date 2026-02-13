@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 11:08:33 by mefische          #+#    #+#             */
-/*   Updated: 2026/02/13 13:02:09 by mefische         ###   ########.fr       */
+/*   Updated: 2026/02/13 13:10:28 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	check_exit(char **command, t_mshell_data *data)
 		while (command[1][i] && ft_isdigit(command[1][i]))
 			i++;
 		if (command[1][i] != '\0')
-		{	
+		{
 			data->exit_status = 2;
 			return (ft_printf("exit: %s: invalid argument\n", command[1]), 1);
 		}

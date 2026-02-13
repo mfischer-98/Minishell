@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 09:21:09 by mefische          #+#    #+#             */
-/*   Updated: 2026/02/13 12:57:24 by mefische         ###   ########.fr       */
+/*   Updated: 2026/02/13 14:27:42 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,8 @@ int	unset(char **commandline, t_mshell_data *data)
 		return (0);
 	if (commandline[1][0] == '-' && commandline[1][1] != '\0')
 	{
-		ft_printf("unset: -%c: invalid option in minishell\n", commandline[1][1]);
+		ft_putstr_fd("unset: ", 2);
+		ft_printf("-%c: invalid option in minishell\n", commandline[1][1]);
 		return (2);
 	}
 	i = 1;

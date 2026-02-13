@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 09:21:04 by mefische          #+#    #+#             */
-/*   Updated: 2026/02/13 10:29:44 by mefische         ###   ########.fr       */
+/*   Updated: 2026/02/13 13:25:46 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ int	handle_no_equal(char *arg, t_mshell_data *data)
 		return (0);
 	if (!identifier_valid(arg))
 	{
-		ft_printf("minishell: export: `%s': is not a valid identifier\n", trim_left(arg));
+		ft_putstr_fd("minishell: ", 2);
+		ft_printf("`%s': is not a valid identifier\n", trim_left(arg));
 		return (1);
 	}
 	return (add_env_list(arg, data));
@@ -44,7 +45,8 @@ int	handle_equal(char *arg, t_mshell_data *data)
 		return (1);
 	if (!identifier_valid(name))
 	{
-		ft_printf("minishell: export: `%s': is not a valid identifier\n", trim_left(arg));
+		ft_putstr_fd("minishell: ", 2);
+		ft_printf("`%s': is not a valid identifier\n", trim_left(arg));
 		free(name);
 		return (1);
 	}
@@ -93,7 +95,7 @@ int	export(char **commandline, t_mshell_data *data)
 	{
 		status = process_export(commandline[i], data);
 		if (status != 0)
-			final_status = status;//not sure if final status is correct
+			final_status = status;
 		i++;
 	}
 	return (final_status);

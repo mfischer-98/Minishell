@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 11:19:33 by mefische          #+#    #+#             */
-/*   Updated: 2026/02/13 09:46:06 by mefische         ###   ########.fr       */
+/*   Updated: 2026/02/13 13:14:43 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,25 +62,34 @@ void	free_list(t_tokens *tokens)
 	free(tokens);
 }
 
-char	**array_join(t_tokens **tokens)
+static int	array_size(t_tokens *tokens)
+{
+	t_tokens	*temp;
+	int			size;
+
+	temp = tokens;
+	size = 0;
+	while (temp)
+	{
+		temp = temp->next;
+		size++;
+	}
+	return (size);
+}
+
+char	**array_join(t_tokens *tokens)
 {
 	char		**array;
 	t_tokens	*temp;
 	int			i;
 	int			size;
 
-	size = 0;
+	size = array_size(tokens);
 	i = 0;
-	temp = *tokens;
-	while (temp)
-	{
-		size++;
-		temp = temp->next;
-	}
 	array = malloc(sizeof(char *) * (size + 1));
 	if (!array)
 		return (NULL);
-	temp = *tokens;
+	temp = tokens;
 	while (temp && i < size)
 	{
 		array[i] = ft_strdup(temp->input);

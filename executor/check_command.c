@@ -6,13 +6,13 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 09:21:13 by mefische          #+#    #+#             */
-/*   Updated: 2026/02/13 12:59:51 by mefische         ###   ########.fr       */
+/*   Updated: 2026/02/13 14:20:42 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static char *find_command_in_path(char *cmd, t_env *env_list)
+static char	*find_command_in_path(char *cmd, t_env *env_list)
 {
 	char	**paths;
 	char	*path_env;
@@ -167,8 +167,8 @@ void	executor(t_mshell_data *data)
 		temp->input = expanded;
 		temp = temp->next;
 	}
-	commands = array_join(&data->tokens);
+	commands = array_join(data->tokens);
 	if (data->tokens && data->tokens->type == NODE_WORD
-			&& commands && commands[0])
+		&& commands && commands[0])
 		run_command(commands, data);
 }

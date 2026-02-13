@@ -100,6 +100,9 @@ void	handle_input(char *prompt);
 void	check_command(t_mshell_data *data);
 char	*get_env_var(char *token, t_mshell_data *data);
 char	*expand_tokens(char *token, t_mshell_data *data);
+void	set_operator_type(t_tokens *token);
+void	set_quote_type(t_tokens *token);
+void	append_status(t_mshell_data *data);
 
 // Executor
 void	executor(t_mshell_data *data);
@@ -108,10 +111,11 @@ void	executor(t_mshell_data *data);
 void	list_add(t_tokens **tokens, char *input);
 void	initialize(t_mshell_data **data, char **envp);
 void	init_expander(t_expander **expander);
+t_token_state	*init_state(void);
 void	free_list(t_tokens *tokens);
 void	free_array(char **array, int n);
 void	print_list(t_tokens *tokens);
-char	**array_join(t_tokens **tokens);
+char	**array_join(t_tokens *tokens);
 void	create_envp(char **vars, t_mshell_data *data);
 void	envp_add(t_mshell_data *data, char *input);
 int		env_size(t_env *env_list);

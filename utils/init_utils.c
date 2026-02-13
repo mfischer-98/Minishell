@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 09:21:41 by mefische          #+#    #+#             */
-/*   Updated: 2026/02/13 09:54:21 by mefische         ###   ########.fr       */
+/*   Updated: 2026/02/13 14:17:04 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,4 +38,18 @@ void	init_expander(t_expander **expander)
 	(*expander)->i = 0;
 	(*expander)->in_single = 0;
 	(*expander)->in_double = 0;
+}
+
+t_token_state	*init_state(void)
+{
+	t_token_state	*state;
+
+	state = malloc (sizeof(t_token_state));
+	if (!state)
+		return (perror("malloc"), NULL);
+	state->i = 0;
+	state->start = 0;
+	state->in_quote = 0;
+	state->quote_char = 0;
+	return (state);
 }
