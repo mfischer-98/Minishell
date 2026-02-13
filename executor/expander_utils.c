@@ -15,9 +15,12 @@
 void	append_status(t_mshell_data *data)
 {
 	char	*temp;
+	char	*old;
 
 	temp = ft_itoa(data->exit_status);
+	old = data->expander->result;
 	data->expander->result = ft_strjoin(data->expander->result, temp);
+	free(old);
 	free(temp);
 }
 

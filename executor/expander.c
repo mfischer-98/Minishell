@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 09:21:16 by mefische          #+#    #+#             */
-/*   Updated: 2026/02/13 14:33:52 by mefische         ###   ########.fr       */
+/*   Updated: 2026/02/13 16:29:02 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ static void	handle_var(char *input, t_mshell_data *data)
 	int		var_len;
 	char	*var_name;
 	char	*temp;
+	char	*old;
 
 	data->expander->i++;
 	if (input[data->expander->i] == '?')
@@ -79,22 +80,23 @@ static void	handle_var(char *input, t_mshell_data *data)
 	if (var_len == 0)
 	{
 		temp = ft_strdup("$");
-		data->expander->result = ft_strjoin(data->expander->result, temp);
-		free(temp);
-		return ;
+		old = data->expander->result;
+		data->expander->result = ft_strjoin(old, temp);
+		return (free(old), free(temp));
 	}
 	var_name = ft_substr(input + data->expander->i, 0, var_len);
 	temp = get_env_var(var_name, data);
-	data->expander->result = ft_strjoin(data->expander->result, temp);
-	free(var_name);
-	free(temp);
+	old = data->expander->result;
+	data->expander->result = ft_strjoin(old, temp);
 	data->expander->i += var_len;
+	return (free(old), free(temp), free(var_name));
 }
 
 char	*expand_tokens(char *input, t_mshell_data *data)
 {
 	char		*temp;
 	t_expander	*exp;
+	char		*old;
 
 	init_expander(&data->expander);
 	exp = data->expander;
@@ -108,9 +110,12 @@ char	*expand_tokens(char *input, t_mshell_data *data)
 			continue ;
 		}
 		temp = ft_substr(&input[exp->i], 0, 1);
-		exp->result = ft_strjoin(exp->result, temp);
+		old = exp->result;
+		exp->result = ft_strjoin(old, temp);
+		free(old);
 		free(temp);
 		exp->i++;
 	}
-	return (exp->result);
+	temp = ft_strdup(exp->result);
+	return (free(exp->result), exp->result = NULL, temp);
 }

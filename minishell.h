@@ -109,11 +109,14 @@ void	executor(t_mshell_data *data);
 
 // Utils and list functions
 void	list_add(t_tokens **tokens, char *input);
+int		array_size(t_tokens *tokens);
 void	initialize(t_mshell_data **data, char **envp);
 void	init_expander(t_expander **expander);
 t_token_state	*init_state(void);
 void	free_list(t_tokens *tokens);
 void	free_array(char **array, int n);
+void	free_data(t_mshell_data *data);
+void	free_env(t_env *env);
 void	print_list(t_tokens *tokens);
 char	**array_join(t_tokens *tokens);
 void	create_envp(char **vars, t_mshell_data *data);

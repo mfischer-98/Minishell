@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 11:19:33 by mefische          #+#    #+#             */
-/*   Updated: 2026/02/13 13:14:43 by mefische         ###   ########.fr       */
+/*   Updated: 2026/02/13 16:17:02 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,20 +49,7 @@ void	print_list(t_tokens *tokens)
 	}
 }
 
-void	free_list(t_tokens *tokens)
-{
-	t_tokens	*temp;
-
-	while (tokens != NULL)
-	{
-		temp = tokens;
-		tokens = tokens->next;
-		free(temp);
-	}
-	free(tokens);
-}
-
-static int	array_size(t_tokens *tokens)
+int	array_size(t_tokens *tokens)
 {
 	t_tokens	*temp;
 	int			size;
@@ -71,8 +58,8 @@ static int	array_size(t_tokens *tokens)
 	size = 0;
 	while (temp)
 	{
-		temp = temp->next;
 		size++;
+		temp = temp->next;
 	}
 	return (size);
 }

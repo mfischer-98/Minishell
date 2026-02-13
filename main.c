@@ -30,6 +30,7 @@ int	main(int argc, char **argv, char **envp)
 		executor(data);
 		add_history(prompt);
 		free_list(data->tokens);
+		free(prompt);
 		data->tokens = NULL;
 	}
 }

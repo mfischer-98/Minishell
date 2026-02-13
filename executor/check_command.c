@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 09:21:13 by mefische          #+#    #+#             */
-/*   Updated: 2026/02/13 14:20:42 by mefische         ###   ########.fr       */
+/*   Updated: 2026/02/13 16:19:55 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ static char	*find_command_in_path(char *cmd, t_env *env_list)
 	char	*path_env;
 	char	*full_path;
 	int		i;
+	char	*temp;
 
 	if (access(cmd, X_OK) == 0)
 		return (cmd);
@@ -40,7 +41,11 @@ static char	*find_command_in_path(char *cmd, t_env *env_list)
 	while (paths[i])
 	{
 		full_path = ft_strjoin(paths[i], "/");
-		full_path = ft_strjoin(full_path, cmd);
+		{
+			temp = ft_strjoin(full_path, cmd);
+			free(full_path);
+			full_path = temp;
+		}
 		if (access(full_path, X_OK) == 0)
 		{
 			free_array(paths, i + 1);
@@ -171,4 +176,5 @@ void	executor(t_mshell_data *data)
 	if (data->tokens && data->tokens->type == NODE_WORD
 		&& commands && commands[0])
 		run_command(commands, data);
+	free_array(commands, array_size(data->tokens));
 }
