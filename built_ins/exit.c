@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 11:08:33 by mefische          #+#    #+#             */
-/*   Updated: 2026/02/13 16:19:39 by mefische         ###   ########.fr       */
+/*   Updated: 2026/02/16 11:54:01 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ int	check_exit(char **command, t_mshell_data *data)
 	if (!command || !command[0] || ft_strcmp(command[0], "exit") != 0)
 		return (1);
 	if (command[1] && command[2] && command[2][0] != '\0')
-		return (data->exit_status = 1, ft_printf("exit: too many arguments\n"), 1);
+		return (data->exit_status = 1,
+			ft_printf("exit: too many arguments\n"), 1);
 	exit_code = data->exit_status;
 	if (command[1])
 	{

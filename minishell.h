@@ -102,7 +102,9 @@ char	*get_env_var(char *token, t_mshell_data *data);
 char	*expand_tokens(char *token, t_mshell_data *data);
 void	set_operator_type(t_tokens *token);
 void	set_quote_type(t_tokens *token);
-void	append_status(t_mshell_data *data);
+char	*handle_brackets(char	*str, int len, int start, t_mshell_data *data);
+void	var_name_error(char *input, t_mshell_data *data);
+void	append_result(char	*str, t_mshell_data *data);
 
 // Executor
 void	executor(t_mshell_data *data);

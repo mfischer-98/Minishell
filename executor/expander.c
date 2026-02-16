@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 09:21:16 by mefische          #+#    #+#             */
-/*   Updated: 2026/02/13 16:29:02 by mefische         ###   ########.fr       */
+/*   Updated: 2026/02/16 11:55:15 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,24 @@ static int	handle_quotes(char c, t_expander *expander)
 	return (0);
 }
 
+// Finds environment variable value in the list
+char	*get_env_var(char *token, t_mshell_data *data)
+{
+	t_env	*temp;
+	int		len;
+
+	temp = data->env_var;
+	len = ft_strlen(token);
+	while (temp)
+	{
+		if (!ft_strncmp(token, temp->var, len)
+			&& ((temp->var[len] == '=' || temp->var[len] == '\0')))
+			return (ft_strdup(temp->var + len + 1));
+		temp = temp->next;
+	}
+	return (ft_strdup(""));
+}
+
 /*
 ** Handles $VAR or $? expansion
 ** Updates expander->result and expander->i
@@ -66,30 +84,29 @@ static void	handle_var(char *input, t_mshell_data *data)
 {
 	int		var_len;
 	char	*var_name;
-	char	*temp;
-	char	*old;
+	char	*value;
 
 	data->expander->i++;
 	if (input[data->expander->i] == '?')
+		return (append_result(ft_itoa(data->exit_status), data),
+			data->expander->i++, (void)0);
+	if (input[data->expander->i] == '{')
 	{
-		append_status(data);
-		data->expander->i++;
-		return ;
+		var_name = handle_brackets(input, ft_strlen(input),
+				data->expander->i, data);
+		if (!var_name)
+			return (var_name_error(input, data));
 	}
-	var_len = get_var_len(input + data->expander->i);
-	if (var_len == 0)
+	else
 	{
-		temp = ft_strdup("$");
-		old = data->expander->result;
-		data->expander->result = ft_strjoin(old, temp);
-		return (free(old), free(temp));
+		var_len = get_var_len(input + data->expander->i);
+		if (var_len == 0)
+			return (append_result("$", data));
+		var_name = ft_substr(input + data->expander->i, 0, var_len);
+		data->expander->i += var_len;
 	}
-	var_name = ft_substr(input + data->expander->i, 0, var_len);
-	temp = get_env_var(var_name, data);
-	old = data->expander->result;
-	data->expander->result = ft_strjoin(old, temp);
-	data->expander->i += var_len;
-	return (free(old), free(temp), free(var_name));
+	value = get_env_var(var_name, data);
+	return (append_result(value, data), free(value), free(var_name));
 }
 
 char	*expand_tokens(char *input, t_mshell_data *data)
