@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 09:21:13 by mefische          #+#    #+#             */
-/*   Updated: 2026/02/13 16:19:55 by mefische         ###   ########.fr       */
+/*   Updated: 2026/02/16 15:02:00 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,11 +113,20 @@ void	run_command(char **commandline, t_mshell_data *data)
 			data->exit_status = 1;
 			return ;
 		}
-		if (pid == 0) //child
+		if (pid == 0) //child, reset signals to default
+		{
+			sig_default(SIGINT); //dies with ctrl+C
+			sig_default(SIGQUIT); //dumps if needed
 			execute_external_command(commandline, data);
+		}
 		else //parent
+		{
 			waitpid(pid, &status, 0);
-		data->exit_status = WEXITSTATUS(status);
+			if (WIFEXITED(status)) //if parent caught signal first overrides g_signal
+				data->exit_status = WEXITSTATUS(status);
+			else if (WIFSIGNALED(status))
+				data->exit_status = 128 + WTERMSIG(status);
+		}
 	}
 }
 

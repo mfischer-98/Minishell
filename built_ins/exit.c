@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 11:08:33 by mefische          #+#    #+#             */
-/*   Updated: 2026/02/16 11:54:01 by mefische         ###   ########.fr       */
+/*   Updated: 2026/02/16 14:37:25 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,5 +37,6 @@ int	check_exit(char **command, t_mshell_data *data)
 	}
 	ft_printf("exit\n");
 	free_data(data);
+	rl_clear_history();
 	exit(exit_code);
 }

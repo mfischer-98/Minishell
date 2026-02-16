@@ -21,6 +21,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <sys/wait.h>
+# include <signal.h>
 
 //COLORS
 # define CYAN "\033[96m"
@@ -30,6 +31,8 @@
 # define BLUE "\033[94m"
 # define RED "\033[91m"
 # define RESET "\033[0m"
+
+extern int	g_signal; //global flag for signal status
 
 typedef enum s_node_type
 {
@@ -155,5 +158,12 @@ int		handle_append(char *str, t_mshell_data *data);
 // unset
 void	unset_env(char *str, t_mshell_data *data);
 int		unset(char **commandline, t_mshell_data *data);
+
+//SIGNALS
+void	sig_init(void);
+void	sig_init_exec(void);
+void	sigint_interactive(int sig);
+void	sig_exec(int sig);
+void	sig_default(int sig);
 
 #endif
