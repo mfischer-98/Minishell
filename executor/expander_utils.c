@@ -12,32 +12,68 @@
 
 #include "../minishell.h"
 
-void	append_status(t_mshell_data *data)
+//checks if we have closed brackets
+static int	valid_bracket(char	*str)
+{
+	int	i;
+	int	open;
+	int	close;
+
+	open = 0;
+	close = 0;
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '{')
+			open++;
+		else if (str[i] == '}')
+			close++;
+		i++;
+	}
+	if (open != close && open >= 1)
+		return (0);
+	return (1);
+}
+
+/*finds brackets and expands what is inside followed by text*/
+char	*handle_brackets(char	*str, int len, int start, t_mshell_data *data)
+{
+	char	*var_name;
+	int		i;
+
+	if (!valid_bracket(str))
+		return (NULL);
+	i = start + 1;
+	while (i < len && str[i] && str[i] != '}')
+		i++;
+	if (i >= len || str[i] != '}')
+		return (NULL);
+	len = i - (start + 1);
+	var_name = ft_substr(str, start + 1, len);
+	if (!var_name)
+		return (NULL);
+	data->expander->i = i + 1;
+	return (var_name);
+}
+
+void	var_name_error(char *input, t_mshell_data *data)
+{
+	ft_printf("minishell: unclosed the brackets\n");
+	data->expander->i = ft_strlen(input);
+	data->exit_status = 127;
+}
+
+void	append_result(char	*str, t_mshell_data *data)
 {
 	char	*temp;
 	char	*old;
 
-	temp = ft_itoa(data->exit_status);
+	if (str == NULL)
+		temp = ft_strdup("");
+	else
+		temp = ft_strdup(str);
 	old = data->expander->result;
 	data->expander->result = ft_strjoin(data->expander->result, temp);
 	free(old);
 	free(temp);
-}
-
-// Finds environment variable value in the list
-char	*get_env_var(char *token, t_mshell_data *data)
-{
-	t_env	*temp;
-	int		len;
-
-	temp = data->env_var;
-	len = ft_strlen(token);
-	while (temp)
-	{
-		if (!ft_strncmp(token, temp->var, len)
-			&& ((temp->var[len] == '=' || temp->var[len] == '\0')))
-			return (ft_strdup(temp->var + len + 1));
-		temp = temp->next;
-	}
-	return (ft_strdup(""));
 }
