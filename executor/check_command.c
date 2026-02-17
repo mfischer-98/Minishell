@@ -85,32 +85,6 @@ static char *find_command_in_path(char *cmd, t_env *env_list)
 		return (NULL);
 	return (find_in_paths(paths, cmd));
 }
-/* static int	count_env_vars(t_env *env_list)
-{
-	int	count;
-
-	count = 0;
-	while (env_list)
-	{
-		count++;
-		env_list = env_list->next;
-	}
-	return (count);
-} */
-
- /*static void	fill_envp(char **envp, t_env *env_list, int size)
-{
-	int	i;
-
-	i = 0;
-	while (i < size && env_list && env_list->var)
-	{
-		envp[i] = env_list->var;
-		i++;
-		env_list = env_list->next;
-	}
-	envp[i] = NULL;
-} */
 
 static void    execute_external_command(char **commandline, t_mshell_data *data)
 {
