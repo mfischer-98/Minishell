@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 11:19:33 by mefische          #+#    #+#             */
-/*   Updated: 2026/02/06 10:12:56 by mefische         ###   ########.fr       */
+/*   Updated: 2026/02/13 16:17:02 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	list_add(t_tokens **tokens, char *input)
 	new_node = malloc(sizeof(t_tokens));
 	if (!new_node)
 	{
-		free(tokens); //check later
+		free(tokens);
 		return ;
 	}
 	new_node->input = input;
@@ -49,46 +49,42 @@ void	print_list(t_tokens *tokens)
 	}
 }
 
-void	free_list(t_tokens *tokens)
+int	array_size(t_tokens *tokens)
 {
 	t_tokens	*temp;
-
-	while (tokens != NULL)
-	{
-		temp = tokens;
-		tokens = tokens->next;
-		free(temp);
-	}
-	free(tokens);
-}
-
-char	**array_join(t_tokens **tokens)
-{
-	char		**array;
-	t_tokens	*temp;
-	int			i;
 	int			size;
-	
+
+	temp = tokens;
 	size = 0;
-	i = 0;
-	temp = *tokens;
 	while (temp)
 	{
 		size++;
 		temp = temp->next;
 	}
+	return (size);
+}
+
+char	**array_join(t_tokens *tokens)
+{
+	char		**array;
+	t_tokens	*temp;
+	int			i;
+	int			size;
+
+	size = array_size(tokens);
+	i = 0;
 	array = malloc(sizeof(char *) * (size + 1));
 	if (!array)
-		return NULL;
-	temp = *tokens;
-	while(temp && i < size)
+		return (NULL);
+	temp = tokens;
+	while (temp && i < size)
 	{
 		array[i] = ft_strdup(temp->input);
-		if (!array[i]) 
+		if (!array[i])
 			return (free_array(array, i), NULL);
 		temp = temp->next;
 		i++;
 	}
 	array[i] = NULL;
-	return(array);
+	return (array);
 }

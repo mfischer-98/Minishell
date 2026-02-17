@@ -12,26 +12,49 @@
 
 #include "minishell.h"
 
-int main (int argc, char **argv, char **envp)
+static void	update_sig_status(t_mshell_data *data)
+{
+	data->exit_status = g_signal;
+	g_signal = 0;
+}
+
+static void	main_loop(t_mshell_data *data)
+{
+	char	*prompt;
+
+	while (1)
+	{
+		if (g_signal != 0)
+			update_sig_status(data);
+		prompt = readline("\x1b[32mminishell\x1b[0m> ");
+		if (!prompt)
+			break ;
+		if (g_signal != 0) //for ctrl+C during typing
+			update_sig_status(data);
+		add_history(prompt);
+		create_tokens(prompt, &data->tokens);
+		free(prompt);
+		sig_init_exec(); //silent handler caller before exec
+		executor(data);
+		if (g_signal != 0)
+			update_sig_status(data);
+		sig_init(); //restore ctrl+c interactive
+		free_list(data->tokens);
+		data->tokens = NULL;
+	}
+}
+
+int	main(int argc, char **argv, char **envp)
 {
 	t_mshell_data	*data;
-	char			*prompt;
-	
+
 	(void)argc;
 	(void)argv;
 	print_banner();
 	initialize(&data, envp);
-	while (1)
-	{
-		prompt = readline("\x1b[32mminishell\x1b[0m> ");
-		if (!prompt)
-			exit(0);
-		if (!check_exit(prompt))
-			exit(0); //function to check exit status
-		create_tokens(prompt, &data->tokens);
-		executor(data);
-		add_history(prompt);
-		free_list(data->tokens);
-		data->tokens = NULL;
-	}
+	rl_catch_signals = 0; //use our signal handlers
+	sig_init();
+	main_loop(data);
+	rl_clear_history();
+	exit(data->exit_status);
 }

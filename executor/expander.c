@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expander.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/02/13 09:21:16 by mefische          #+#    #+#             */
+/*   Updated: 2026/02/16 11:55:15 by mefische         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 /*Expander
@@ -47,16 +59,16 @@ static int	handle_quotes(char c, t_expander *expander)
 }
 
 // Finds environment variable value in the list
-char	*get_env_var(char *token, t_mshell_data *data) 
+char	*get_env_var(char *token, t_mshell_data *data)
 {
 	t_env	*temp;
 	int		len;
 
 	temp = data->env_var;
 	len = ft_strlen(token);
-	while(temp)
+	while (temp)
 	{
-		if (!ft_strncmp(token, temp->var, len) 
+		if (!ft_strncmp(token, temp->var, len)
 			&& ((temp->var[len] == '=' || temp->var[len] == '\0')))
 			return (ft_strdup(temp->var + len + 1));
 		temp = temp->next;
@@ -72,35 +84,36 @@ static void	handle_var(char *input, t_mshell_data *data)
 {
 	int		var_len;
 	char	*var_name;
-	char	*temp;
+	char	*value;
 
 	data->expander->i++;
 	if (input[data->expander->i] == '?')
+		return (append_result(ft_itoa(data->exit_status), data),
+			data->expander->i++, (void)0);
+	if (input[data->expander->i] == '{')
 	{
-		data->expander->result = ft_strjoin(data->expander->result, ft_itoa(data->exit_status));
-		data->expander->i++;
-		return ;
+		var_name = handle_brackets(input, ft_strlen(input),
+				data->expander->i, data);
+		if (!var_name)
+			return (var_name_error(input, data));
 	}
-	var_len = get_var_len(input + data->expander->i);
-	if (var_len == 0)
+	else
 	{
-		temp = ft_strdup("$");
-		data->expander->result = ft_strjoin(data->expander->result, temp);
-		free(temp);
-		return ;
+		var_len = get_var_len(input + data->expander->i);
+		if (var_len == 0)
+			return (append_result("$", data));
+		var_name = ft_substr(input + data->expander->i, 0, var_len);
+		data->expander->i += var_len;
 	}
-	var_name = ft_substr(input + data->expander->i, 0, var_len);
-	temp = get_env_var(var_name, data);
-	data->expander->result = ft_strjoin(data->expander->result, temp);
-	free(var_name);
-	free(temp);
-	data->expander->i += var_len;
+	value = get_env_var(var_name, data);
+	return (append_result(value, data), free(value), free(var_name));
 }
 
 char	*expand_tokens(char *input, t_mshell_data *data)
 {
 	char		*temp;
 	t_expander	*exp;
+	char		*old;
 
 	init_expander(&data->expander);
 	exp = data->expander;
@@ -108,15 +121,18 @@ char	*expand_tokens(char *input, t_mshell_data *data)
 	{
 		if (handle_quotes(input[exp->i], exp))
 			continue ;
-		if (input[exp->i] == '$' && !exp->in_single) 
+		if (input[exp->i] == '$' && !exp->in_single)
 		{
 			handle_var(input, data);
-			continue;
+			continue ;
 		}
 		temp = ft_substr(&input[exp->i], 0, 1);
-		exp->result = ft_strjoin(exp->result, temp);
+		old = exp->result;
+		exp->result = ft_strjoin(old, temp);
+		free(old);
 		free(temp);
 		exp->i++;
 	}
-	return (exp->result);
+	temp = ft_strdup(exp->result);
+	return (free(exp->result), exp->result = NULL, temp);
 }

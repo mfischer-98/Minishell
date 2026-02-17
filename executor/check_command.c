@@ -1,8 +1,29 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check_command.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/02/13 09:21:13 by mefische          #+#    #+#             */
+/*   Updated: 2026/02/16 15:02:00 by mefische         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
+static char	*find_command_in_path(char *cmd, t_env *env_list)
 static char	**get_paths_array(char *path_env)
 {
 	char	**paths;
+	char	*path_env;
+	char	*full_path;
+	int		i;
+	char	*temp;
+
+	if (access(cmd, X_OK) == 0)
+		return (cmd);
+	path_env = NULL;
 
 	if (!path_env)
 		return (NULL);
@@ -42,6 +63,12 @@ static char	*find_in_paths(char **paths, char *cmd)
 	i = 0;
 	while (paths[i])
 	{
+		full_path = ft_strjoin(paths[i], "/");
+		{
+			temp = ft_strjoin(full_path, cmd);
+			free(full_path);
+			full_path = temp;
+		}
 		full_path = join_path_cmd(paths[i], cmd);
 		if (!full_path)
 		{
@@ -59,6 +86,8 @@ static char	*find_in_paths(char **paths, char *cmd)
 	free_array(paths, i);
 	return (NULL);
 }
+
+static void	execute_external_command(char **commandline, t_mshell_data *data)
 
 static char *find_command_in_path(char *cmd, t_env *env_list)
 {
@@ -105,52 +134,32 @@ static void execute_external_command(char **commandline, t_env *env_list)
 	char	*cmd_path;
 	char	**envp;
 	int		size;
+	int		size;
 
-	cmd_path = find_command_in_path(commandline[0], env_list);
+	cmd_path = find_command_in_path(commandline[0], data->env_var);
 	if (!cmd_path)
 	{
 		ft_printf("minishell: command not found: %s\n", commandline[0]);
 		exit(127);
 	}
+	size = env_size(data->env_var);
+	envp = list_to_array(data->env_var, size);
 	size = count_env_vars(env_list);
 	envp = malloc(sizeof(char *) * (size + 2));
 	if (!envp)
+	{
+		perror("malloc envp");
+		exit(1);
+	}
 		return ;
 	fill_envp(envp, env_list, size);
 	execve(cmd_path, commandline, envp);
 	perror("execve");
+	free_array(envp, size);
 	exit(1);
 }
 
-static char	**build_command(t_tokens **tokens)
-{
-	char		**cmd;
-	t_tokens	*temp;
-	int			count;
-	int			i;
-
-	count = 0;
-	temp = *tokens;
-	while (temp && temp->type != NODE_PIPE)
-	{
-		count++;
-		temp = temp->next;
-	}
-	cmd = malloc(sizeof(char *) * (count + 1));
-	if (!cmd)
-		return (NULL);
-	i = 0;
-	temp = *tokens;
-	while (temp && temp->type != NODE_PIPE)
-	{
-		cmd[i++] = temp->input;
-		temp = temp->next;
-	}
-	cmd[i] = NULL;
-	return (cmd);
-}
-
-void run_command(char **commandline, t_mshell_data *data)
+void	run_command(char **commandline, t_mshell_data *data)
 {
 	pid_t	pid;
 	int		status;
@@ -158,16 +167,23 @@ void run_command(char **commandline, t_mshell_data *data)
 	if (!commandline || !commandline[0])
 		return ;
 	if (!ft_strcmp(commandline[0], "pwd"))
+		data->exit_status = pwd();
+	/* else if (!ft_strcmp(commandline[0], "cd"))
+		data->exit_status = cd(data, commandline); */
 		pwd();
 	else if (!ft_strcmp(commandline[0], "cd"))
 	 	cd(data, commandline);
 	else if (!ft_strcmp(commandline[0], "env"))
-		env(commandline, data);
+		data->exit_status = env(commandline, data);
 	else if (!ft_strcmp(commandline[0], "echo"))
-		echo(commandline);
+		data->exit_status = echo(commandline);
 	else if (!ft_strcmp(commandline[0], "export"))
-		export(commandline, data);
+		data->exit_status = export(commandline, data);
 	else if (!ft_strcmp(commandline[0], "unset"))
+		data->exit_status = unset(commandline, data);
+	else if (!ft_strcmp(commandline[0], "exit"))
+		check_exit(commandline, data);
+	else // Not a built-in - fork to then execute
 	 	unset(commandline, data);
 	else // not builtin
 	{
@@ -175,12 +191,24 @@ void run_command(char **commandline, t_mshell_data *data)
 		if (pid == -1)
 		{
 			perror("fork");
+			data->exit_status = 1;
 			return ;
+		}
+		if (pid == 0) //child, reset signals to default
+		{
+			sig_default(SIGINT); //dies with ctrl+C
+			sig_default(SIGQUIT); //dumps if needed
+			execute_external_command(commandline, data);
 		}
 		if (pid == 0) //child
 			execute_external_command(commandline, data->env_var);
 		else //parent
 			waitpid(pid, &status, 0);
+			if (WIFEXITED(status)) //if parent caught signal first overrides g_signal
+				data->exit_status = WEXITSTATUS(status);
+			else if (WIFSIGNALED(status))
+				data->exit_status = 128 + WTERMSIG(status);
+		}
 	}
 }
 
@@ -212,6 +240,7 @@ static int	check_unclosed_quotes(t_tokens *tokens)
 	return (0);
 }
 
+void	executor(t_mshell_data *data)
 static int	has_pipes(t_mshell_data *data)
 {
 	t_tokens	*temp;
@@ -287,27 +316,9 @@ static void	expand_all_tokens(t_mshell_data *data)
 		temp->input = expanded;
 		temp = temp->next;
 	}
-}
-
-void executor(t_mshell_data *data)
-{
-	char		**commands;
-
-	if (!data || !data->tokens)
-		return ;
-	if (check_unclosed_quotes(data->tokens))
-	{
-		ft_putstr_fd("minishell: Error: Unclosed quotes\n", 2);
-		data->exit_status = 1;
-		return ;
-	}
-	expand_all_tokens(data);
-	if (has_pipes(data))
-		execute_piped_commands(data, data->tokens);
-	else
-	{
-		commands = array_join(&data->tokens);
-		if (data->tokens && commands && commands[0])
-			run_command(commands, data);
-	}
+	commands = array_join(data->tokens);
+	if (data->tokens && data->tokens->type == NODE_WORD
+		&& commands && commands[0])
+		run_command(commands, data);
+	free_array(commands, array_size(data->tokens));
 }

@@ -1,40 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check_exit.c                                       :+:      :+:    :+:   */
+/*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 11:08:33 by mefische          #+#    #+#             */
-/*   Updated: 2026/01/27 14:46:46 by mefische         ###   ########.fr       */
+/*   Updated: 2026/02/16 14:37:25 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int check_exit(char *prompt)
+int	check_exit(char **command, t_mshell_data *data)
 {
-	char	**split;
 	int		exit_code;
 	int		i;
 
-	if (!prompt || !*prompt)
+	if (!command || !command[0] || ft_strcmp(command[0], "exit") != 0)
 		return (1);
-	split = ft_split(prompt, ' ');
-	if (!split || !split[0] || ft_strcmp(split[0], "exit") != 0)
-		return (1);
-		//return (free_split(split), 1);
-	exit_code = 0;
-	if (split[1])
+	if (command[1] && command[2] && command[2][0] != '\0')
+		return (data->exit_status = 1,
+			ft_printf("exit: too many arguments\n"), 1);
+	exit_code = data->exit_status;
+	if (command[1])
 	{
 		i = 0;
-		while (split[1][i] && ft_isdigit(split[1][i]))
+		while (command[1][i] && ft_isdigit(command[1][i]))
 			i++;
-		if (split[1][i] != '\0')
-			return (ft_printf("exit: invalid argument\n"), 1);
-			//return (ft_printf("exit: invalid argument\n"), free_split(split), 1);
-		exit_code = ft_atoi(split[1]);
+		if (command[1][i] != '\0')
+		{
+			data->exit_status = 2;
+			return (ft_printf("exit: %s: invalid argument\n", command[1]), 1);
+		}
+		exit_code = ft_atoi(command[1]) % 256;
 	}
-	//free_split(split);
-	exit(exit_code);  // Sai já aqui
+	ft_printf("exit\n");
+	free_data(data);
+	rl_clear_history();
+	exit(exit_code);
 }

@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export_print.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/02/13 09:20:57 by mefische          #+#    #+#             */
+/*   Updated: 2026/02/13 10:09:39 by mefische         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 char	**list_to_array(t_env *env_list, int size)
 {
-	char	**env_array; //ou t_env
+	char	**env_array;
 	t_env	*temp;
 	int		i;
 
@@ -23,8 +35,8 @@ char	**list_to_array(t_env *env_list, int size)
 
 void	bubble_sort_export(char **env_array, int size)
 {
-	int	i;
-	int	j;
+	int		i;
+	int		j;
 	char	*temp;
 
 	i = 0;
@@ -51,7 +63,6 @@ char	*trim_outer_quotes(char	*str)
 
 	if (!str || !*str)
 		return (ft_strdup(""));
-
 	len = ft_strlen(str);
 	if ((str[0] == '\'' || str[0] == '\"') && str[len - 1] == str[0])
 	{
@@ -89,7 +100,7 @@ void	print_variable(char *str)
 	free(name);
 }
 
-int print_export(t_mshell_data *data)
+int	print_export(t_mshell_data *data)
 {
 	char	**env_array;
 	int		size;

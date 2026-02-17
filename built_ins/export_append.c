@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export_append.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/02/13 09:20:55 by mefische          #+#    #+#             */
+/*   Updated: 2026/02/13 09:59:38 by mefische         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 int	get_name_len(char	*str)
@@ -10,7 +22,7 @@ int	get_name_len(char	*str)
 	return (i);
 }
 
-char *get_append_value(char	*str)
+char	*get_append_value(char	*str)
 {
 	char	*value;
 
@@ -20,15 +32,15 @@ char *get_append_value(char	*str)
 	return (value + 2);
 }
 
-char *get_old_var(char *name, int len, t_mshell_data *data)
+char	*get_old_var(char *name, int len, t_mshell_data *data)
 {
 	t_env	*temp;
 
 	temp = data->env_var;
 	while (temp)
 	{
-		if (!ft_strncmp(name, temp->var, len) &&
-			(temp->var[len] == '=' || temp->var[len] == '\0'))
+		if (!ft_strncmp(name, temp->var, len)
+			&& (temp->var[len] == '=' || temp->var[len] == '\0'))
 			return (temp->var);
 		temp = temp->next;
 	}
@@ -66,9 +78,11 @@ int	handle_append(char *str, t_mshell_data *data) //str: name+=value
 	char	*old_var;
 
 	name_len = get_name_len(str);
-	if (!name_len || !(name = ft_substr(str, 0, name_len)) || !identifier_valid(name))
+	name = ft_substr(str, 0, name_len);
+	if (!name_len || !name || !identifier_valid(name))
 		return (1);
-	if (!(value = get_append_value(str)))
+	value = get_append_value(str);
+	if (!value)
 		return (free(name), 1);
 	old_var = get_old_var(name, name_len, data);
 	if (!old_var)
