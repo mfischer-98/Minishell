@@ -12,15 +12,6 @@
 
 #include "../minishell.h"
 
-static char	*ft_get_env_value(t_env *env, char *name)
-{
-	while (env && ft_strncmp(env->var, name, ft_strlen(name)))
-		env = env->next;
-	if (env && env->var[ft_strlen(name)] == '=')
-		return (env->var + ft_strlen(name) + 1);
-	return (NULL);
-}
-
 static char	*ft_destination(t_mshell_data *data, char *arg)
 {
 	char	*value;
@@ -48,11 +39,11 @@ static int	ft_cd_env(t_mshell_data *data, char *old_pwd)
 	char	*new_pwd;
 
 	if (old_pwd)
-		ft_set_env_var(&data->env_var, "OLDPWD", old_pwd);
+		ft_set_env_var(data, "OLDPWD", old_pwd);
 	new_pwd = getcwd(NULL, 0);
 	if (!new_pwd)
 		return (perror("minishell: cd"), 1);
-	ft_set_env_var(&data->env_var, "PWD", new_pwd);
+	ft_set_env_var(data, "PWD", new_pwd);
 	free(new_pwd);
 	return (0);
 }
@@ -62,8 +53,12 @@ static int	ft_try_cdpath(t_mshell_data *data, char *dest, char *old_pwd)
 	char	**paths;
 	char	full[PATH_MAX];
 	int		i;
+	char	*cdpath;
 
-	paths = ft_split(ft_get_env_value(data->env_var, "CDPATH"), ':');
+	cdpath = ft_get_env_value(data->env_var, "CDPATH");
+	if (!cdpath || !*cdpath)
+		cdpath = ".";
+	paths = ft_split(cdpath, ':');
 	if (!paths)
 		return (-1);
 	i = -1;

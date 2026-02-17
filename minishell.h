@@ -21,6 +21,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <sys/wait.h>
+#include <errno.h>
 
 //COLORS
 # define CYAN "\033[96m"
@@ -103,6 +104,7 @@ char	*get_env_var(char *token, t_mshell_data *data);
 char	*expand_tokens(char *token, t_mshell_data *data);
 // Parsing
 void executor(t_mshell_data *data);
+void run_command(char **commandline, t_mshell_data *data);
 
 // Utils and list functions
 void	list_add(t_tokens **tokens, char *input);
@@ -141,7 +143,9 @@ int		get_name_len(char	*str);
 char	*get_append_value(char	*str);
 char	*get_old_var(char *name, int len, t_mshell_data *data);
 char	*build_var(char *name, char *old_var, char *new_value);
-int		handle_append(char *str, t_mshell_data *data);
+int		handle_append(char *str, t_mshell_data *data);// cd helpers
+char	*ft_get_env_value(t_env *env, char *name);
+void	ft_set_env_var(t_mshell_data *data, char *name, char *value);
 // unset
 void	unset_env(char *str, t_mshell_data *data);
 int		unset(char **commandline, t_mshell_data *data);
