@@ -77,6 +77,10 @@ void	add_token(t_tokens **tokens, char *input, t_node_type type)
 		return ;
 	new_node->input = input;
 	new_node->type = type;
+	new_node->redir_file = NULL;
+	new_node->heredoc_fd = -1;
+	new_node->quote_delim = 0;
+	new_node->is_redir_name = 0;
 	new_node->next = NULL;
 	if (*tokens == NULL)
 	{
@@ -101,5 +105,16 @@ void	add_type(t_tokens **tokens)
 		if (temp->type == NODE_UNKNOWN)
 			temp->type = NODE_WORD;
 		temp = temp->next;
+	}
+}
+
+void	add_redir_info(t_tokens *token)
+{
+	if (token->next)
+	{
+		token->redir_file = ft_strdup(token->next->input);
+		if (!token->redir_file)
+			return (perror("malloc"), (void)0);
+		token->next->is_redir_name = 1; //will skip later
 	}
 }

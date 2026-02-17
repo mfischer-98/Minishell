@@ -23,6 +23,7 @@
 # include <sys/wait.h>
 # include <errno.h>
 # include <signal.h>
+# include <fcntl.h>
 
 //COLORS
 # define CYAN "\033[96m"
@@ -60,6 +61,10 @@ typedef struct s_tokens
 {
 	char			*input;
 	t_node_type		type;
+	char			*redir_file; // filename for redirects
+	int				heredoc_fd; // FD for heredoc
+	int				quote_delim; // 1 if heredoc delimiter was quoted
+	int				is_redir_name; //se tiver um redirect antes, esse node nao conta no executor
 	struct s_tokens	*next;
 }			t_tokens;
 
@@ -104,7 +109,17 @@ void	handle_input(char *prompt);
 void	check_command(t_mshell_data *data);
 char	*get_env_var(char *token, t_mshell_data *data);
 char	*expand_tokens(char *token, t_mshell_data *data);
-// Parsing
+
+// Redirections
+void	add_redir_info(t_tokens *token);
+int		prep_heredoc(t_mshell_data *data);
+int		handle_heredoc(t_tokens *token, t_mshell_data *data);
+void	write_line(int fd, char *line, t_tokens *token, t_mshell_data *data);
+int		process_delimeter_quotes(t_tokens *token);
+char	*expand_heredoc_line(char *line, t_mshell_data *data);
+
+// Parser Executor
+void	executor(t_mshell_data *data);
 void	run_command(char **commandline, t_mshell_data *data);
 void	set_operator_type(t_tokens *token);
 void	set_quote_type(t_tokens *token);
@@ -112,8 +127,6 @@ char	*handle_brackets(char	*str, int len, int start, t_mshell_data *data);
 void	var_name_error(char *input, t_mshell_data *data);
 void	append_result(char	*str, t_mshell_data *data);
 
-// Executor
-void	executor(t_mshell_data *data);
 
 // Utils and list functions
 void	list_add(t_tokens **tokens, char *input);

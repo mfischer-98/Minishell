@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 09:21:13 by mefische          #+#    #+#             */
-/*   Updated: 2026/02/17 12:07:03 by mefische         ###   ########.fr       */
+/*   Updated: 2026/02/17 18:08:14 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,6 +141,9 @@ static char	**build_command(t_tokens **tokens)
 
 static void	ft_execve(char **commandline, t_mshell_data *data)
 {
+	pid_t	pid;
+	int		status;
+	
 	pid = fork();
 	if (pid == -1)
 	{
@@ -166,9 +169,6 @@ static void	ft_execve(char **commandline, t_mshell_data *data)
 
 void	run_command(char **commandline, t_mshell_data *data)
 {
-	pid_t	pid;
-	int		status;
-
 	if (!commandline || !commandline[0])
 		return ;
 	if (!ft_strcmp(commandline[0], "pwd"))
@@ -186,7 +186,7 @@ void	run_command(char **commandline, t_mshell_data *data)
 	else if (!ft_strcmp(commandline[0], "exit"))
 		check_exit(commandline, data);
 	else // Not a built-in - fork to then execute
-		ft_execve(commandline, data)
+		ft_execve(commandline, data);
 }
 
 static int	check_unclosed_quotes(t_tokens *tokens)
@@ -307,6 +307,8 @@ void	executor(t_mshell_data *data)
 		return (data->exit_status = 1, (void)0);
 	}
 	expand_all_tokens(data);
+	if (!prep_heredoc(data))
+		return ;
 	if (has_pipes(data))
 		execute_piped_commands(data, data->tokens);
 	else
