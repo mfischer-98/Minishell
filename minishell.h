@@ -15,23 +15,14 @@
 
 # include <stdlib.h>
 # include "libft/libft.h"
-<<<<<<< HEAD
-#include <stdio.h>
-#include <unistd.h>
-#include <limits.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <sys/wait.h>
-#include <errno.h>
-=======
 # include <stdio.h>
 # include <unistd.h>
 # include <limits.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <sys/wait.h>
+# include <errno.h>
 # include <signal.h>
->>>>>>> ca7c6e7501173635181a06225785f94c534877af
 
 //COLORS
 # define CYAN "\033[96m"
@@ -113,11 +104,8 @@ void	handle_input(char *prompt);
 void	check_command(t_mshell_data *data);
 char	*get_env_var(char *token, t_mshell_data *data);
 char	*expand_tokens(char *token, t_mshell_data *data);
-<<<<<<< HEAD
 // Parsing
-void executor(t_mshell_data *data);
-void run_command(char **commandline, t_mshell_data *data);
-=======
+void	run_command(char **commandline, t_mshell_data *data);
 void	set_operator_type(t_tokens *token);
 void	set_quote_type(t_tokens *token);
 char	*handle_brackets(char	*str, int len, int start, t_mshell_data *data);
@@ -126,7 +114,6 @@ void	append_result(char	*str, t_mshell_data *data);
 
 // Executor
 void	executor(t_mshell_data *data);
->>>>>>> ca7c6e7501173635181a06225785f94c534877af
 
 // Utils and list functions
 void	list_add(t_tokens **tokens, char *input);

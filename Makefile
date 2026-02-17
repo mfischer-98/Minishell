@@ -14,15 +14,9 @@ NAME = minishell
 
 SRC = main.c \
 		utils/free_data.c utils/list_utils.c utils/envp_list.c utils/init_utils.c banner.c \
-<<<<<<< HEAD
-		lexing/tokenizer.c executor/check_command.c executor/expander.c lexing/token_utils.c \
-		built_ins/pwd_env.c built_ins/export.c built_ins/export_utils.c built_ins/export_print.c built_ins/export_append.c built_ins/unset.c built_ins/echo.c built_ins/cd.c built_ins/cd_helper.c
+		lexing/tokenizer.c executor/check_command.c executor/expander.c executor/expander_utils.c lexing/token_utils.c signals/signal_handling.c \
+		built_ins/pwd_env.c built_ins/export.c built_ins/exit.c built_ins/export_utils.c built_ins/export_print.c built_ins/export_append.c built_ins/unset.c built_ins/echo.c built_ins/cd.c built_ins/cd_helper.c
 		
-=======
-		lexing/tokenizer.c executor/check_command.c executor/expander.c executor/expander_utils.c lexing/token_utils.c signals/signal_handling.c\
-		built_ins/pwd_env.c built_ins/export.c built_ins/export_utils.c built_ins/export_print.c built_ins/export_append.c built_ins/unset.c built_ins/echo.c built_ins/exit.c
->>>>>>> ca7c6e7501173635181a06225785f94c534877af
-
 OBJ = $(SRC:.c=.o)
 
 CC = cc
