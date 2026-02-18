@@ -119,7 +119,7 @@ int handle_heredoc(t_tokens *token, t_mshell_data *data)
 	token->heredoc_fd = open(".heredoc_temp", O_RDONLY);
 	if (token->heredoc_fd < 0)
 		return (perror("heredoc"), -1);
-	return (token->heredoc_fd);
+	return (unlink(".heredoc_temp"), token->heredoc_fd);
 }
 
 
