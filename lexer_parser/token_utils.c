@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 09:21:23 by mefische          #+#    #+#             */
-/*   Updated: 2026/02/13 14:26:06 by mefische         ###   ########.fr       */
+/*   Updated: 2026/02/17 18:08:50 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,13 +49,27 @@ void	set_operator_type(t_tokens *token)
 	if (!ft_strcmp(token->input, "|"))
 		token->type = NODE_PIPE;
 	else if (!ft_strcmp(token->input, ">>"))
+	{
 		token->type = NODE_APPEND;
+		add_redir_info(token);
+	}
 	else if (!ft_strcmp(token->input, "<<"))
+	{
 		token->type = NODE_HERE;
+		add_redir_info(token);
+		if (process_delimeter_quotes(token))
+			token->quote_delim = 1;
+	}
 	else if (!ft_strcmp(token->input, ">"))
+	{
 		token->type = NODE_OUT;
+		add_redir_info(token);
+	}
 	else if (!ft_strcmp(token->input, "<"))
+	{
 		token->type = NODE_IN;
+		add_redir_info(token);
+	}
 }
 
 void	set_quote_type(t_tokens *token)

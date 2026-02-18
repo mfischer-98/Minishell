@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 09:21:13 by mefische          #+#    #+#             */
-/*   Updated: 2026/02/17 12:07:03 by mefische         ###   ########.fr       */
+/*   Updated: 2026/02/18 16:45:03 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,8 @@ static void	execute_external_command(char **commandline, t_mshell_data *data)
 	char	**envp;
 	int		size;
 
+	if (apply_redirects(data->tokens))
+		exit(1);
 	cmd_path = find_command_in_path(commandline[0], data->env_var);
 	if (!cmd_path)
 	{
@@ -139,8 +141,11 @@ static char	**build_command(t_tokens **tokens)
 	return (cmd);
 }
 
-static void	ft_execve(char **commandline, t_mshell_data *data)
+void	ft_execve(char **commandline, t_mshell_data *data)
 {
+	pid_t	pid;
+	int		status;
+	
 	pid = fork();
 	if (pid == -1)
 	{
@@ -166,9 +171,6 @@ static void	ft_execve(char **commandline, t_mshell_data *data)
 
 void	run_command(char **commandline, t_mshell_data *data)
 {
-	pid_t	pid;
-	int		status;
-
 	if (!commandline || !commandline[0])
 		return ;
 	if (!ft_strcmp(commandline[0], "pwd"))
@@ -186,7 +188,7 @@ void	run_command(char **commandline, t_mshell_data *data)
 	else if (!ft_strcmp(commandline[0], "exit"))
 		check_exit(commandline, data);
 	else // Not a built-in - fork to then execute
-		ft_execve(commandline, data)
+		ft_execve(commandline, data);
 }
 
 static int	check_unclosed_quotes(t_tokens *tokens)
@@ -307,6 +309,8 @@ void	executor(t_mshell_data *data)
 		return (data->exit_status = 1, (void)0);
 	}
 	expand_all_tokens(data);
+	if (!prep_heredoc(data))
+		return ;
 	if (has_pipes(data))
 		execute_piped_commands(data, data->tokens);
 	else
@@ -314,7 +318,12 @@ void	executor(t_mshell_data *data)
 		commands = array_join(data->tokens);
 		if (data->tokens && data->tokens->type == NODE_WORD
 			&& commands && commands[0])
-			run_command(commands, data);
+		{
+			if (!has_redirect(data->tokens))
+				run_command(commands, data);
+			else
+				run_builtin_redirects(commands, data);
+		}
 	}
-	//free_array(commands, array_size(data->tokens));
+	//free_array(commands, array_size(commands));
 }

@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 09:21:36 by mefische          #+#    #+#             */
-/*   Updated: 2026/02/13 16:16:50 by mefische         ###   ########.fr       */
+/*   Updated: 2026/02/17 18:19:48 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ void	free_list(t_tokens *tokens)
 		tokens = tokens->next;
 		if (temp->input)
 			free(temp->input);
+		if (temp->redir_file)
+			free(temp->redir_file);
 		free(temp);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 11:19:33 by mefische          #+#    #+#             */
-/*   Updated: 2026/02/13 16:17:02 by mefische         ###   ########.fr       */
+/*   Updated: 2026/02/17 18:05:43 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,10 @@ int	array_size(t_tokens *tokens)
 
 	temp = tokens;
 	size = 0;
-	while (temp)
+	while (temp && temp->type != NODE_PIPE)
 	{
-		size++;
+		if (temp->type == NODE_WORD && !temp->is_redir_name)
+			size++;
 		temp = temp->next;
 	}
 	return (size);
@@ -77,13 +78,16 @@ char	**array_join(t_tokens *tokens)
 	if (!array)
 		return (NULL);
 	temp = tokens;
-	while (temp && i < size)
+	while (temp && temp->type != NODE_PIPE)
 	{
-		array[i] = ft_strdup(temp->input);
-		if (!array[i])
-			return (free_array(array, i), NULL);
+		if ((temp->type == NODE_WORD && !temp->is_redir_name))
+		{
+			array[i] = ft_strdup(temp->input);
+			if (!array[i])
+				return (free_array(array, i), NULL);
+			i++;
+		}
 		temp = temp->next;
-		i++;
 	}
 	array[i] = NULL;
 	return (array);
