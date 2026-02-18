@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 09:21:13 by mefische          #+#    #+#             */
-/*   Updated: 2026/02/18 09:56:15 by mefische         ###   ########.fr       */
+/*   Updated: 2026/02/18 16:45:03 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,7 @@ static char	**build_command(t_tokens **tokens)
 	return (cmd);
 }
 
-static void	ft_execve(char **commandline, t_mshell_data *data)
+void	ft_execve(char **commandline, t_mshell_data *data)
 {
 	pid_t	pid;
 	int		status;
@@ -318,7 +318,12 @@ void	executor(t_mshell_data *data)
 		commands = array_join(data->tokens);
 		if (data->tokens && data->tokens->type == NODE_WORD
 			&& commands && commands[0])
-			run_command(commands, data);
+		{
+			if (!has_redirect(data->tokens))
+				run_command(commands, data);
+			else
+				run_builtin_redirects(commands, data);
+		}
 	}
-	//free_array(commands, array_size(data->tokens));
+	//free_array(commands, array_size(commands));
 }

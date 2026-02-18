@@ -16,7 +16,7 @@ SRC = main.c \
 		utils/free_data.c utils/list_utils.c utils/envp_list.c utils/init_utils.c banner.c \
 		lexer_parser/tokenizer.c executor/check_command.c executor/expander.c executor/expander_utils.c lexer_parser/token_utils.c signals/signal_handling.c \
 		built_ins/pwd_env.c built_ins/export.c built_ins/exit.c built_ins/export_utils.c built_ins/export_print.c built_ins/export_append.c built_ins/unset.c built_ins/echo.c built_ins/cd.c built_ins/cd_helper.c \
-		redirections/heredoc.c redirections/heredoc_utils.c redirections/redirect.c
+		redirections/heredoc.c redirections/heredoc_utils.c redirections/redirect.c redirections/redirect_utils.c
 		
 OBJ = $(SRC:.c=.o)
 

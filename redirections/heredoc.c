@@ -59,7 +59,9 @@ static int	open_heredoc_file(void)
 	return (fd);
 }
 
-/* Heredoc loop: reads user input */
+/* Heredoc loop: reads user input and calls write line to put it in fd
+	- if delimeter = free line and break
+	- reset signals in the end to go back to my shell stuff */
 static void	heredoc_loop(int fd, t_tokens *token, t_mshell_data *data)
 {
 	char	*line;
@@ -85,31 +87,36 @@ static void	heredoc_loop(int fd, t_tokens *token, t_mshell_data *data)
 }
 
 
-/* Handle heredoc: fork a child to read heredoc input so Ctrl+C only interrupts heredoc, not the shell */
+/* Handle heredoc: fork a child to read heredoc input so Ctrl+C only interrupts heredoc, not the shell 
+	- fd = Open temp file for heredoc
+	- fork -> child process -> set heredoc signals and run loop 
+	- parent waits for child to finish
+	- if child was interrupted by SIGINT (Ctrl+C), change status and abort heredoc 
+	- reopen heredoc file later for reading in parent */
 int handle_heredoc(t_tokens *token, t_mshell_data *data)
 {
 	int fd;
 	pid_t pid;
 	int status;
 
-	fd = open_heredoc_file(); // Open temp file for heredoc
+	fd = open_heredoc_file();
 	if (fd < 0)
 		return (perror("heredoc"), -1);
 	pid = fork();
 	if (pid < 0)
 		return (close(fd), perror("fork"), -1);
-	if (pid == 0) // Child process: set heredoc signals and run heredoc loop
+	if (pid == 0)
 	{
 		set_heredoc_signals();
 		heredoc_loop(fd, token, data);
 		close(fd);
-		exit(0); // Exit child after heredoc
+		exit(0);
 	}
-	close(fd); // Parent process: wait for child to finish heredoc
+	close(fd);
 	waitpid(pid, &status, 0);
-	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)// If child was interrupted by SIGINT (Ctrl+C), propagate status and abort heredoc
+	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
 		return (data->exit_status = 128 + WTERMSIG(status), write(1, "\n", 1), -1);
-	token->heredoc_fd = open(".heredoc_temp", O_RDONLY);// Reopen heredoc file for reading in parent
+	token->heredoc_fd = open(".heredoc_temp", O_RDONLY);
 	if (token->heredoc_fd < 0)
 		return (perror("heredoc"), -1);
 	return (token->heredoc_fd);

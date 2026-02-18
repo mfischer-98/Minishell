@@ -121,6 +121,8 @@ void	reset_signals(void);
 void	write_line(int fd, char *line, t_tokens *token, t_mshell_data *data);
 int		process_delimeter_quotes(t_tokens *token);
 char	*expand_heredoc_line(char *line, t_mshell_data *data);
+int		has_redirect(t_tokens *tokens);
+void	run_builtin_redirects(char **commandline, t_mshell_data *data);
 
 // Parser Executor
 void	executor(t_mshell_data *data);
@@ -157,6 +159,7 @@ int		env(char **commandline, t_mshell_data *data);
 int		echo(char **arg);
 int		cd(t_mshell_data *data, char **args);
 int		check_exit(char **command, t_mshell_data *data);
+void	ft_execve(char **commandline, t_mshell_data *data);
 // export
 int		export(char **commandline, t_mshell_data *data);
 int		handle_no_equal(char *arg, t_mshell_data *data);

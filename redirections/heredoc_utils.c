@@ -12,11 +12,14 @@
 
 #include "../minishell.h"
 
+/* Write lines in temp_file 
+	- if delimeter had quotes = do not expand variables
+	- if not, expand variables before writing in fd */
 void	write_line(int fd, char *line, t_tokens *token, t_mshell_data *data)
 {
 	char	*expanded;
 	
-	if (!token->quote_delim) //delimeter was not quoted
+	if (!token->quote_delim) 
 	{
 		expanded = expand_heredoc_line(line, data);
 		write(fd, expanded, ft_strlen(expanded));
@@ -26,7 +29,9 @@ void	write_line(int fd, char *line, t_tokens *token, t_mshell_data *data)
 		write(fd, line, ft_strlen(line));
 	write(fd, "\n", 1);
 }
-
+/* Function to check if delimeter has quotes ('or")
+	- if yes, I do not expand variables later
+	- i also take quotes out so when person types delimeter later it works */
 int	process_delimeter_quotes(t_tokens *token)
 {
 	int		len;
@@ -50,22 +55,25 @@ int	process_delimeter_quotes(t_tokens *token)
 	return (0);
 }
 /* Function so signals work as I want during heredoc 
-	- using signalction so I can reset readline function */
+	- using signalction so I can reset readline function 
+	- sa.sa_flags without SA_RESTART = interrupt readline
+	- custom indicate custom handler for sigint behaviour */
 void	set_heredoc_signals(void)
 {
 	struct sigaction	sa;
 
-	// SIGINT: custom handler (implement heredoc_sigint to write("\n",1); exit(1);)
 	sa.sa_handler = heredoc_sigint;
-	sa.sa_flags = 0;  // No SA_RESTART: interrupt readline
+	sa.sa_flags = 0;
 	sigemptyset(&sa.sa_mask);
 	sigaction(SIGINT, &sa, NULL);
-	
 	sa.sa_handler = SIG_IGN;
 	sigaction(SIGQUIT, &sa, NULL);
 }
 
-/* Handler for signal in case of Ctrl + C */
+/* Handler for signal in case of Ctrl + C 
+	- need cleanup_after_signal or minishell has weird behaviour after signal
+	- change signal to 130 and exit child
+*/
 void	heredoc_sigint(int	sig)
 {
 	(void)sig;
@@ -75,17 +83,16 @@ void	heredoc_sigint(int	sig)
 	exit(1);
 }
 
-/* Reset signals after heredoc */
+/* Reset signals after heredoc 
+	- Reset SIGINT to ignore and siquit as well*/
 void	reset_signals(void)
 {
 	struct sigaction	sa;
 
-	// Reset SIGINT to ignore (common for non-heredoc shell modes)
 	sa.sa_handler = SIG_IGN;
 	sa.sa_flags = 0;
 	sigemptyset(&sa.sa_mask);
 	sigaction(SIGINT, &sa, NULL);
-	
 	sa.sa_handler = SIG_IGN;
 	sigemptyset(&sa.sa_mask);
 	sigaction(SIGQUIT, &sa, NULL);
