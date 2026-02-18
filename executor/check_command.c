@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 09:21:13 by mefische          #+#    #+#             */
-/*   Updated: 2026/02/17 18:08:14 by mefische         ###   ########.fr       */
+/*   Updated: 2026/02/18 09:56:15 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,8 @@ static void	execute_external_command(char **commandline, t_mshell_data *data)
 	char	**envp;
 	int		size;
 
+	if (apply_redirects(data->tokens))
+		exit(1);
 	cmd_path = find_command_in_path(commandline[0], data->env_var);
 	if (!cmd_path)
 	{

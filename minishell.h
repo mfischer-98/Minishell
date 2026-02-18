@@ -113,7 +113,11 @@ char	*expand_tokens(char *token, t_mshell_data *data);
 // Redirections
 void	add_redir_info(t_tokens *token);
 int		prep_heredoc(t_mshell_data *data);
+int		apply_redirects(t_tokens *tokens);
 int		handle_heredoc(t_tokens *token, t_mshell_data *data);
+void	set_heredoc_signals(void);
+void	heredoc_sigint(int	sig);
+void	reset_signals(void);
 void	write_line(int fd, char *line, t_tokens *token, t_mshell_data *data);
 int		process_delimeter_quotes(t_tokens *token);
 char	*expand_heredoc_line(char *line, t_mshell_data *data);

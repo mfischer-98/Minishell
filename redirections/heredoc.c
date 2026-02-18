@@ -81,20 +81,35 @@ static void	heredoc_loop(int fd, t_tokens *token, t_mshell_data *data)
 		write_line(fd, line, token, data);
 		free(line);
 	}
+	reset_signals();
 }
 
 
-/* Handle heredoc: create temp fd, use readline to read user input, expand and write in file. Then close fd */
-int	handle_heredoc(t_tokens *token, t_mshell_data *data)
+/* Handle heredoc: fork a child to read heredoc input so Ctrl+C only interrupts heredoc, not the shell */
+int handle_heredoc(t_tokens *token, t_mshell_data *data)
 {
-	int	fd;
-	
-	fd = open_heredoc_file(); // opening temp file to write
+	int fd;
+	pid_t pid;
+	int status;
+
+	fd = open_heredoc_file(); // Open temp file for heredoc
 	if (fd < 0)
 		return (perror("heredoc"), -1);
-	heredoc_loop(fd, token, data); //reads lines until delimeter
-	close(fd);	//closes write fd
-	token->heredoc_fd = open(".heredoc_temp", O_RDONLY); //reopen to read
+	pid = fork();
+	if (pid < 0)
+		return (close(fd), perror("fork"), -1);
+	if (pid == 0) // Child process: set heredoc signals and run heredoc loop
+	{
+		set_heredoc_signals();
+		heredoc_loop(fd, token, data);
+		close(fd);
+		exit(0); // Exit child after heredoc
+	}
+	close(fd); // Parent process: wait for child to finish heredoc
+	waitpid(pid, &status, 0);
+	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)// If child was interrupted by SIGINT (Ctrl+C), propagate status and abort heredoc
+		return (data->exit_status = 128 + WTERMSIG(status), write(1, "\n", 1), -1);
+	token->heredoc_fd = open(".heredoc_temp", O_RDONLY);// Reopen heredoc file for reading in parent
 	if (token->heredoc_fd < 0)
 		return (perror("heredoc"), -1);
 	return (token->heredoc_fd);

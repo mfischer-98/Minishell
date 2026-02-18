@@ -49,3 +49,44 @@ int	process_delimeter_quotes(t_tokens *token)
 	}
 	return (0);
 }
+/* Function so signals work as I want during heredoc 
+	- using signalction so I can reset readline function */
+void	set_heredoc_signals(void)
+{
+	struct sigaction	sa;
+
+	// SIGINT: custom handler (implement heredoc_sigint to write("\n",1); exit(1);)
+	sa.sa_handler = heredoc_sigint;
+	sa.sa_flags = 0;  // No SA_RESTART: interrupt readline
+	sigemptyset(&sa.sa_mask);
+	sigaction(SIGINT, &sa, NULL);
+	
+	sa.sa_handler = SIG_IGN;
+	sigaction(SIGQUIT, &sa, NULL);
+}
+
+/* Handler for signal in case of Ctrl + C */
+void	heredoc_sigint(int	sig)
+{
+	(void)sig;
+	g_signal = 130;
+	write(1, "^C\n", 3);
+	rl_cleanup_after_signal();
+	exit(1);
+}
+
+/* Reset signals after heredoc */
+void	reset_signals(void)
+{
+	struct sigaction	sa;
+
+	// Reset SIGINT to ignore (common for non-heredoc shell modes)
+	sa.sa_handler = SIG_IGN;
+	sa.sa_flags = 0;
+	sigemptyset(&sa.sa_mask);
+	sigaction(SIGINT, &sa, NULL);
+	
+	sa.sa_handler = SIG_IGN;
+	sigemptyset(&sa.sa_mask);
+	sigaction(SIGQUIT, &sa, NULL);
+}
