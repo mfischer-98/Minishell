@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-static void	update_sig_status(t_mshell_data *data)
+void	update_sig_status(t_mshell_data *data)
 {
 	data->exit_status = g_signal;
 	g_signal = 0;
@@ -43,7 +43,7 @@ static void	main_loop(t_mshell_data *data)
 		data->tokens = NULL;
 	}
 }
-
+ 
 int	main(int argc, char **argv, char **envp)
 {
 	t_mshell_data	*data;
@@ -56,5 +56,6 @@ int	main(int argc, char **argv, char **envp)
 	sig_init();
 	main_loop(data);
 	rl_clear_history();
-	exit(data->exit_status);
+	//exit(data->exit_status);
+	return (data->exit_status);
 }

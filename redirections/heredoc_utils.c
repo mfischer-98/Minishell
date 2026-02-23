@@ -18,24 +18,25 @@
 void	write_line(int fd, char *line, t_tokens *token, t_mshell_data *data)
 {
 	char	*expanded;
-	
-	if (!token->quote_delim) 
+
+	if (!token->quote_delim)
 	{
 		expanded = expand_heredoc_line(line, data);
 		write(fd, expanded, ft_strlen(expanded));
 		free(expanded);
 	}
-	else //quoted delimeter = do not expand variables
+	else
 		write(fd, line, ft_strlen(line));
 	write(fd, "\n", 1);
 }
+
 /* Function to check if delimeter has quotes ('or")
 	- if yes, I do not expand variables later
 	- i also take quotes out so when person types delimeter later it works */
 int	process_delimeter_quotes(t_tokens *token)
 {
 	int		len;
-	char	*new_delim; //without quotes
+	char	*new_delim;
 
 	if (!token->redir_file || !token->redir_file[0])
 		return (0);
@@ -54,6 +55,7 @@ int	process_delimeter_quotes(t_tokens *token)
 	}
 	return (0);
 }
+
 /* Function so signals work as I want during heredoc 
 	- using signalction so I can reset readline function 
 	- sa.sa_flags without SA_RESTART = interrupt readline
@@ -74,7 +76,7 @@ void	set_heredoc_signals(void)
 	- need cleanup_after_signal or minishell has weird behaviour after signal
 	- change signal to 130 and exit child
 */
-void	heredoc_sigint(int	sig)
+void	heredoc_sigint(int sig)
 {
 	(void)sig;
 	g_signal = 130;
