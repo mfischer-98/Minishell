@@ -74,18 +74,21 @@ int	apply_redirects(t_tokens *tokens)
 	t_tokens	*temp;
 
 	temp = tokens;
-	printf("DEBUG: token=%s type=%d redir_file=%s\n", 
-       temp->input, temp->type, temp->redir_file ? temp->redir_file : "NULL");
 	while (temp && temp->type != NODE_PIPE)
 	{
-		if (temp->type == NODE_HERE && apply_heredoc(temp->heredoc_fd))
-			return (1);
-		else if (temp->type == NODE_IN && apply_input(temp->redir_file))
-			return (1);
-		else if (temp->type == NODE_OUT && apply_output(temp->redir_file))
-			return (1);
-		else if (temp->type == NODE_APPEND && apply_append(temp->redir_file))
-			return (1);
+		if (temp->type == NODE_WORD || temp->is_redir_name == 1)
+		{
+			temp = temp->next;
+			continue;
+		}
+		if (temp->type == NODE_HERE && temp->redir_file)
+			return (apply_heredoc(temp->heredoc_fd), 1);
+		else if (temp->type == NODE_IN && temp->redir_file)
+			return (apply_input(temp->redir_file), 1);
+		else if (temp->type == NODE_OUT && temp->redir_file)
+			return (apply_output(temp->redir_file), 1);
+		else if (temp->type == NODE_APPEND && temp->redir_file)
+			return (apply_append(temp->redir_file), 1);
 		temp = temp->next;
 	}
 	return (0);

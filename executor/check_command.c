@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 09:21:13 by mefische          #+#    #+#             */
-/*   Updated: 2026/02/23 10:39:32 by mefische         ###   ########.fr       */
+/*   Updated: 2026/02/23 13:54:23 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,8 +189,8 @@ void	run_command(char **commandline, t_mshell_data *data)
 		data->exit_status = unset(commandline, data);
 	else if (!ft_strcmp(commandline[0], "exit"))
 		check_exit(commandline, data);
-/* 	else // Not a built-in - fork to then execute
-		ft_execve(commandline, data); took it out and now this works: ls | cat > ls_out.txt */
+	else // Not a built-in - fork to then execute
+		ft_execve(commandline, data);//took it out and now this works: ls | cat > ls_out.txt
 }
 
 static int	check_unclosed_quotes(t_tokens *tokens)
