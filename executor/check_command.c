@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 09:21:13 by mefische          #+#    #+#             */
-/*   Updated: 2026/02/18 16:45:03 by mefische         ###   ########.fr       */
+/*   Updated: 2026/02/23 10:39:32 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,13 +86,13 @@ static char *find_command_in_path(char *cmd, t_env *env_list)
 	return (find_in_paths(paths, cmd)); // For each directory, creates a full_path and checks if that file exists, returns path when finds 1st match
 }
 
-static void	execute_external_command(char **commandline, t_mshell_data *data)
+static void	execute_external_command(char **commandline, t_mshell_data *data, t_tokens *segment)
 {
 	char	*cmd_path;
 	char	**envp;
 	int		size;
 
-	if (apply_redirects(data->tokens))
+	if (apply_redirects(segment))
 		exit(1);
 	cmd_path = find_command_in_path(commandline[0], data->env_var);
 	if (!cmd_path)
@@ -124,7 +124,8 @@ static char	**build_command(t_tokens **tokens)
 	temp = *tokens;
 	while (temp && temp->type != NODE_PIPE)
 	{
-		count++;
+		if (temp->type == NODE_WORD) //test
+			count++;
 		temp = temp->next;
 	}
 	cmd = malloc(sizeof(char *) * (count + 1));
@@ -134,7 +135,8 @@ static char	**build_command(t_tokens **tokens)
 	temp = *tokens;
 	while (temp && temp->type != NODE_PIPE)
 	{
-		cmd[i++] = temp->input;
+		if (temp->type == NODE_WORD) // test
+			cmd[i++] = temp->input;
 		temp = temp->next;
 	}
 	cmd[i] = NULL;
@@ -157,7 +159,7 @@ void	ft_execve(char **commandline, t_mshell_data *data)
 	{
 		sig_default(SIGINT); //dies with ctrl+C
 		sig_default(SIGQUIT); //dumps if needed
-		execute_external_command(commandline, data);
+		execute_external_command(commandline, data, data->tokens);
 	}
 	else //parent
 	{
@@ -187,8 +189,8 @@ void	run_command(char **commandline, t_mshell_data *data)
 		data->exit_status = unset(commandline, data);
 	else if (!ft_strcmp(commandline[0], "exit"))
 		check_exit(commandline, data);
-	else // Not a built-in - fork to then execute
-		ft_execve(commandline, data);
+/* 	else // Not a built-in - fork to then execute
+		ft_execve(commandline, data); took it out and now this works: ls | cat > ls_out.txt */
 }
 
 static int	check_unclosed_quotes(t_tokens *tokens)
@@ -239,6 +241,7 @@ static void	setup_child_pipe(int *pipefd, int has_next)
 	{
 		dup2(pipefd[1], STDOUT_FILENO);
 		close(pipefd[0]);
+		close(pipefd[1]);
 	}
 }
 
@@ -246,6 +249,7 @@ static void	setup_parent_pipe(int *pipefd)
 {
 	close(pipefd[1]);
 	dup2(pipefd[0], STDIN_FILENO);
+	close(pipefd[0]);
 }
 
 static void	execute_piped_commands(t_mshell_data *data, t_tokens *tokens)
@@ -269,7 +273,7 @@ static void	execute_piped_commands(t_mshell_data *data, t_tokens *tokens)
 	if (pid == 0)
 	{
 		setup_child_pipe(pipefd, (next_cmd != NULL));
-		execute_external_command(cmd, data);
+		execute_external_command(cmd, data, tokens);
 	}
 	if (next_cmd)
 	{
@@ -298,7 +302,7 @@ static void	expand_all_tokens(t_mshell_data *data)
 
 void	executor(t_mshell_data *data)
 {
-	char	**commands;
+	char	**commands = NULL;
 
 	if (!data || !data->tokens)
 		return ;
@@ -321,9 +325,12 @@ void	executor(t_mshell_data *data)
 		{
 			if (!has_redirect(data->tokens))
 				run_command(commands, data);
-			else
+			else if (is_builtin(commands))
 				run_builtin_redirects(commands, data);
+			else
+				ft_execve(commands, data);
 		}
 	}
 	//free_array(commands, array_size(commands));
 }
+	

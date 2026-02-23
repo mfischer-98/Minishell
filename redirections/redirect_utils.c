@@ -20,8 +20,8 @@ int	has_redirect(t_tokens *tokens)
 	temp = tokens;
 	while (temp && temp->type != NODE_PIPE)
 	{
-		if (temp->type == NODE_IN || temp->type == NODE_OUT ||
-			temp->type == NODE_APPEND || temp->type == NODE_HERE)
+		if (temp->type == NODE_IN || temp->type == NODE_OUT
+			|| temp->type == NODE_APPEND || temp->type == NODE_HERE)
 			return (1);
 		temp = temp->next;
 	}
@@ -32,7 +32,7 @@ int	has_redirect(t_tokens *tokens)
 	- save terminal → point stdout to file → run builtin → restore terminal
 	- save keyboard (oldstdin) and save terminal (oldstdout)
 	- restore fds */
-void	run_builtin_redirects(char **commandline, t_mshell_data *data) 
+void	run_builtin_redirects(char **commandline, t_mshell_data *data)
 {
 	int	old_stdin;
 	int	old_stdout;
@@ -49,7 +49,36 @@ void	run_builtin_redirects(char **commandline, t_mshell_data *data)
 	close(old_stdout);
 }
 
-/* static void	execute_external_command(char **commandline, t_mshell_data *data)
+/* If it is builtin, i need to do an extra step with dup2,
+	if it is not, it can go directly to ft_execve function */
+int	is_builtin(char **commands)
+{
+	int	i;
+	
+	i = 0;
+	while(commands[i])
+	{
+		if (!ft_strcmp(commands[0], "pwd"))
+			return (1);
+		else if (!ft_strcmp(commands[0], "cd"))
+			return (1);
+		else if (!ft_strcmp(commands[0], "env"))
+			return (1);
+		else if (!ft_strcmp(commands[0], "echo"))
+			return (1);
+		else if (!ft_strcmp(commands[0], "export"))
+			return (1);
+		else if (!ft_strcmp(commands[0], "unset"))
+			return (1);
+		else if (!ft_strcmp(commands[0], "exit"))
+			return (1);
+		i++;
+	}
+	return(0);
+}
+
+/* static void	execute_external_command
+(char **commandline, t_mshell_data *data)
 {
 	char	*cmd_path;
 	char	**envp;
