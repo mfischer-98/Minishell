@@ -145,6 +145,7 @@ int		array_size(t_tokens *tokens);
 void	initialize(t_mshell_data **data, char **envp);
 void	init_expander(t_expander **expander);
 t_token_state	*init_state(void);
+char	*get_prompt(void);
 void	free_list(t_tokens *tokens);
 void	free_array(char **array, int n);
 void	free_data(t_mshell_data *data);
