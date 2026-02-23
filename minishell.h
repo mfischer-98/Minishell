@@ -34,7 +34,7 @@
 # define RED "\033[91m"
 # define RESET "\033[0m"
 
-extern int	g_signal; //global flag for signal status
+extern int	g_signal;
 
 typedef enum s_node_type
 {
@@ -57,14 +57,19 @@ typedef struct s_token_state
 	char	quote_char;
 }			t_token_state;
 
+/*	redir_file = file name for redirects
+	quote_delim = 1 if was quoted
+	redi_name = if there was a redirect before, 
+	this is not a command for executor, so skip
+*/
 typedef struct s_tokens
 {
 	char			*input;
 	t_node_type		type;
-	char			*redir_file; // filename for redirects
-	int				heredoc_fd; // FD for heredoc
-	int				quote_delim; // 1 if heredoc delimiter was quoted
-	int				is_redir_name; //se tiver um redirect antes, esse node nao conta no executor
+	char			*redir_file;
+	int				heredoc_fd;
+	int				quote_delim;
+	int				is_redir_name;
 	struct s_tokens	*next;
 }			t_tokens;
 
@@ -105,25 +110,6 @@ void	add_type(t_tokens **tokens);
 // Input reading
 void	handle_input(char *prompt);
 
-// Parser Expander
-void	check_command(t_mshell_data *data);
-char	*get_env_var(char *token, t_mshell_data *data);
-char	*expand_tokens(char *token, t_mshell_data *data);
-
-// Redirections
-void	add_redir_info(t_tokens *token);
-int		prep_heredoc(t_mshell_data *data);
-int		apply_redirects(t_tokens *tokens);
-int		handle_heredoc(t_tokens *token, t_mshell_data *data);
-void	set_heredoc_signals(void);
-void	heredoc_sigint(int	sig);
-void	reset_signals(void);
-void	write_line(int fd, char *line, t_tokens *token, t_mshell_data *data);
-int		process_delimeter_quotes(t_tokens *token);
-char	*expand_heredoc_line(char *line, t_mshell_data *data);
-int		has_redirect(t_tokens *tokens);
-void	run_builtin_redirects(char **commandline, t_mshell_data *data);
-
 // Parser Executor
 void	executor(t_mshell_data *data);
 void	run_command(char **commandline, t_mshell_data *data);
@@ -133,6 +119,25 @@ char	*handle_brackets(char	*str, int len, int start, t_mshell_data *data);
 void	var_name_error(char *input, t_mshell_data *data);
 void	append_result(char	*str, t_mshell_data *data);
 
+// Expander
+void	check_command(t_mshell_data *data);
+char	*get_env_var(char *token, t_mshell_data *data);
+char	*expand_tokens(char *token, t_mshell_data *data);
+
+// Redirections
+int		is_builtin(char **commands);
+void	add_redir_info(t_tokens *token);
+int		prep_heredoc(t_mshell_data *data);
+int		apply_redirects(t_tokens *tokens);
+int		handle_heredoc(t_tokens *token, t_mshell_data *data);
+void	set_heredoc_signals(void);
+void	heredoc_sigint(int sig);
+void	reset_signals(void);
+void	write_line(int fd, char *line, t_tokens *token, t_mshell_data *data);
+int		process_delimeter_quotes(t_tokens *token);
+char	*expand_heredoc_line(char *line, t_mshell_data *data);
+int		has_redirect(t_tokens *tokens);
+void	run_builtin_redirects(char **commandline, t_mshell_data *data);
 
 // Utils and list functions
 void	list_add(t_tokens **tokens, char *input);
@@ -140,6 +145,7 @@ int		array_size(t_tokens *tokens);
 void	initialize(t_mshell_data **data, char **envp);
 void	init_expander(t_expander **expander);
 t_token_state	*init_state(void);
+char	*get_prompt(void);
 void	free_list(t_tokens *tokens);
 void	free_array(char **array, int n);
 void	free_data(t_mshell_data *data);
@@ -189,6 +195,7 @@ void	sig_init(void);
 void	sig_init_exec(void);
 void	sigint_interactive(int sig);
 void	sig_exec(int sig);
+void	update_sig_status(t_mshell_data *data);
 void	sig_default(int sig);
 
 #endif

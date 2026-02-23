@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-static void	update_sig_status(t_mshell_data *data)
+void	update_sig_status(t_mshell_data *data)
 {
 	data->exit_status = g_signal;
 	g_signal = 0;
@@ -21,19 +21,22 @@ static void	update_sig_status(t_mshell_data *data)
 static void	main_loop(t_mshell_data *data)
 {
 	char	*prompt;
+	char	*readline_input;
 
 	while (1)
 	{
 		if (g_signal != 0)
 			update_sig_status(data);
-		prompt = readline("\x1b[32mminishell\x1b[0m> ");
-		if (!prompt)
+		prompt = get_prompt();
+		readline_input = readline(prompt);
+		free(prompt);
+		if (!readline_input)
 			break ;
 		if (g_signal != 0) //for ctrl+C during typing
 			update_sig_status(data);
-		add_history(prompt);
-		create_tokens(prompt, &data->tokens);
-		free(prompt);
+		add_history(readline_input);
+		create_tokens(readline_input, &data->tokens);
+		free(readline_input);
 		sig_init_exec(); //silent handler caller before exec
 		executor(data);
 		if (g_signal != 0)
@@ -43,7 +46,7 @@ static void	main_loop(t_mshell_data *data)
 		data->tokens = NULL;
 	}
 }
-
+ 
 int	main(int argc, char **argv, char **envp)
 {
 	t_mshell_data	*data;
@@ -56,5 +59,6 @@ int	main(int argc, char **argv, char **envp)
 	sig_init();
 	main_loop(data);
 	rl_clear_history();
-	exit(data->exit_status);
+	//exit(data->exit_status);
+	return (data->exit_status);
 }

@@ -108,6 +108,7 @@ void	add_type(t_tokens **tokens)
 	}
 }
 
+/* If is_redir_name = 1 I will skip later */
 void	add_redir_info(t_tokens *token)
 {
 	if (token->next)
@@ -115,6 +116,6 @@ void	add_redir_info(t_tokens *token)
 		token->redir_file = ft_strdup(token->next->input);
 		if (!token->redir_file)
 			return (perror("malloc"), (void)0);
-		token->next->is_redir_name = 1; //will skip later
+		token->next->is_redir_name = 1;
 	}
 }

@@ -59,3 +59,28 @@ t_token_state	*init_state(void)
 	state->quote_char = 0;
 	return (state);
 }
+
+char	*get_prompt(void)
+{
+	char	cwd[PATH_MAX];
+	char	*prompt;
+	char	*temp;
+	char	*user_pos;
+
+	if (getcwd(cwd, sizeof(cwd)) == NULL)
+	{
+		perror("getcwd");
+		return (ft_strdup("\x1b[32mminishell\x1b[0m> "));
+	}
+	user_pos = ft_strnstr(cwd, "User", ft_strlen(cwd));
+	if (user_pos == NULL)
+		user_pos = cwd;
+	temp = ft_strjoin("\x1b[32m", user_pos);
+	if (!temp)
+		return (ft_strdup("\x1b[32mminishell\x1b[0m> "));
+	prompt = ft_strjoin(temp, "\x1b[0m> ");
+	free(temp);
+	if (!prompt)
+		return (ft_strdup("\x1b[32mminishell\x1b[0m> "));
+	return (prompt);
+}

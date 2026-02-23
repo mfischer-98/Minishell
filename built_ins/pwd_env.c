@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/14 12:31:26 by mefische          #+#    #+#             */
-/*   Updated: 2026/02/13 14:15:18 by mefische         ###   ########.fr       */
+/*   Updated: 2026/02/20 09:18:54 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ int	pwd(void)
 	path = getcwd(NULL, 0);
 	if (!path)
 		return (perror("pwd"), 1);
-	ft_printf("%s\n", path);
+	ft_putstr_fd(path, STDOUT_FILENO);
+	ft_putstr_fd("\n", STDOUT_FILENO);
 	free(path);
 	return (0);
 }

@@ -52,7 +52,7 @@ char	*expand_heredoc_line(char *line, t_mshell_data *data)
 static int	open_heredoc_file(void)
 {
 	int	fd;
-	
+
 	fd = open(".heredoc_temp", O_WRONLY | O_CREAT | O_TRUNC, 0600);
 	if (fd < 0)
 		return (perror("heredoc"), -1);
@@ -65,7 +65,7 @@ static int	open_heredoc_file(void)
 static void	heredoc_loop(int fd, t_tokens *token, t_mshell_data *data)
 {
 	char	*line;
-	
+
 	while (1)
 	{
 		line = readline("> ");
@@ -86,18 +86,19 @@ static void	heredoc_loop(int fd, t_tokens *token, t_mshell_data *data)
 	reset_signals();
 }
 
-
-/* Handle heredoc: fork a child to read heredoc input so Ctrl+C only interrupts heredoc, not the shell 
+/* Handle heredoc: fork a child to read heredoc input so Ctrl+C
+	only interrupts heredoc, not the shell 
 	- fd = Open temp file for heredoc
 	- fork -> child process -> set heredoc signals and run loop 
 	- parent waits for child to finish
-	- if child was interrupted by SIGINT (Ctrl+C), change status and abort heredoc 
+	- if child was interrupted by SIGINT (Ctrl+C),
+	change status and abort heredoc 
 	- reopen heredoc file later for reading in parent */
-int handle_heredoc(t_tokens *token, t_mshell_data *data)
+int	handle_heredoc(t_tokens *token, t_mshell_data *data)
 {
-	int fd;
-	pid_t pid;
-	int status;
+	int		fd;
+	pid_t	pid;
+	int		status;
 
 	fd = open_heredoc_file();
 	if (fd < 0)
@@ -121,5 +122,3 @@ int handle_heredoc(t_tokens *token, t_mshell_data *data)
 		return (perror("heredoc"), -1);
 	return (unlink(".heredoc_temp"), token->heredoc_fd);
 }
-
-

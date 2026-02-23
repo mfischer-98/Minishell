@@ -27,10 +27,10 @@ static int	apply_heredoc(int fd)
 static int	apply_input(char	*file)
 {
 	int	fd;
-	
+
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
-		return (perror("open <"), 1);
+		return (perror(file), 1);
 	if (dup2(fd, STDIN_FILENO) == -1)
 		return (perror("dup2"), close(fd), 1);
 	close(fd);
@@ -41,7 +41,7 @@ static int	apply_input(char	*file)
 static int	apply_output(char	*file)
 {
 	int	fd;
-	
+
 	fd = open(file, O_CREAT | O_TRUNC | O_WRONLY, 0644);
 	if (fd < 0)
 		return (perror("open <"), 1);
@@ -55,8 +55,8 @@ static int	apply_output(char	*file)
 static int	apply_append(char	*file)
 {
 	int	fd;
-	
-	fd = open(file,  O_CREAT | O_APPEND | O_WRONLY, 0644);
+
+	fd = open(file, O_CREAT | O_APPEND | O_WRONLY, 0644);
 	if (fd < 0)
 		return (perror("open <"), 1);
 	if (dup2(fd, STDOUT_FILENO) == -1)
@@ -72,8 +72,10 @@ static int	apply_append(char	*file)
 int	apply_redirects(t_tokens *tokens)
 {
 	t_tokens	*temp;
-	
+
 	temp = tokens;
+	printf("DEBUG: token=%s type=%d redir_file=%s\n", 
+       temp->input, temp->type, temp->redir_file ? temp->redir_file : "NULL");
 	while (temp && temp->type != NODE_PIPE)
 	{
 		if (temp->type == NODE_HERE && apply_heredoc(temp->heredoc_fd))
