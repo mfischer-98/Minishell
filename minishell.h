@@ -102,7 +102,7 @@ void	print_banner(void);
 void	create_tokens(char *prompt, t_tokens **tokens);
 void	add_token(t_tokens **tokens, char *input, t_node_type type);
 void	handle_space(t_tokens **tokens, char *prompt, t_token_state *state);
-void	handle_quote_end(t_tokens **tokens, char *prompt, t_token_state *state);
+void	handle_quote_end(t_token_state *state);
 void	handle_quote_start(char *prompt, t_token_state *state);
 void	handle_tok_type(t_tokens **tokens, char *prompt, t_token_state *state);
 void	add_type(t_tokens **tokens);
@@ -113,6 +113,13 @@ void	handle_input(char *prompt);
 // Parser Executor
 void	executor(t_mshell_data *data);
 void	run_command(char **commandline, t_mshell_data *data);
+void	ft_execve(char **commandline, t_mshell_data *data);
+char	*find_command_in_path(char *cmd, t_env *env_list);
+char	**build_command(t_tokens **tokens);
+void	execute_external_command(char **commandline, t_mshell_data *data,
+		t_tokens *segment);
+void	execute_piped_commands(t_mshell_data *data, t_tokens *tokens);
+void	expand_all_tokens(t_mshell_data *data);
 void	set_operator_type(t_tokens *token);
 void	set_quote_type(t_tokens *token);
 char	*handle_brackets(char	*str, int len, int start, t_mshell_data *data);
@@ -165,7 +172,6 @@ int		env(char **commandline, t_mshell_data *data);
 int		echo(char **arg);
 int		cd(t_mshell_data *data, char **args);
 int		check_exit(char **command, t_mshell_data *data);
-void	ft_execve(char **commandline, t_mshell_data *data);
 // export
 int		export(char **commandline, t_mshell_data *data);
 int		handle_no_equal(char *arg, t_mshell_data *data);

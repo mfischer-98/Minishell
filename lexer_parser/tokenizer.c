@@ -27,7 +27,7 @@ void	handle_tok_type(t_tokens **tokens, char *prompt, t_token_state *state)
 	}
 	else if (state->in_quote && prompt[state->i] == state->quote_char)
 	{
-		handle_quote_end(tokens, prompt, state);
+		handle_quote_end(state);
 		return ;
 	}
 	else if (!state->in_quote && prompt[state->i] == ' ')

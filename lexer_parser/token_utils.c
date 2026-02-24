@@ -19,19 +19,10 @@ void	handle_quote_start(char *prompt, t_token_state *state)
 	state->i++;
 }
 
-void	handle_quote_end(t_tokens **tokens, char *prompt, t_token_state *state)
+void	handle_quote_end(t_token_state *state)
 {
-	t_node_type	type;
-
-	if (state->quote_char == '"')
-		type = NODE_DOUBLE_QUOTE;
-	else
-		type = NODE_SINGLE_QUOTE;
-	add_token(tokens, ft_substr(prompt, state->start,
-			state->i - state->start + 1), type);
 	state->in_quote = 0;
 	state->i++;
-	state->start = state->i;
 }
 
 void	handle_space(t_tokens **tokens, char *prompt, t_token_state *state)
