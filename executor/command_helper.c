@@ -12,12 +12,13 @@
 
 #include "../minishell.h"
 
-char *find_command_in_path(char *cmd, t_env *env_list)
+char	*find_command_in_path(char *cmd, t_env *env_list)
 {
 	char	**paths;
 	char	*full_path;
 	char	*tmp;
 	int		i;
+
 	if (access(cmd, X_OK) == 0)
 		return (cmd);
 	while (env_list && ft_strncmp(env_list->var, "PATH=", 5) != 0)
@@ -37,6 +38,7 @@ char *find_command_in_path(char *cmd, t_env *env_list)
 	}
 	return (free_array(paths, i), NULL);
 }
+
 char	**build_command(t_tokens **tokens)
 {
 	int		count;
@@ -62,6 +64,7 @@ char	**build_command(t_tokens **tokens)
 	cmd[i] = NULL;
 	return (cmd);
 }
+
 void	expand_all_tokens(t_mshell_data *data)
 {
 	t_tokens	*temp;
@@ -76,6 +79,7 @@ void	expand_all_tokens(t_mshell_data *data)
 		temp = temp->next;
 	}
 }
+
 void	execute_external_command(char **commandline, t_mshell_data *data,
 		t_tokens *segment)
 {
@@ -84,7 +88,7 @@ void	execute_external_command(char **commandline, t_mshell_data *data,
 	int		size;
 
 	if (apply_redirects(segment))
-		exit(1);
+		perror("redirect"); // or set exit status and leave
 	cmd_path = find_command_in_path(commandline[0], data->env_var);
 	if (!cmd_path)
 	{
@@ -103,14 +107,17 @@ void	execute_external_command(char **commandline, t_mshell_data *data,
 	free_array(envp, size);
 	exit(1);
 }
-void	execute_piped_commands(t_mshell_data *data, t_tokens *tokens)
+
+void execute_piped_commands(t_mshell_data *data, t_tokens *tokens)
 {
-	pid_t	pid;
-	int		pipefd[2];
-	char	**cmd;
+	pid_t		pid;
+	int			pipefd[2];
+	char		**cmd;
 	t_tokens	*next;
-	int		saved;
+	int			saved;
+	
 	next = tokens;
+
 	while (next && next->type != NODE_PIPE)
 		next = next->next;
 	cmd = build_command(&tokens);

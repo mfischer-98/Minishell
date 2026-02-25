@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 09:21:13 by mefische          #+#    #+#             */
-/*   Updated: 2026/02/23 13:54:23 by mefische         ###   ########.fr       */
+/*   Updated: 2026/02/25 11:29:57 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void	ft_execve(char **commandline, t_mshell_data *data)
 	else if (WIFSIGNALED(status))
 		data->exit_status = 128 + WTERMSIG(status);
 }
+
 void	run_command(char **commandline, t_mshell_data *data)
 {
 	if (!commandline || !commandline[0])
@@ -52,6 +53,7 @@ void	run_command(char **commandline, t_mshell_data *data)
 	else // Not a built-in - fork to then execute
 		ft_execve(commandline, data);//took it out and now this works: ls | cat > ls_out.txt
 }
+
 static int	check_unclosed_quotes(t_tokens *tokens)
 {
 	int		sq;
@@ -72,6 +74,7 @@ static int	check_unclosed_quotes(t_tokens *tokens)
 	}
 	return ((dq % 2 != 0) || (sq % 2 != 0));
 }
+
 static int	has_pipes(t_mshell_data *data)
 {
 	t_tokens	*temp;
@@ -85,6 +88,7 @@ static int	has_pipes(t_mshell_data *data)
 	}
 	return (0);
 }
+
 void	executor(t_mshell_data *data)
 {
 	char	**commands;

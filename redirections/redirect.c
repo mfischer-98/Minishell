@@ -16,9 +16,17 @@
 static int	apply_heredoc(int fd)
 {
 	if (fd < 0)
+	{
+		ft_printf("DEBUG: apply_heredoc: invalid fd %d\n", fd);
 		return (1);
+	}
 	if (dup2(fd, STDIN_FILENO) == -1)
+	{
+		perror("dup2 in apply_heredoc");
 		return (perror("dup2"), 1);
+	}
+	if (close(fd) == -1)
+		perror("close in apply_heredoc");
 	close(fd);
 	return (0);
 }
@@ -72,24 +80,21 @@ static int	apply_append(char	*file)
 int	apply_redirects(t_tokens *tokens)
 {
 	t_tokens	*temp;
+	int			result;
 
+	result = 0;
 	temp = tokens;
 	while (temp && temp->type != NODE_PIPE)
 	{
-		if (temp->type == NODE_WORD || temp->is_redir_name == 1)
-		{
-			temp = temp->next;
-			continue;
-		}
 		if (temp->type == NODE_HERE && temp->redir_file)
-			return (apply_heredoc(temp->heredoc_fd), 1);
+			result = apply_heredoc(temp->heredoc_fd);
 		else if (temp->type == NODE_IN && temp->redir_file)
-			return (apply_input(temp->redir_file), 1);
+			result = apply_input(temp->redir_file);
 		else if (temp->type == NODE_OUT && temp->redir_file)
-			return (apply_output(temp->redir_file), 1);
+			result = apply_output(temp->redir_file);
 		else if (temp->type == NODE_APPEND && temp->redir_file)
-			return (apply_append(temp->redir_file), 1);
+			result = apply_append(temp->redir_file);
 		temp = temp->next;
 	}
-	return (0);
+	return (result);
 }
