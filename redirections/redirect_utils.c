@@ -12,6 +12,33 @@
 
 #include "../minishell.h"
 
+void	redirect_start(t_tokens *tokens, t_mshell_data *data)
+{
+	int	fd;
+	
+	if (!ft_strcmp(tokens->input, "<"))
+	{
+		fd = open(tokens->redir_file, O_RDONLY);
+		if (fd < 0)
+		{
+			ft_putstr_fd("minishell: ", 2);
+			ft_putstr_fd(tokens->next->input, 2);
+			ft_putstr_fd(": No such file or directory\n", 2);
+			data->exit_status = 1;
+		}
+		else
+			return (data->exit_status = 0, close(fd), (void)0);
+	}
+	else if (!ft_strcmp(tokens->input, ">") || !ft_strcmp(tokens->input, ">>"))
+	{
+		fd = open(tokens->redir_file, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+		if (fd < 0)
+			perror("open fd");
+		else
+			return (data->exit_status = 0, close(fd), (void)0);
+	}
+}
+
 /* Check if commandline has redirects */
 int	has_redirect(t_tokens *tokens)
 {

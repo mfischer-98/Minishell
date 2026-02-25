@@ -133,6 +133,7 @@ char	*expand_tokens(char *token, t_mshell_data *data);
 
 // Redirections
 int		is_builtin(char **commands);
+void	redirect_start(t_tokens *tokens, t_mshell_data *data);
 void	add_redir_info(t_tokens *token);
 int		prep_heredoc(t_mshell_data *data);
 int		apply_redirects(t_tokens *tokens);

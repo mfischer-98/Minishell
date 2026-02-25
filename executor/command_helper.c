@@ -92,11 +92,13 @@ void	execute_external_command(char **commandline, t_mshell_data *data,
 	cmd_path = find_command_in_path(commandline[0], data->env_var);
 	if (!cmd_path)
 	{
-		ft_printf("minishell: command not found: %s\n", commandline[0]);
+		ft_printf("minishell: command not found: %s\n", commandline[0]); //tem que ser no channel 2 para erro stderr
+		data->exit_status = 127;
 		exit(127);
 	}
 	size = env_size(data->env_var);
 	envp = list_to_array(data->env_var, size);
+	data->exit_status = 1;
 	if (!envp)
 	{
 		perror("malloc envp");

@@ -16,17 +16,9 @@
 static int	apply_heredoc(int fd)
 {
 	if (fd < 0)
-	{
-		ft_printf("DEBUG: apply_heredoc: invalid fd %d\n", fd);
 		return (1);
-	}
 	if (dup2(fd, STDIN_FILENO) == -1)
-	{
-		perror("dup2 in apply_heredoc");
 		return (perror("dup2"), 1);
-	}
-	if (close(fd) == -1)
-		perror("close in apply_heredoc");
 	close(fd);
 	return (0);
 }
