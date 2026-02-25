@@ -146,6 +146,9 @@ int		process_delimeter_quotes(t_tokens *token);
 char	*expand_heredoc_line(char *line, t_mshell_data *data);
 int		has_redirect(t_tokens *tokens);
 void	run_builtin_redirects(char **commandline, t_mshell_data *data);
+char	*strip_file_quotes(char *name);
+int		check_fd_error(char *name);
+
 
 // Utils and list functions
 void	list_add(t_tokens **tokens, char *input);

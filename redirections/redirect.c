@@ -30,7 +30,7 @@ static int	apply_input(char	*file)
 
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
-		return (perror(file), 1);
+		return (check_fd_error(file));
 	if (dup2(fd, STDIN_FILENO) == -1)
 		return (perror("dup2"), close(fd), 1);
 	close(fd);
@@ -44,7 +44,7 @@ static int	apply_output(char	*file)
 
 	fd = open(file, O_CREAT | O_TRUNC | O_WRONLY, 0644);
 	if (fd < 0)
-		return (perror("open <"), 1);
+		return (check_fd_error(file));
 	if (dup2(fd, STDOUT_FILENO) == -1)
 		return (perror("dup2"), close(fd), 1);
 	close(fd);
@@ -58,7 +58,7 @@ static int	apply_append(char	*file)
 
 	fd = open(file, O_CREAT | O_APPEND | O_WRONLY, 0644);
 	if (fd < 0)
-		return (perror("open <"), 1);
+		return (check_fd_error(file));
 	if (dup2(fd, STDOUT_FILENO) == -1)
 		return (perror("dup2"), close(fd), 1);
 	close(fd);

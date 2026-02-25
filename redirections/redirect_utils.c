@@ -12,6 +12,9 @@
 
 #include "../minishell.h"
 
+/* If first token is > >> < there is different behaviour
+	< if there is file does nothing, if there isnt = error
+	> >> if there is file do nothing, if there isnt = creates empty file */
 void	redirect_start(t_tokens *tokens, t_mshell_data *data)
 {
 	int	fd;
@@ -32,10 +35,7 @@ void	redirect_start(t_tokens *tokens, t_mshell_data *data)
 	else if (!ft_strcmp(tokens->input, ">") || !ft_strcmp(tokens->input, ">>"))
 	{
 		fd = open(tokens->redir_file, O_CREAT | O_WRONLY | O_TRUNC, 0644);
-		if (fd < 0)
-			perror("open fd");
-		else
-			return (data->exit_status = 0, close(fd), (void)0);
+		return (data->exit_status = 0, close(fd), (void)0);
 	}
 }
 
@@ -49,7 +49,10 @@ int	has_redirect(t_tokens *tokens)
 	{
 		if (temp->type == NODE_IN || temp->type == NODE_OUT
 			|| temp->type == NODE_APPEND || temp->type == NODE_HERE)
+		{
+			temp->redir_file  = strip_file_quotes(temp->redir_file);
 			return (1);
+		}
 		temp = temp->next;
 	}
 	return (0);

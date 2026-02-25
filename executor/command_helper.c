@@ -87,8 +87,8 @@ void	execute_external_command(char **commandline, t_mshell_data *data,
 	char	**envp;
 	int		size;
 
-	if (apply_redirects(segment))
-		perror("redirect"); // or set exit status and leave
+	if ((data->exit_status = apply_redirects(segment)))
+		exit(data->exit_status);
 	cmd_path = find_command_in_path(commandline[0], data->env_var);
 	if (!cmd_path)
 	{

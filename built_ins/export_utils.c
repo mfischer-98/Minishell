@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 09:21:01 by mefische          #+#    #+#             */
-/*   Updated: 2026/02/13 10:03:19 by mefische         ###   ########.fr       */
+/*   Updated: 2026/02/25 16:53:51 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ int	identifier_valid(char *str)
 	return 1 = match
 	return 0 = no match
 */
-
 int	check_env_list(char *str, t_mshell_data *data)
 {
 	t_env	*temp;
