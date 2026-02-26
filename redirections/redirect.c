@@ -24,13 +24,13 @@ static int	apply_heredoc(int fd)
 }
 
 /* Apply input: < file -> stdin */
-static int	apply_input(char	*file)
+static int	apply_input(char *file, t_mshell_data *data)
 {
 	int	fd;
 
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
-		return (check_fd_error(file));
+		return (check_fd_error(file, data));
 	if (dup2(fd, STDIN_FILENO) == -1)
 		return (perror("dup2"), close(fd), 1);
 	close(fd);
@@ -38,13 +38,13 @@ static int	apply_input(char	*file)
 }
 
 /* Apply output: > file -> stdout truncate */
-static int	apply_output(char	*file)
+static int	apply_output(char *file, t_mshell_data *data)
 {
 	int	fd;
 
 	fd = open(file, O_CREAT | O_TRUNC | O_WRONLY, 0644);
 	if (fd < 0)
-		return (check_fd_error(file));
+		return (check_fd_error(file, data));
 	if (dup2(fd, STDOUT_FILENO) == -1)
 		return (perror("dup2"), close(fd), 1);
 	close(fd);
@@ -52,13 +52,13 @@ static int	apply_output(char	*file)
 }
 
 /* Apply append: >> file -> stdout append */
-static int	apply_append(char	*file)
+static int	apply_append(char *file, t_mshell_data *data)
 {
 	int	fd;
 
 	fd = open(file, O_CREAT | O_APPEND | O_WRONLY, 0644);
 	if (fd < 0)
-		return (check_fd_error(file));
+		return (check_fd_error(file, data));
 	if (dup2(fd, STDOUT_FILENO) == -1)
 		return (perror("dup2"), close(fd), 1);
 	close(fd);
@@ -69,7 +69,7 @@ static int	apply_append(char	*file)
 	- dup2 makes new fd out of the temp fd,
 	so file is read instead of keyboard
 */
-int	apply_redirects(t_tokens *tokens)
+int	apply_redirects(t_tokens *tokens, t_mshell_data *data)
 {
 	t_tokens	*temp;
 	int			result;
@@ -81,11 +81,11 @@ int	apply_redirects(t_tokens *tokens)
 		if (temp->type == NODE_HERE && temp->redir_file)
 			result = apply_heredoc(temp->heredoc_fd);
 		else if (temp->type == NODE_IN && temp->redir_file)
-			result = apply_input(temp->redir_file);
+			result = apply_input(temp->redir_file, data);
 		else if (temp->type == NODE_OUT && temp->redir_file)
-			result = apply_output(temp->redir_file);
+			result = apply_output(temp->redir_file, data);
 		else if (temp->type == NODE_APPEND && temp->redir_file)
-			result = apply_append(temp->redir_file);
+			result = apply_append(temp->redir_file, data);
 		temp = temp->next;
 	}
 	return (result);

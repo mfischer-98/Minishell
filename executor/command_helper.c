@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/24 by assistant               #+#    #+#             */
-/*   Updated: 2026/02/24 by assistant              ###   ########.fr       */
+/*   Created: 2026/02/26 15:48:36 by mefische          #+#    #+#             */
+/*   Updated: 2026/02/26 16:27:42 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,15 +41,18 @@ char	*find_command_in_path(char *cmd, t_env *env_list)
 
 char	**build_command(t_tokens **tokens)
 {
-	int		count;
-	int		i;
+	int			count;
+	int			i;
 	t_tokens	*temp;
-	char	**cmd;
+	char		**cmd;
 
 	count = 0;
 	temp = *tokens;
 	while (temp && temp->type != NODE_PIPE)
-		count += (temp->type == NODE_WORD), temp = temp->next;
+	{
+		count += (temp->type == NODE_WORD);
+		temp = temp->next;
+	}
 	cmd = malloc(sizeof(char *) * (count + 1));
 	if (!cmd)
 		return (NULL);
@@ -85,19 +88,18 @@ void	execute_external_command(char **commandline, t_mshell_data *data,
 {
 	char	*cmd_path;
 	char	**envp;
-	int		size;
 
-	if ((data->exit_status = apply_redirects(segment)))
+	data->exit_status = apply_redirects(segment, data);
+	if (data->exit_status != 0)
 		exit(data->exit_status);
 	cmd_path = find_command_in_path(commandline[0], data->env_var);
 	if (!cmd_path)
 	{
-		ft_printf("minishell: command not found: %s\n", commandline[0]); //tem que ser no channel 2 para erro stderr
+		ft_printf("minishell: command not found: %s\n", commandline[0]);
 		data->exit_status = 127;
 		exit(127);
 	}
-	size = env_size(data->env_var);
-	envp = list_to_array(data->env_var, size);
+	envp = list_to_array(data->env_var, env_size(data->env_var));
 	data->exit_status = 1;
 	if (!envp)
 	{
@@ -106,20 +108,19 @@ void	execute_external_command(char **commandline, t_mshell_data *data,
 	}
 	execve(cmd_path, commandline, envp);
 	perror("execve");
-	free_array(envp, size);
+	free_array(envp, env_size(data->env_var));
 	exit(1);
 }
 
-void execute_piped_commands(t_mshell_data *data, t_tokens *tokens)
+void	execute_piped_commands(t_mshell_data *data, t_tokens *tokens)
 {
 	pid_t		pid;
 	int			pipefd[2];
 	char		**cmd;
 	t_tokens	*next;
 	int			saved;
-	
-	next = tokens;
 
+	next = tokens;
 	while (next && next->type != NODE_PIPE)
 		next = next->next;
 	cmd = build_command(&tokens);

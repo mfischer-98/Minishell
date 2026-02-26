@@ -18,7 +18,7 @@
 void	redirect_start(t_tokens *tokens, t_mshell_data *data)
 {
 	int	fd;
-	
+
 	if (!ft_strcmp(tokens->input, "<"))
 	{
 		fd = open(tokens->redir_file, O_RDONLY);
@@ -50,7 +50,7 @@ int	has_redirect(t_tokens *tokens)
 		if (temp->type == NODE_IN || temp->type == NODE_OUT
 			|| temp->type == NODE_APPEND || temp->type == NODE_HERE)
 		{
-			temp->redir_file  = strip_file_quotes(temp->redir_file);
+			temp->redir_file = strip_file_quotes(temp->redir_file);
 			return (1);
 		}
 		temp = temp->next;
@@ -71,7 +71,7 @@ void	run_builtin_redirects(char **commandline, t_mshell_data *data)
 	old_stdout = dup(1);
 	if (old_stdin < 0 || old_stdout < 0)
 		return (perror("dup"), (void)0);
-	if (apply_redirects(data->tokens) == 0)
+	if (apply_redirects(data->tokens, data) == 0)
 		run_command(commandline, data);
 	dup2(old_stdin, 0);
 	dup2(old_stdout, 1);
@@ -84,9 +84,9 @@ void	run_builtin_redirects(char **commandline, t_mshell_data *data)
 int	is_builtin(char **commands)
 {
 	int	i;
-	
+
 	i = 0;
-	while(commands[i])
+	while (commands[i])
 	{
 		if (!ft_strcmp(commands[0], "pwd"))
 			return (1);
@@ -104,5 +104,12 @@ int	is_builtin(char **commands)
 			return (1);
 		i++;
 	}
-	return(0);
+	return (0);
+}
+
+int	heredoc_signal_error(t_mshell_data *data, int status)
+{
+	data->exit_status = 128 + WTERMSIG(status);
+	write(1, "\n", 1);
+	return (-1);
 }

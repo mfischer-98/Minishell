@@ -18,6 +18,10 @@ void	update_sig_status(t_mshell_data *data)
 	g_signal = 0;
 }
 
+/*	if (g_signal != 0) = for ctrl+C during typing
+	sig_init_exec() = silent handler caller before exec
+	sig_init(); = restore ctrl+c interactive
+*/
 static void	main_loop(t_mshell_data *data)
 {
 	char	*prompt;
@@ -32,21 +36,22 @@ static void	main_loop(t_mshell_data *data)
 		free(prompt);
 		if (!readline_input)
 			break ;
-		if (g_signal != 0) //for ctrl+C during typing
+		if (g_signal != 0)
 			update_sig_status(data);
 		add_history(readline_input);
 		create_tokens(readline_input, &data->tokens);
 		free(readline_input);
-		sig_init_exec(); //silent handler caller before exec
+		sig_init_exec();
 		executor(data);
 		if (g_signal != 0)
 			update_sig_status(data);
-		sig_init(); //restore ctrl+c interactive
+		sig_init();
 		free_list(data->tokens);
 		data->tokens = NULL;
 	}
 }
- 
+
+/* rl_catch_signals = 0 -> use our signal handlers */
 int	main(int argc, char **argv, char **envp)
 {
 	t_mshell_data	*data;
@@ -55,10 +60,9 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	print_banner();
 	initialize(&data, envp);
-	rl_catch_signals = 0; //use our signal handlers
+	rl_catch_signals = 0;
 	sig_init();
 	main_loop(data);
 	rl_clear_history();
-	//exit(data->exit_status);
 	return (data->exit_status);
 }
