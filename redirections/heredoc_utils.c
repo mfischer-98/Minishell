@@ -81,9 +81,9 @@ void	heredoc_sigint(int sig)
 	(void)sig;
 	g_signal = 130;
 	unlink(".heredoc_temp");
-	write(1, "^C\n", 3);
+	write(1, "^C", 3);
 	rl_cleanup_after_signal();
-	exit(1);
+	exit(130);
 }
 
 /* Reset signals after heredoc 

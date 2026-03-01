@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 09:21:13 by mefische          #+#    #+#             */
-/*   Updated: 2026/02/25 11:29:57 by mefische         ###   ########.fr       */
+/*   Updated: 2026/02/26 16:22:42 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	ft_execve(char **commandline, t_mshell_data *data)
 {
 	pid_t	pid;
 	int		status;
+
 	pid = fork();
 	if (pid == -1)
 		return (perror("fork"), data->exit_status = 1, (void)0);
@@ -50,8 +51,8 @@ void	run_command(char **commandline, t_mshell_data *data)
 		data->exit_status = unset(commandline, data);
 	else if (!ft_strcmp(commandline[0], "exit"))
 		check_exit(commandline, data);
-	else // Not a built-in - fork to then execute
-		ft_execve(commandline, data);//took it out and now this works: ls | cat > ls_out.txt
+	else
+		ft_execve(commandline, data);
 }
 
 static int	check_unclosed_quotes(t_tokens *tokens)
@@ -92,6 +93,7 @@ static int	has_pipes(t_mshell_data *data)
 void	executor(t_mshell_data *data)
 {
 	char	**commands;
+
 	if (!data || !data->tokens)
 		return ;
 	if (check_unclosed_quotes(data->tokens))
@@ -103,6 +105,9 @@ void	executor(t_mshell_data *data)
 	if (has_pipes(data))
 		return (execute_piped_commands(data, data->tokens), (void)0);
 	commands = array_join(data->tokens);
+	if (!ft_strcmp(data->tokens->input, ">") || !ft_strcmp(data->tokens->input,
+			">>") || !ft_strcmp(data->tokens->input, "<"))
+		return (redirect_start(data->tokens, data));
 	if (commands && commands[0] && data->tokens->type == NODE_WORD)
 	{
 		if (!has_redirect(data->tokens))

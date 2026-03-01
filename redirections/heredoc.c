@@ -19,13 +19,16 @@
 int	prep_heredoc(t_mshell_data *data)
 {
 	t_tokens	*temp;
-
+	int			heredoc;
+	
+	heredoc = 0;
 	temp = data->tokens;
 	while (temp)
 	{
 		if (temp->type == NODE_HERE)
 		{
-			if (handle_heredoc(temp, data) < 0)
+			heredoc = handle_heredoc(temp, data);
+			if (heredoc < 0)
 			{
 				data->exit_status = 1;
 				return (0);
@@ -115,8 +118,8 @@ int	handle_heredoc(t_tokens *token, t_mshell_data *data)
 	}
 	close(fd);
 	waitpid(pid, &status, 0);
-	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
-		return (data->exit_status = 128 + WTERMSIG(status), write(1, "\n", 1), -1);
+	if (WEXITSTATUS(status) == 130)
+		return (heredoc_signal_error(data, status));
 	token->heredoc_fd = open(".heredoc_temp", O_RDONLY);
 	if (token->heredoc_fd < 0)
 		return (perror("heredoc"), -1);
