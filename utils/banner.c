@@ -6,11 +6,11 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 09:20:35 by mefische          #+#    #+#             */
-/*   Updated: 2026/02/13 13:09:35 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/02 15:04:15 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 void	print_banner(void)
 {

@@ -2,5 +2,7 @@
 	"files.associations": {
 		"minishell.h": "c"
 	},
-	"C_Cpp.errorSquiggles": "disabled"
+	"C_Cpp.errorSquiggles": "disabled",
+	"42header.username": "mefische",
+	"42header.email": "mefische@student.42porto.com"
 }

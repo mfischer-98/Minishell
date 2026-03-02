@@ -42,7 +42,7 @@ static void	main_loop(t_mshell_data *data)
 		create_tokens(readline_input, &data->tokens);
 		free(readline_input);
 		sig_init_exec();
-		executor(data);
+		parser(data);
 		if (g_signal != 0)
 			update_sig_status(data);
 		sig_init();
