@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 09:21:16 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/02 15:03:50 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/03 08:44:05 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,9 +87,9 @@ static void	handle_var(char *input, t_mshell_data *data)
 	char	*value;
 
 	data->expander->i++;
-	if (input[data->expander->i] == '?')
-		return (append_result(ft_itoa(data->exit_status), data),
-			data->expander->i++, (void)0);
+	if (input[data->expander->i] == '?'
+			|| input[data->expander->i] == '_')
+		return (special_char(input[data->expander->i], data), (void)0);
 	if (input[data->expander->i] == '{')
 	{
 		var_name = handle_brackets(input, ft_strlen(input),

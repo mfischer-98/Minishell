@@ -142,6 +142,7 @@ void			append_result(char	*str, t_mshell_data *data);
 void			check_command(t_mshell_data *data);
 char			*get_env_var(char *token, t_mshell_data *data);
 char			*expand_tokens(char *token, t_mshell_data *data);
+void			special_char(char c, t_mshell_data *data);
 
 // Redirections
 int				is_builtin(char **commands);

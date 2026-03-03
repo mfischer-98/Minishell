@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/02 14:47:45 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/02 15:09:10 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/03 09:20:32 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,24 +40,32 @@ int	check_unclosed_quotes(t_tokens *tokens)
 void	update_underscore(t_mshell_data *data)
 {
 	t_env		*vars;
-	t_tokens	*tokens;
+	t_tokens	*temp;
 	char		*last_command;
 
-	tokens = data->tokens;
-	while (tokens->next)
-		tokens = tokens->next;
-	last_command = ft_strdup(tokens->input);
+	if (!data->tokens)
+		return ;
+	temp = data->tokens;
+	while (temp->next)
+		temp = temp->next;
+	last_command = ft_strdup(temp->input);
 	vars = data->env_var;
 	while (vars)
 	{
 		if (!ft_strncmp(vars->var, "_=", 2))
+		{
+			free(vars->var);
 			vars->var = ft_strjoin("_=", last_command);
+			break;
+		}
 		vars = vars->next;
 	}
+	free(last_command);
 }
 
 /* Shell level security < 1000 
-	- if >= 1000: reset to 1 and no error */
+	- if >= 1000: reset to 1 and no error 
+	- ft_atoi(temp->var + 6 = skip SHLVL= */
 void	check_shell_level(t_env *env)
 {
 	int		level;
@@ -66,12 +74,17 @@ void	check_shell_level(t_env *env)
 	temp = env;
 	while (temp)
 	{
-		if (!ft_strncmp(temp->var, "SHLLVL", 6))
-			level = ft_atoi(temp->var + 6); //skip SHLLVL=
+		if (!ft_strncmp(temp->var, "SHLVL", 5))
+		{
+			level = ft_atoi(temp->var + 6);
+			if (level >= 1000)
+			{
+				free (temp->var);
+				temp->var = ft_strdup("SHLVL=1");
+			}
+			return ;
+
+		}
 		temp = temp->next;
-	}
-	if (level >= 1000)
-	{
-		temp->var = ft_strdup("SHLLVL=1");
 	}
 }

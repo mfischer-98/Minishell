@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/02 12:27:39 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/02 15:06:43 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/03 09:56:55 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,13 @@ void	parser(t_mshell_data *data)
 	if (check_unclosed_quotes(data->tokens))
 	{
 		ft_putstr_fd("minishell: Error: Unclosed quotes\n", 2);
-		data->exit_status = 1;
+		data->exit_status = 2;
 		return ;
 	}
 	check_shell_level(data->env_var);
 	if (check_pipe_syntax(data->tokens))
 	{
+		ft_putstr_fd("minishell: syntax error near unexpected token `|'\n", 2); //make more specific
 		data->exit_status = 2;
 		return ;
 	}
@@ -35,8 +36,8 @@ void	parser(t_mshell_data *data)
 		data->exit_status = 2;
 		return ;
 	}
-	update_underscore(data); //problems after I free everything?
 	executor(data);
+	update_underscore(data); //problems after I free everything?
 }
 
 /* Pipe syntax errors: 
@@ -57,10 +58,24 @@ int	check_pipe_syntax(t_tokens *tokens)
 		if ((temp->type == NODE_OUT || temp->type == NODE_IN
 				|| temp->type == NODE_APPEND) && (temp->next->type == NODE_PIPE))
 			return (1);
+		temp = temp->next;
 	}
 	if (temp && temp->type == NODE_PIPE)
 		return (1);
 	return (0);
+}
+
+static void redir_error(t_node_type type)
+{
+	if (type == NODE_IN)
+		ft_putstr_fd("minishell: syntax error near unexpected token `<'\n", 2);
+	else if (type == NODE_OUT)
+		ft_putstr_fd("minishell: syntax error near unexpected token `>'\n", 2);
+	else if (type == NODE_APPEND)
+		ft_putstr_fd("minishell: syntax error near unexpected token `>>'\n", 2);
+	else if (type == NODE_HERE)
+		ft_putstr_fd("minishell: syntax error near unexpected token `<<'\n", 2);
+	return ;
 }
 
 /* Redirect syntax errors:
@@ -79,9 +94,18 @@ int	check_redir_syntax(t_tokens *tokens)
 		{
 			if (temp->next->type == NODE_OUT || temp->next->type == NODE_IN
 					|| temp->next->type == NODE_APPEND || temp->next->type == NODE_HERE)
-				return (1);
+				return (redir_error(temp->next->type), 1);
 			if (!temp->next || temp->next->type == NODE_PIPE)
+			{
+				ft_putstr_fd("minishell: syntax error near unexpected token `newline'\n", 2);
 				return (1);
+			}
+		}
+		if ((temp->next->type == NODE_OUT || temp->next->type == NODE_IN
+				|| temp->next->type == NODE_APPEND) && (temp->type == NODE_PIPE))
+		{
+			ft_putstr_fd("minishell: syntax error near unexpected token `newline'\n", 2);
+			return (1);
 		}
 		temp = temp->next;
 	}
