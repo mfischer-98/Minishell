@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 09:21:13 by mefische          #+#    #+#             */
-/*   Updated: 2026/02/26 16:22:42 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/02 14:48:09 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,27 +55,6 @@ void	run_command(char **commandline, t_mshell_data *data)
 		ft_execve(commandline, data);
 }
 
-static int	check_unclosed_quotes(t_tokens *tokens)
-{
-	int		sq;
-	int		dq;
-
-	sq = 0;
-	dq = 0;
-	while (tokens)
-	{
-		for (int i = 0; tokens->input[i]; i++)
-		{
-			if (tokens->input[i] == '\"')
-				dq++;
-			else if (tokens->input[i] == '\'')
-				sq++;
-		}
-		tokens = tokens->next;
-	}
-	return ((dq % 2 != 0) || (sq % 2 != 0));
-}
-
 static int	has_pipes(t_mshell_data *data)
 {
 	t_tokens	*temp;
@@ -94,11 +73,6 @@ void	executor(t_mshell_data *data)
 {
 	char	**commands;
 
-	if (!data || !data->tokens)
-		return ;
-	if (check_unclosed_quotes(data->tokens))
-		return (ft_putstr_fd("minishell: Error: Unclosed quotes\n", 2),
-			data->exit_status = 1, (void)0);
 	expand_all_tokens(data);
 	if (!prep_heredoc(data))
 		return ;

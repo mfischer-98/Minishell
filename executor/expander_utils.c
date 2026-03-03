@@ -77,3 +77,33 @@ void	append_result(char	*str, t_mshell_data *data)
 	free(old);
 	free(temp);
 }
+
+void	special_char(char c, t_mshell_data *data)
+{
+	t_env	*temp;
+	char	*value;
+
+	if (c == '?')
+	{
+		value = ft_itoa(data->exit_status);
+		append_result(ft_itoa(data->exit_status), data);
+		free(value);
+	}
+	else if (c == '_')
+	{
+		value = NULL;
+		temp = data->env_var;
+		while (temp)
+		{
+			if (!ft_strncmp(temp->var, "_=", 2))
+			{
+				value = temp->var + 2;
+				break;
+			}
+			temp = temp->next;
+		}
+		append_result(value, data);
+	}
+	data->expander->i++;
+}
+

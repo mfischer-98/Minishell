@@ -112,7 +112,16 @@ void			add_type(t_tokens **tokens);
 // Input reading
 void			handle_input(char *prompt);
 
-// Parser Executor
+// Parser 
+void			parser(t_mshell_data *data);
+void			update_underscore(t_mshell_data *data);
+void			check_shell_level(t_env *env);
+int				check_pipe_syntax(t_tokens *tokens);
+int				check_redir_syntax(t_tokens *tokens);
+int				check_unclosed_quotes(t_tokens *tokens);
+int				is_command(char *str);
+
+// Executor
 void			executor(t_mshell_data *data);
 void			run_command(char **commandline, t_mshell_data *data);
 void			ft_execve(char **commandline, t_mshell_data *data);
@@ -133,6 +142,7 @@ void			append_result(char	*str, t_mshell_data *data);
 void			check_command(t_mshell_data *data);
 char			*get_env_var(char *token, t_mshell_data *data);
 char			*expand_tokens(char *token, t_mshell_data *data);
+void			special_char(char c, t_mshell_data *data);
 
 // Redirections
 int				is_builtin(char **commands);
