@@ -6,14 +6,14 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/02 12:27:39 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/03 09:56:55 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/03 09:58:49 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-// syntax errors: unclosed quotes, pipe at the end of commandline or start alone, malformed redirs
-// bash message + exit 2
+/* Syntax errors: unclosed quotes, pipe at the end of commandline or start alone, malformed redirs
+	- Error message + exit 2 */
 void	parser(t_mshell_data *data)
 {
 	if (!data || !data->tokens)
@@ -37,7 +37,7 @@ void	parser(t_mshell_data *data)
 		return ;
 	}
 	executor(data);
-	update_underscore(data); //problems after I free everything?
+	update_underscore(data);
 }
 
 /* Pipe syntax errors: 
