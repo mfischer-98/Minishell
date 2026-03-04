@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 09:21:23 by mefische          #+#    #+#             */
-/*   Updated: 2026/02/17 18:08:50 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/04 17:40:05 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,31 +35,15 @@ void	handle_space(t_tokens **tokens, char *prompt, t_token_state *state)
 	state->start = state->i;
 }
 
-void	set_operator_type(t_tokens *token)
+/* If is_redir_name = 1 I will skip later */
+void	add_redir_info(t_tokens *token)
 {
-	if (!ft_strcmp(token->input, "|"))
-		token->type = NODE_PIPE;
-	else if (!ft_strcmp(token->input, ">>"))
+	if (token->next)
 	{
-		token->type = NODE_APPEND;
-		add_redir_info(token);
-	}
-	else if (!ft_strcmp(token->input, "<<"))
-	{
-		token->type = NODE_HERE;
-		add_redir_info(token);
-		if (process_delimeter_quotes(token))
-			token->quote_delim = 1;
-	}
-	else if (!ft_strcmp(token->input, ">"))
-	{
-		token->type = NODE_OUT;
-		add_redir_info(token);
-	}
-	else if (!ft_strcmp(token->input, "<"))
-	{
-		token->type = NODE_IN;
-		add_redir_info(token);
+		token->redir_file = ft_strdup(token->next->input);
+		if (!token->redir_file)
+			return (perror("malloc"), (void)0);
+		token->next->is_redir_name = 1;
 	}
 }
 
