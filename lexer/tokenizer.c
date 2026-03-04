@@ -12,31 +12,46 @@
 
 #include "../minishell.h"
 
-void	handle_tok_type(t_tokens **tokens, char *prompt, t_token_state *state)
+static void	handle_redirect(t_tokens **tokens, char *prompt, t_token_state *state, int is_double)
 {
-	if (state->in_quote && prompt[state->i] == '=')
+	if (state->i > state->start)
+		add_token(tokens, ft_substr(prompt, state->start, state->i - state->start), NODE_UNKNOWN);
+	if (is_double)
 	{
-		state->i++;
-		return ;
-	}
-	if (!state->in_quote && (prompt[state->i] == '"'
-			|| prompt[state->i] == '\''))
-	{
-		handle_quote_start(prompt, state);
-		return ;
-	}
-	else if (state->in_quote && prompt[state->i] == state->quote_char)
-	{
-		handle_quote_end(state);
-		return ;
-	}
-	else if (!state->in_quote && prompt[state->i] == ' ')
-	{
-		handle_space(tokens, prompt, state);
-		return ;
+		add_token(tokens, ft_strdup("<<"), NODE_HERE);
+		state->i += 2;
 	}
 	else
+	{
+		add_token(tokens, ft_strdup("<"), NODE_IN);
 		state->i++;
+	}
+	state->start = state->i;
+}
+
+void	handle_tok_type(t_tokens **tokens, char *prompt, t_token_state *state)
+{
+	if (!state->in_quote && prompt[state->i] == '<')
+		return (handle_redirect(tokens, prompt, state, prompt[state->i + 1] == '<'), (void)0);
+	if (!state->in_quote && prompt[state->i] == '>')
+		return (handle_redirect(tokens, prompt, state, prompt[state->i + 1] == '>'), (void)0);
+	if (!state->in_quote && prompt[state->i] == '|')
+	{
+		if (state->i > state->start)
+			add_token(tokens, ft_substr(prompt, state->start, state->i - state->start), NODE_UNKNOWN);
+		add_token(tokens, ft_strdup("|"), NODE_PIPE);
+		state->i++;
+		state->start = state->i;
+		return ;
+	}
+	if (state->in_quote && prompt[state->i] == '=') { state->i++; return ; }
+	if (!state->in_quote && (prompt[state->i] == '"' || prompt[state->i] == '\'')) 
+		return (handle_quote_start(prompt, state), (void)0);
+	if (state->in_quote && prompt[state->i] == state->quote_char) 
+		return (handle_quote_end(state), (void)0);
+	if (!state->in_quote && prompt[state->i] == ' ') 
+		return (handle_space(tokens, prompt, state), (void)0);
+	state->i++;
 }
 
 void	create_tokens(char *prompt, t_tokens **tokens)
@@ -97,25 +112,22 @@ void	add_type(t_tokens **tokens)
 {
 	t_tokens	*temp;
 
-	temp = *tokens;
+	temp = tokens;
 	while (temp)
 	{
-		set_operator_type(temp);
 		set_quote_type(temp);
 		if (temp->type == NODE_UNKNOWN)
 			temp->type = NODE_WORD;
 		temp = temp->next;
 	}
-}
-
-/* If is_redir_name = 1 I will skip later */
-void	add_redir_info(t_tokens *token)
-{
-	if (token->next)
+	// separate pass for redir files
+	temp = *tokens;
+	while (temp)
 	{
-		token->redir_file = ft_strdup(token->next->input);
-		if (!token->redir_file)
-			return (perror("malloc"), (void)0);
-		token->next->is_redir_name = 1;
+		if (temp->type == NODE_IN || temp->type == NODE_OUT || 
+			temp->type == NODE_APPEND || temp->type == NODE_HERE)
+			add_redir_info(temp);
+		temp = temp->next;
 	}
 }
+
