@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 15:48:36 by mefische          #+#    #+#             */
-/*   Updated: 2026/02/26 16:27:42 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/04 16:53:58 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,9 @@ void	execute_external_command(char **commandline, t_mshell_data *data,
 	cmd_path = find_command_in_path(commandline[0], data->env_var);
 	if (!cmd_path)
 	{
-		ft_printf("minishell: command not found: %s\n", commandline[0]);
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(commandline[0], 2);
+		ft_putstr_fd(": command not found\n", 2);
 		data->exit_status = 127;
 		exit(127);
 	}

@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 09:21:04 by mefische          #+#    #+#             */
-/*   Updated: 2026/02/13 13:25:46 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/04 16:49:23 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,9 @@ int	handle_no_equal(char *arg, t_mshell_data *data)
 		return (0);
 	if (!identifier_valid(arg))
 	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_printf("`%s': is not a valid identifier\n", trim_left(arg));
+		ft_putstr_fd("minishell: `", 2);
+		ft_putstr_fd(trim_left(arg), 2);
+		ft_putstr_fd("': not a valid identifier\n", 2);
 		return (1);
 	}
 	return (add_env_list(arg, data));
@@ -46,7 +47,8 @@ int	handle_equal(char *arg, t_mshell_data *data)
 	if (!identifier_valid(name))
 	{
 		ft_putstr_fd("minishell: ", 2);
-		ft_printf("`%s': is not a valid identifier\n", trim_left(arg));
+		ft_putstr_fd(trim_left(arg), 2);
+		ft_putstr_fd("': not a valid identifier\n", 2);
 		free(name);
 		return (1);
 	}
@@ -64,7 +66,9 @@ int	process_export(char *str, t_mshell_data *data)
 
 	if (str[0] == '-')
 	{
-		ft_printf("minishell: export: `%s': not a valid identifier\n", str);
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(str, 2);
+		ft_putstr_fd("': not a valid identifier\n", 2);
 		return (2);
 	}
 	new_str = trim_outer_quotes(str);

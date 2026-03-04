@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/02 12:27:39 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/03 09:58:49 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/04 16:07:35 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	parser(t_mshell_data *data)
 	check_shell_level(data->env_var);
 	if (check_pipe_syntax(data->tokens))
 	{
-		ft_putstr_fd("minishell: syntax error near unexpected token `|'\n", 2); //make more specific
+		ft_putstr_fd("minishell: syntax error near unexpected token `|'\n", 2);
 		data->exit_status = 2;
 		return ;
 	}
