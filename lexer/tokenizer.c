@@ -112,7 +112,7 @@ void	add_type(t_tokens **tokens)
 {
 	t_tokens	*temp;
 
-	temp = tokens;
+	temp = *tokens;
 	while (temp)
 	{
 		set_quote_type(temp);
