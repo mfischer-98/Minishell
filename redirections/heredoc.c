@@ -20,7 +20,7 @@ int	prep_heredoc(t_mshell_data *data)
 {
 	t_tokens	*temp;
 	int			heredoc;
-	
+
 	heredoc = 0;
 	temp = data->tokens;
 	while (temp)

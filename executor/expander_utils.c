@@ -98,7 +98,7 @@ void	special_char(char c, t_mshell_data *data)
 			if (!ft_strncmp(temp->var, "_=", 2))
 			{
 				value = temp->var + 2;
-				break;
+				break ;
 			}
 			temp = temp->next;
 		}
@@ -106,4 +106,3 @@ void	special_char(char c, t_mshell_data *data)
 	}
 	data->expander->i++;
 }
-

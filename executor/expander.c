@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 09:21:16 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/03 08:44:05 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/05 09:43:55 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 		2- If VAR does not exist new line
 		3- id '$VAR' -> do not expand
 ** If $?: replace by exit status number
-
 ** Get_var_len
 ** Calculates valid variable name length after $
 ** Valid: [a-zA-Z_][a-zA-Z0-9_]*
@@ -88,7 +87,7 @@ static void	handle_var(char *input, t_mshell_data *data)
 
 	data->expander->i++;
 	if (input[data->expander->i] == '?'
-			|| input[data->expander->i] == '_')
+		|| input[data->expander->i] == '_')
 		return (special_char(input[data->expander->i], data), (void)0);
 	if (input[data->expander->i] == '{')
 	{
