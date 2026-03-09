@@ -24,44 +24,53 @@ static int	apply_heredoc(int fd)
 }
 
 /* Apply input: < file -> stdin */
-static int	apply_input(char *file, t_mshell_data *data)
+static int	apply_input(t_tokens *token, t_mshell_data *data)
 {
 	int	fd;
+	char	*file;
 
+	file = strip_file_quotes(token->redir_file);
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
 		return (check_fd_error(file, data));
 	if (dup2(fd, STDIN_FILENO) == -1)
 		return (perror("dup2"), close(fd), 1);
 	close(fd);
+	free(file);
 	return (0);
 }
 
 /* Apply output: > file -> stdout truncate */
-static int	apply_output(char *file, t_mshell_data *data)
+static int	apply_output(t_tokens *token, t_mshell_data *data)
 {
 	int	fd;
+	char	*file;
 
+	file = strip_file_quotes(token->redir_file);
 	fd = open(file, O_CREAT | O_TRUNC | O_WRONLY, 0644);
 	if (fd < 0)
 		return (check_fd_error(file, data));
 	if (dup2(fd, STDOUT_FILENO) == -1)
 		return (perror("dup2"), close(fd), 1);
 	close(fd);
+	free(file);
 	return (0);
 }
 
 /* Apply append: >> file -> stdout append */
-static int	apply_append(char *file, t_mshell_data *data)
+static int	apply_append(t_tokens *token, t_mshell_data *data)
 {
-	int	fd;
+	int		fd;
+	char	*file;
 
+	file = strip_file_quotes(token->redir_file);
 	fd = open(file, O_CREAT | O_APPEND | O_WRONLY, 0644);
 	if (fd < 0)
 		return (check_fd_error(file, data));
 	if (dup2(fd, STDOUT_FILENO) == -1)
 		return (perror("dup2"), close(fd), 1);
 	close(fd);
+	free(file);
 	return (0);
 }
 
@@ -81,11 +90,11 @@ int	apply_redirects(t_tokens *tokens, t_mshell_data *data)
 		if (temp->type == NODE_HERE && temp->redir_file)
 			result = apply_heredoc(temp->heredoc_fd);
 		else if (temp->type == NODE_IN && temp->redir_file)
-			result = apply_input(temp->redir_file, data);
+			result = apply_input(temp, data);
 		else if (temp->type == NODE_OUT && temp->redir_file)
-			result = apply_output(temp->redir_file, data);
+			result = apply_output(temp, data);
 		else if (temp->type == NODE_APPEND && temp->redir_file)
-			result = apply_append(temp->redir_file, data);
+			result = apply_append(temp, data);
 		temp = temp->next;
 	}
 	return (result);

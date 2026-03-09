@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/02 12:27:39 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/05 11:10:32 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/09 09:53:44 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,11 +111,8 @@ int	check_redir_syntax(t_tokens *tokens)
 	temp = tokens;
 	while (temp)
 	{
-		printf("DEBUG: temp->type=%d, input='%s', next=%p\n", temp->type, temp->input ? temp->input : "NULL", temp->next);
 		if (node_redir(temp->type))
 		{
-			printf("DEBUG: REDIR FOUND, next->input='%s'\n", 
-                   temp->next ? (temp->next->input ? temp->input : "NULL") : "NO_NEXT");
 			if (!temp->next || !temp->next->input || !temp->next->input[0])
 				return (redir_error(1), 1);
 			else
