@@ -41,7 +41,7 @@ typedef enum s_node_type
 	NODE_UNKNOWN,
 	NODE_WORD,
 	NODE_PIPE,
-	NODE_OUT, //REDIRECT
+	NODE_OUT,
 	NODE_IN,
 	NODE_APPEND,
 	NODE_HERE,

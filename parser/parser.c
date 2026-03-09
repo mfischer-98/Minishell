@@ -6,13 +6,15 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/02 12:27:39 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/04 16:07:35 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/05 11:10:32 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-/* Syntax errors: unclosed quotes, pipe at the end of commandline or start alone, malformed redirs
+/* Syntax errors:
+	- unclosed quotes, pipe at the end of commandline or start alone,
+		malformed redirs
 	- Error message + exit 2 */
 void	parser(t_mshell_data *data)
 {
@@ -56,7 +58,8 @@ int	check_pipe_syntax(t_tokens *tokens)
 		if (temp->type == NODE_PIPE && temp->next->type == NODE_PIPE)
 			return (1);
 		if ((temp->type == NODE_OUT || temp->type == NODE_IN
-				|| temp->type == NODE_APPEND) && (temp->next->type == NODE_PIPE))
+				|| temp->type == NODE_APPEND)
+			&& (temp->next->type == NODE_PIPE))
 			return (1);
 		temp = temp->next;
 	}
@@ -65,7 +68,7 @@ int	check_pipe_syntax(t_tokens *tokens)
 	return (0);
 }
 
-static void redir_error(t_node_type type)
+static void	redir_error(t_node_type type)
 {
 	if (type == NODE_IN)
 		ft_putstr_fd("minishell: syntax error near unexpected token `<'\n", 2);
@@ -75,7 +78,25 @@ static void redir_error(t_node_type type)
 		ft_putstr_fd("minishell: syntax error near unexpected token `>>'\n", 2);
 	else if (type == NODE_HERE)
 		ft_putstr_fd("minishell: syntax error near unexpected token `<<'\n", 2);
+	else
+	{
+		ft_putstr_fd("minishell: syntax error near ", 2);
+		ft_putstr_fd("unexpected token `newline'\n", 2);
+	}
 	return ;
+}
+
+static int	node_redir(t_node_type type)
+{
+	if (type == NODE_IN)
+		return (1);
+	else if (type == NODE_OUT)
+		return (1);
+	else if (type == NODE_APPEND)
+		return (1);
+	else if (type == NODE_HERE)
+		return (1);
+	return (0);
 }
 
 /* Redirect syntax errors:
@@ -88,25 +109,24 @@ int	check_redir_syntax(t_tokens *tokens)
 	t_tokens	*temp;
 
 	temp = tokens;
-	while (temp && temp->next)
+	while (temp)
 	{
-		if (temp->type == NODE_OUT || temp->type == NODE_IN || temp->type == NODE_APPEND)
+		printf("DEBUG: temp->type=%d, input='%s', next=%p\n", temp->type, temp->input ? temp->input : "NULL", temp->next);
+		if (node_redir(temp->type))
 		{
-			if (temp->next->type == NODE_OUT || temp->next->type == NODE_IN
-					|| temp->next->type == NODE_APPEND || temp->next->type == NODE_HERE)
+			printf("DEBUG: REDIR FOUND, next->input='%s'\n", 
+                   temp->next ? (temp->next->input ? temp->input : "NULL") : "NO_NEXT");
+			if (!temp->next || !temp->next->input || !temp->next->input[0])
+				return (redir_error(1), 1);
+			else
+
+			if (node_redir(temp->next->type))
 				return (redir_error(temp->next->type), 1);
-			if (!temp->next || temp->next->type == NODE_PIPE)
-			{
-				ft_putstr_fd("minishell: syntax error near unexpected token `newline'\n", 2);
-				return (1);
-			}
+			if (temp->next->type == NODE_PIPE)
+				return (redir_error(1), 1);
 		}
-		if ((temp->next->type == NODE_OUT || temp->next->type == NODE_IN
-				|| temp->next->type == NODE_APPEND) && (temp->type == NODE_PIPE))
-		{
-			ft_putstr_fd("minishell: syntax error near unexpected token `newline'\n", 2);
-			return (1);
-		}
+		if (temp->next && ((temp->type == NODE_PIPE) && node_redir(temp->next->type)))
+				return (redir_error(1), 1);
 		temp = temp->next;
 	}
 	return (0);

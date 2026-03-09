@@ -41,5 +41,5 @@ int	check_fd_error(char *name, t_mshell_data *data)
 	else if (errno == EACCES)
 		ft_putstr_fd("Permission denied\n", 2);
 	data->exit_status = 1;
-	return (1);
+	exit(1);
 }

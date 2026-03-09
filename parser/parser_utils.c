@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/02 14:47:45 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/03 09:20:32 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/05 09:43:15 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,21 +16,28 @@ int	check_unclosed_quotes(t_tokens *tokens)
 {
 	int		sq;
 	int		dq;
+	int		i;
 
 	sq = 0;
 	dq = 0;
 	while (tokens)
 	{
-		for (int i = 0; tokens->input[i]; i++)
+		i = 0;
+		while (tokens->input[i])
 		{
 			if (tokens->input[i] == '\"')
 				dq++;
 			else if (tokens->input[i] == '\'')
 				sq++;
+			i++;
 		}
 		tokens = tokens->next;
 	}
-	return ((dq % 2 != 0) || (sq % 2 != 0));
+	if (sq % 2 != 0)
+		return (1);
+	if (dq % 2 != 0)
+		return (1);
+	return (0);
 }
 
 /*Update underscore variable
@@ -56,7 +63,7 @@ void	update_underscore(t_mshell_data *data)
 		{
 			free(vars->var);
 			vars->var = ft_strjoin("_=", last_command);
-			break;
+			break ;
 		}
 		vars = vars->next;
 	}
@@ -83,7 +90,6 @@ void	check_shell_level(t_env *env)
 				temp->var = ft_strdup("SHLVL=1");
 			}
 			return ;
-
 		}
 		temp = temp->next;
 	}
