@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 15:48:36 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/04 16:53:58 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/09 10:45:33 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,11 +133,21 @@ void	execute_piped_commands(t_mshell_data *data, t_tokens *tokens)
 	if ((pid = fork()) == 0)
 	{
 		if (next)
+		{
 			dup2(pipefd[1], STDOUT_FILENO);
+			close(pipefd[0]);
+			close(pipefd[1]);
+		}
 		execute_external_command(cmd, data, tokens);
+		exit(1); //teste
 	}
 	if (next)
+	{
+		close(pipefd[1]);
 		dup2(pipefd[0], STDIN_FILENO), execute_piped_commands(data, next->next);
+		close(pipefd[0]);
+	}
 	waitpid(pid, 0, 0);
 	dup2(saved, STDIN_FILENO);
+	close(saved);
 }
