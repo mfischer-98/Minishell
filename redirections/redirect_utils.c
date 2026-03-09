@@ -49,10 +49,7 @@ int	has_redirect(t_tokens *tokens)
 	{
 		if (temp->type == NODE_IN || temp->type == NODE_OUT
 			|| temp->type == NODE_APPEND || temp->type == NODE_HERE)
-		{
-			temp->redir_file = strip_file_quotes(temp->redir_file);
 			return (1);
-		}
 		temp = temp->next;
 	}
 	return (0);

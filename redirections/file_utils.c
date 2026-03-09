@@ -17,12 +17,15 @@ char	*strip_file_quotes(char *name)
 	int	len;
 
 	len = ft_strlen(name);
-	if (((name[0] == '\'' || name[0] == '"')
-			&& name[0] == name[len - 1]))
+	if (len > 2 && 
+		((name[0] == '\'' && name[len-1] == '\'')
+		|| (name[0] == '"' && name[len-1] == '"')))
 	{
 		name[len - 1] = '\0';
 		return (ft_strdup(name + 1));
 	}
+	if (!ft_strncmp(name, "./", 2))
+		name += 2;
 	return (ft_strdup(name));
 }
 
