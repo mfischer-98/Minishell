@@ -17,7 +17,11 @@ handle_child(int has_next, int pipefd[], char **cmd,
         t_mshell_data *data, t_tokens *segment)
 {
     if (has_next)
+    {
         dup2(pipefd[1], STDOUT_FILENO);
+        close(pipefd[0]);
+        close(pipefd[1]);
+    }
     execute_external_command(cmd, data, segment);
 }
 

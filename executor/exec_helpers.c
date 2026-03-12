@@ -12,16 +12,14 @@
 
 #include "../minishell.h"
 
-static void
-print_cmd_not_found(char *cmd)
+static void print_cmd_not_found(char *cmd)
 {
     ft_putstr_fd("minishell: ", 2);
     ft_putstr_fd(cmd, 2);
     ft_putstr_fd(": command not found\n", 2);
 }
 
-static char **
-get_envp_or_exit(t_env *env)
+static char **get_envp_or_exit(t_env *env)
 {
     char **envp = list_to_array(env, env_size(env));
     if (!envp)
