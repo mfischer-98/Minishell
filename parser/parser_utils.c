@@ -14,30 +14,28 @@
 
 int	check_unclosed_quotes(t_tokens *tokens)
 {
-	int		sq;
-	int		dq;
 	int		i;
+	int		in_sq;
+	int		in_dq;
+	char	*str;
 
-	sq = 0;
-	dq = 0;
+	in_sq = 0;
+	in_dq = 0;
 	while (tokens)
 	{
+		str = tokens->input;
 		i = 0;
-		while (tokens->input[i])
+		while (str && str[i])
 		{
-			if (tokens->input[i] == '\"')
-				dq++;
-			else if (tokens->input[i] == '\'')
-				sq++;
+			if (str[i] == '\'' && !in_dq)
+				in_sq = !in_sq;
+			else if (str[i] == '"' && !in_sq)
+				in_dq = !in_dq;
 			i++;
 		}
 		tokens = tokens->next;
 	}
-	if (sq % 2 != 0)
-		return (1);
-	if (dq % 2 != 0)
-		return (1);
-	return (0);
+	return (in_sq || in_dq);
 }
 
 /*Update underscore variable
