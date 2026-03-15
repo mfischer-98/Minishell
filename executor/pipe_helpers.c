@@ -44,7 +44,6 @@ static int handle_parent(int has_next, int pipefd[], int saved, t_mshell_data *d
         return (0);
     }
     close(pipefd[1]);
-    waitpid(pid, &status, 0);
     return (1);
 }
 
