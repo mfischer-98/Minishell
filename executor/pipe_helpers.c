@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/05 00:00:00 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/05 00:00:00 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/16 17:25:10 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,9 @@ static void handle_child(int has_next, int pipefd[], char **cmd, t_mshell_data *
 static int handle_parent(int has_next, int pipefd[], int saved, t_mshell_data *data, pid_t pid)
 {
     int status;
+
     if (has_next)
-    {
-    dup2(pipefd[0], STDIN_FILENO);
-    close(pipefd[0]);
-    }
+		dup2(pipefd[0], STDIN_FILENO);
     else
     {
         dup2(saved, STDIN_FILENO);
@@ -71,7 +69,10 @@ static int	process_segment(t_mshell_data *data, t_tokens **tokens, int saved)
 	{
 		int result = handle_parent(next != NULL, pipefd, saved, data, pid);
 		if (next)
+		{
+			close(pipefd[0]);
 			*tokens = next->next;
+		}
 		return (free(cmd), result);
 	}
 	return (free(cmd), fail_saved(saved));
@@ -82,6 +83,5 @@ void	execute_piped_commands(t_mshell_data *data, t_tokens *tokens)
     int saved = dup(STDIN_FILENO);
     if (saved == -1)
         return;
-    while (tokens && process_segment(data, &tokens, saved))
-        ;
+    while (tokens && process_segment(data, &tokens, saved));
 }

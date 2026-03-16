@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 09:21:13 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/02 14:48:09 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/16 17:58:46 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,11 @@ void	ft_execve(char **commandline, t_mshell_data *data)
 
 void	run_command(char **commandline, t_mshell_data *data)
 {
-	if (!commandline || !commandline[0])
+	if (!commandline || !commandline[0] || commandline[0][0] == '\0')
+	{
+		data->exit_status = 0;
 		return ;
+	}
 	if (!ft_strcmp(commandline[0], "pwd"))
 		data->exit_status = pwd();
 	else if (!ft_strcmp(commandline[0], "cd"))
@@ -69,11 +72,45 @@ static int	has_pipes(t_mshell_data *data)
 	return (0);
 }
 
+static void	clean_empty_tokens(t_tokens **tokens)
+{
+    t_tokens  *current;
+    t_tokens  *prev;
+    t_tokens  *next;
+
+    if (!tokens || !*tokens)
+        return ;
+    current = *tokens;
+    prev = NULL;
+    while (current)
+    {
+        next = current->next;
+        if (!current->input || current->input[0] == '\0')
+        {
+            if (prev)
+                prev->next = next;
+            else
+                *tokens = next;
+            free(current->input);
+            free(current);
+        }
+        else
+            prev = current;
+        current = next;
+    }
+}
+
 void	executor(t_mshell_data *data)
 {
 	char	**commands;
 
 	expand_all_tokens(data);
+	clean_empty_tokens(&data->tokens);
+	if (!data->tokens)
+	{
+		data->exit_status = 0;
+		return ;
+	}
 	if (!prep_heredoc(data))
 		return ;
 	if (has_pipes(data))

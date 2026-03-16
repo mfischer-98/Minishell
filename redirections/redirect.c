@@ -95,7 +95,9 @@ int	apply_redirects(t_tokens *tokens, t_mshell_data *data)
 			result = apply_output(temp, data);
 		else if (temp->type == NODE_APPEND && temp->redir_file)
 			result = apply_append(temp, data);
+		if (result != 0)
+			return (result);
 		temp = temp->next;
 	}
-	return (result);
+	return (0);
 }

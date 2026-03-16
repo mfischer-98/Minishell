@@ -24,6 +24,7 @@
 # include <errno.h>
 # include <signal.h>
 # include <fcntl.h>
+# include <sys/stat.h> 
 
 //COLORS
 # define CYAN "\033[96m"
