@@ -14,19 +14,21 @@
 
 char	*strip_file_quotes(char *name)
 {
-	int	len;
-
-	len = ft_strlen(name);
-	if (len > 2 && 
-		((name[0] == '\'' && name[len-1] == '\'')
-		|| (name[0] == '"' && name[len-1] == '"')))
-	{
-		name[len - 1] = '\0';
-		return (ft_strdup(name + 1));
-	}
+	char	*result;
+		
 	if (!ft_strncmp(name, "./", 2))
 		name += 2;
-	return (ft_strdup(name));
+	result = ft_strdup(name);
+	int i = 0;
+	int j = 0;
+	while (result[i])
+	{
+		if (result[i] != '"' && result[i] != '\'')
+			result[j++] = result[i];
+		i++;
+	}
+	result[j] = '\0';
+	return (result);
 }
 
 int	check_fd_error(char *name, t_mshell_data *data)

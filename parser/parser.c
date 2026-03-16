@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/02 12:27:39 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/09 09:53:44 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/16 17:12:59 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,15 +115,11 @@ int	check_redir_syntax(t_tokens *tokens)
 		{
 			if (!temp->next || !temp->next->input || !temp->next->input[0])
 				return (redir_error(1), 1);
-			else
-
 			if (node_redir(temp->next->type))
 				return (redir_error(temp->next->type), 1);
 			if (temp->next->type == NODE_PIPE)
 				return (redir_error(1), 1);
 		}
-		if (temp->next && ((temp->type == NODE_PIPE) && node_redir(temp->next->type)))
-				return (redir_error(1), 1);
 		temp = temp->next;
 	}
 	return (0);
