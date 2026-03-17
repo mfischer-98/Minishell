@@ -72,7 +72,7 @@ static int	has_pipes(t_mshell_data *data)
 	return (0);
 }
 
-static void	clean_empty_tokens(t_tokens **tokens)
+static void	skip_empty_tokens(t_tokens **tokens)
 {
     t_tokens  *current;
     t_tokens  *prev;
@@ -100,12 +100,29 @@ static void	clean_empty_tokens(t_tokens **tokens)
     }
 }
 
+static int	first_empty(t_mshell_data *data, char *str)
+{
+	if (str[0] == '\"' && str[1] == '\"')
+	{
+		data->exit_status = 127;
+		return (1);
+	}
+	if (!str)
+	{
+		data->exit_status = 127;
+		return (1);
+	}
+	return (0);
+}
+
 void	executor(t_mshell_data *data)
 {
 	char	**commands;
 
+	if (first_empty(data, data->tokens->input))
+		return (print_cmd_not_found("\'\'"));
 	expand_all_tokens(data);
-	clean_empty_tokens(&data->tokens);
+	skip_empty_tokens(&data->tokens);
 	if (!data->tokens)
 	{
 		data->exit_status = 0;
