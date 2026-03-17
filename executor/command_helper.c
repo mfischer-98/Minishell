@@ -6,47 +6,47 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 15:48:36 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/17 15:40:46 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/17 16:39:24 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static char *search_paths(char **paths, char *cmd)
+static char	*search_paths(char **paths, char *cmd)
 {
-    char *tmp;
-    char *full_path;
-    int i;
+	char	*tmp;
+	char	*full_path;
+	int		i;
 
 	i = 0;
-    while (paths[i])
-    {
-        tmp = ft_strjoin(paths[i], "/");
+	while (paths[i])
+	{
+		tmp = ft_strjoin(paths[i], "/");
 		if (tmp)
 			full_path = ft_strjoin(tmp, cmd);
 		else
 			full_path = NULL;
-        if (full_path && access(full_path, X_OK) == 0)
-            return (free(tmp), free_array(paths, i + 1), full_path);
-        free(tmp);
-        free(full_path);
-        i++;
-    }
-    free_array(paths, i);
-    return (NULL);
+		if (full_path && access(full_path, X_OK) == 0)
+			return (free(tmp), free_array(paths, i + 1), full_path);
+		free(tmp);
+		free(full_path);
+		i++;
+	}
+	free_array(paths, i);
+	return (NULL);
 }
 
-char    *find_command_in_path(char *cmd, t_env *env_list)
+char	*find_command_in_path(char *cmd, t_env *env_list)
 {
-    char **paths;
+	char	**paths;
 
-	 if (ft_strchr(cmd, '/'))
-    {
-        if (access(cmd, F_OK) == 0 && access(cmd, X_OK) == 0)
-            return (ft_strdup(cmd));
-        return (NULL);
-    }
-    while (env_list && ft_strncmp(env_list->var, "PATH=", 5) != 0)
+	if (ft_strchr(cmd, '/'))
+	{
+		if (access(cmd, F_OK) == 0 && access(cmd, X_OK) == 0)
+			return (ft_strdup(cmd));
+		return (NULL);
+	}
+	while (env_list && ft_strncmp(env_list->var, "PATH=", 5) != 0)
 	{
 		env_list = env_list->next;
 	}
@@ -54,9 +54,9 @@ char    *find_command_in_path(char *cmd, t_env *env_list)
 		paths = ft_split(env_list->var + 5, ':');
 	else
 		paths = NULL;
-    if (!paths)
-        return (NULL);
-    return (search_paths(paths, cmd));
+	if (!paths)
+		return (NULL);
+	return (search_paths(paths, cmd));
 }
 
 char	**build_command(t_tokens **tokens)
