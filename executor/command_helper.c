@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 15:48:36 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/16 18:46:43 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/17 15:01:42 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,12 @@ char    *find_command_in_path(char *cmd, t_env *env_list)
 {
     char **paths;
 
-	 if (cmd[0] == '/' || cmd[0] == '.')
+	 if (ft_strchr(cmd, '/'))
     {
         if (access(cmd, F_OK) == 0 && access(cmd, X_OK) == 0)
             return (ft_strdup(cmd));
         return (NULL);  // *** CRITICAL: Don't return unexecutable paths ***
     }
-    if (access(cmd, X_OK) == 0)
-        return (ft_strdup(cmd));
     while (env_list && ft_strncmp(env_list->var, "PATH=", 5) != 0)
         env_list = env_list->next;
     paths = env_list ? ft_split(env_list->var + 5, ':') : NULL;

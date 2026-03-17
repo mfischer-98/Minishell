@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/05 00:00:00 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/17 12:05:46 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/17 15:18:53 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,17 @@ void print_cmd_not_found(char *cmd)
 
 void print_perm_denied(char *cmd)
 {
+    struct stat st;
+    
     if (access(cmd, F_OK) != 0)
     {
+        if(!S_ISDIR(st.st_mode))
+        {
+            ft_putstr_fd("minishell: ", 2);
+            ft_putstr_fd(cmd, 2);
+            ft_putstr_fd(": No such file or directory\n", 2);
+            exit(127);
+        }
         print_cmd_not_found(cmd);
         exit(127);
     }
@@ -64,6 +73,7 @@ static int  validate_cmd_path(char *cmd_name, char *cmd_path)
             ft_putstr_fd(": Is a directory\n", 2);
             return (126);
         }
+
     }
     // Case 2: Test 4 - File exists but no execute permission
     if (access(cmd_path, F_OK) == 0 && access(cmd_path, X_OK) != 0)
@@ -96,9 +106,7 @@ void    execute_external_command(char **commandline, t_mshell_data *data,
     }
     err_code = validate_cmd_path(commandline[0], cmd_path);
     if (err_code != 0)
-    {
         exit(err_code);
-    }
     envp = get_envp_or_exit(data->env_var);
     execve(cmd_path, commandline, envp);
     perror("execve");
