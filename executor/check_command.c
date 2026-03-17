@@ -6,11 +6,30 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 09:21:13 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/16 17:58:46 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/17 16:48:07 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+static void	execute_single_command(t_mshell_data *data)
+{
+	char	**commands;
+
+	commands = array_join(data->tokens);
+	if (!ft_strcmp(data->tokens->input, ">") || !ft_strcmp(data->tokens->input,
+			">>") || !ft_strcmp(data->tokens->input, "<"))
+		return (redirect_start(data->tokens, data));
+	if (commands && commands[0] && data->tokens->type == NODE_WORD)
+	{
+		if (!has_redirect(data->tokens))
+			run_command(commands, data);
+		else if (is_builtin(commands))
+			run_builtin_redirects(commands, data);
+		else
+			ft_execve(commands, data);
+	}
+}
 
 void	ft_execve(char **commandline, t_mshell_data *data)
 {
@@ -58,69 +77,44 @@ void	run_command(char **commandline, t_mshell_data *data)
 		ft_execve(commandline, data);
 }
 
-static int	has_pipes(t_mshell_data *data)
-{
-	t_tokens	*temp;
-
-	temp = data->tokens;
-	while (temp)
-	{
-		if (temp->type == NODE_PIPE)
-			return (1);
-		temp = temp->next;
-	}
-	return (0);
-}
-
 static void	skip_empty_tokens(t_tokens **tokens)
 {
-    t_tokens  *current;
-    t_tokens  *prev;
-    t_tokens  *next;
+	t_tokens	*current;
+	t_tokens	*prev;
+	t_tokens	*next;
 
-    if (!tokens || !*tokens)
-        return ;
-    current = *tokens;
-    prev = NULL;
-    while (current)
-    {
-        next = current->next;
-        if (!current->input || current->input[0] == '\0')
-        {
-            if (prev)
-                prev->next = next;
-            else
-                *tokens = next;
-            free(current->input);
-            free(current);
-        }
-        else
-            prev = current;
-        current = next;
-    }
-}
-
-static int	first_empty(t_mshell_data *data, char *str)
-{
-	if (str[0] == '\"' && str[1] == '\"')
+	if (!tokens || !*tokens)
+		return ;
+	current = *tokens;
+	prev = NULL;
+	while (current)
 	{
-		data->exit_status = 127;
-		return (1);
+		next = current->next;
+		if (!current->input || current->input[0] == '\0')
+		{
+			if (prev)
+				prev->next = next;
+			else
+				*tokens = next;
+			free(current->input);
+			free(current);
+		}
+		else
+			prev = current;
+		current = next;
 	}
-	if (!str)
-	{
-		data->exit_status = 127;
-		return (1);
-	}
-	return (0);
 }
 
 void	executor(t_mshell_data *data)
 {
-	char	**commands;
+	t_tokens	*temp;
 
-	if (first_empty(data, data->tokens->input))
+	if ((data->tokens->input[0] == '\"' && data->tokens->input[1] == '\"')
+		|| !data->tokens->input)
+	{
+		data->exit_status = 127;
 		return (print_cmd_not_found("\'\'"));
+	}
 	expand_all_tokens(data);
 	skip_empty_tokens(&data->tokens);
 	if (!data->tokens)
@@ -130,19 +124,12 @@ void	executor(t_mshell_data *data)
 	}
 	if (!prep_heredoc(data))
 		return ;
-	if (has_pipes(data))
-		return (execute_piped_commands(data, data->tokens), (void)0);
-	commands = array_join(data->tokens);
-	if (!ft_strcmp(data->tokens->input, ">") || !ft_strcmp(data->tokens->input,
-			">>") || !ft_strcmp(data->tokens->input, "<"))
-		return (redirect_start(data->tokens, data));
-	if (commands && commands[0] && data->tokens->type == NODE_WORD)
+	temp = data->tokens;
+	while (temp)
 	{
-		if (!has_redirect(data->tokens))
-			run_command(commands, data);
-		else if (is_builtin(commands))
-			run_builtin_redirects(commands, data);
-		else
-			ft_execve(commands, data);
+		if (temp->type == NODE_PIPE)
+			return (execute_piped_commands(data, data->tokens), (void)0);
+		temp = temp->next;
 	}
+	execute_single_command(data);
 }

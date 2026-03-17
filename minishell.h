@@ -96,6 +96,16 @@ typedef struct s_mshell_data
 	int			exit_status;
 }			t_mshell_data;
 
+typedef struct s_fork_data
+{
+	t_mshell_data	*data;
+	t_tokens		**tokens;
+	int				saved;
+	char			**cmd;
+	int				*pipefd;
+	t_tokens		*next;
+}			t_fork_data;
+
 // Banner
 void			print_banner(void);
 
