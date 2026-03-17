@@ -195,6 +195,7 @@ void			print_env(t_mshell_data *data);
 void			run_builtin(char **commandline, t_mshell_data *data);
 t_env			*ft_env_var(t_env *env_list, char *var_name);
 void			print_cmd_not_found(char *cmd);
+void			free_prev_data(char **commands, t_mshell_data *data);
 
 // Built ins
 int				pwd(void);

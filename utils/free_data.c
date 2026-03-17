@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 09:21:36 by mefische          #+#    #+#             */
-/*   Updated: 2026/02/17 18:19:48 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/17 16:42:19 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,10 @@ void	free_data(t_mshell_data *data)
 {
 	free_env(data->env_var);
 	if (data->tokens)
+	{
 		free_list(data->tokens);
+		free(data->tokens);
+	}
 	if (data->expander)
 	{
 		if (data->expander->result)
@@ -25,6 +28,28 @@ void	free_data(t_mshell_data *data)
 	}
 	free(data);
 	rl_clear_history();
+}
+
+void	free_prev_data(char **commands, t_mshell_data *data)
+{
+	int	size;
+
+	size = 0;
+	while (commands[size])
+		size++;
+	if (commands)
+		free_array(commands, size);
+	if (data->tokens)
+	{
+		free_list(data->tokens);
+		free(data->tokens);
+	}
+	if (data->expander)
+	{
+		if (data->expander->result)
+			free(data->expander->result);
+		free(data->expander);
+	}
 }
 
 void	free_array(char **array, int n)

@@ -16,33 +16,29 @@ static void	handle_redirect(t_tokens **tokens, char *prompt,
 	t_token_state *state, int is_double)
 {
 	if (state->i > state->start)
-		add_token(tokens, ft_substr(prompt, state->start, state->i - state->start), NODE_UNKNOWN);
+		add_token(tokens, ft_substr(prompt, state->start,
+				state->i - state->start), NODE_UNKNOWN);
 	if (prompt[state->i] == '<')
 	{
 		if (is_double)
 		{
 			add_token(tokens, ft_strdup("<<"), NODE_HERE);
-			state->i += 2;
-		}
-		else
-		{
-			add_token(tokens, ft_strdup("<"), NODE_IN);
 			state->i++;
 		}
+		else
+			add_token(tokens, ft_strdup("<"), NODE_IN);
 	}
 	else if (prompt[state->i] == '>')
 	{
 		if (is_double)
 		{
 			add_token(tokens, ft_strdup(">>"), NODE_APPEND);
-			state->i += 2;
-		}
-		else
-		{
-			add_token(tokens, ft_strdup(">"), NODE_OUT);
 			state->i++;
 		}
+		else
+			add_token(tokens, ft_strdup(">"), NODE_OUT);
 	}
+	state->i++;
 	state->start = state->i;
 }
 
@@ -97,7 +93,7 @@ void	create_tokens(char *prompt, t_tokens **tokens)
 		else
 			type = NODE_UNKNOWN;
 		add_token(tokens, ft_substr(prompt, state->start,
-				state->i - state->start), type);
+				state->i - state->start), type);//free
 	}
 	add_type(tokens);
 	free(state);

@@ -15,12 +15,14 @@
 char	*strip_file_quotes(char *name)
 {
 	char	*result;
-		
+	int		i;
+	int		j;
+
 	if (!ft_strncmp(name, "./", 2))
 		name += 2;
 	result = ft_strdup(name);
-	int i = 0;
-	int j = 0;
+	i = 0;
+	j = 0;
 	while (result[i])
 	{
 		if (result[i] != '"' && result[i] != '\'')
