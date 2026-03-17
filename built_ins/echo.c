@@ -30,14 +30,7 @@ static int	ft_flag(char *arg)
 
 static void	print_arg(char *str)
 {
-	int	len;
-
-	len = ft_strlen(str);
-	if ((str[0] == '"' && str[len - 1] == '"')
-		|| (str[0] == '\'' && str[len - 1] == '\''))
-		write(1, str + 1, len - 2);
-	else
-		ft_putstr_fd(str, 1);
+	ft_putstr_fd(str, 1);
 }
 
 int	echo(char **arg)

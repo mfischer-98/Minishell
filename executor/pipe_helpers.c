@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/05 00:00:00 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/16 17:25:10 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/17 10:45:14 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,16 @@ static void handle_child(int has_next, int pipefd[], char **cmd, t_mshell_data *
     close(pipefd[0]);
     close(pipefd[1]);
 
-    execute_external_command(cmd, data, segment);
+    data->exit_status = apply_redirects(segment, data);
+    if (data->exit_status != 0)
+        exit(data->exit_status);
+    if (is_builtin(cmd))
+    {
+        run_command(cmd, data);
+        exit(data->exit_status);
+    }
+    else
+        execute_external_command(cmd, data, segment);
 }
 
 static int handle_parent(int has_next, int pipefd[], int saved, t_mshell_data *data, pid_t pid)
