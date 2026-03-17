@@ -6,15 +6,15 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/05 00:00:00 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/17 10:45:14 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/17 15:45:21 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static void handle_child(int has_next, int pipefd[], char **cmd, t_mshell_data *data, t_tokens *segment)
+static void handle_child(int pipefd[], char **cmd, t_mshell_data *data, t_tokens *segment)
 {
-    if (has_next)
+    if (pipefd[1] != -1)
     {
         dup2(pipefd[1], STDOUT_FILENO);
     }
@@ -33,11 +33,11 @@ static void handle_child(int has_next, int pipefd[], char **cmd, t_mshell_data *
         execute_external_command(cmd, data, segment);
 }
 
-static int handle_parent(int has_next, int pipefd[], int saved, t_mshell_data *data, pid_t pid)
+static int handle_parent(int pipefd[], int saved, t_mshell_data *data, pid_t pid)
 {
     int status;
 
-    if (has_next)
+    if (pipefd[0] != -1)
 		dup2(pipefd[0], STDIN_FILENO);
     else
     {
@@ -73,10 +73,10 @@ static int	process_segment(t_mshell_data *data, t_tokens **tokens, int saved)
 	if (!(cmd = build_command(tokens)) || (next && pipe(pipefd) == -1))
 		return (fail_saved(saved));
 	if ((pid = fork()) == 0)
-		handle_child(next != NULL, pipefd, cmd, data, *tokens);
+		handle_child(pipefd, cmd, data, *tokens);
 	else if (pid > 0)
 	{
-		int result = handle_parent(next != NULL, pipefd, saved, data, pid);
+		int result = handle_parent(pipefd, saved, data, pid);
 		if (next)
 		{
 			close(pipefd[0]);

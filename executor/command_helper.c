@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 15:48:36 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/17 15:01:42 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/17 15:40:46 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,16 @@ static char *search_paths(char **paths, char *cmd)
 {
     char *tmp;
     char *full_path;
-    int i = 0;
+    int i;
 
+	i = 0;
     while (paths[i])
     {
         tmp = ft_strjoin(paths[i], "/");
-        full_path = tmp ? ft_strjoin(tmp, cmd) : NULL;
+		if (tmp)
+			full_path = ft_strjoin(tmp, cmd);
+		else
+			full_path = NULL;
         if (full_path && access(full_path, X_OK) == 0)
             return (free(tmp), free_array(paths, i + 1), full_path);
         free(tmp);
@@ -40,11 +44,16 @@ char    *find_command_in_path(char *cmd, t_env *env_list)
     {
         if (access(cmd, F_OK) == 0 && access(cmd, X_OK) == 0)
             return (ft_strdup(cmd));
-        return (NULL);  // *** CRITICAL: Don't return unexecutable paths ***
+        return (NULL);
     }
     while (env_list && ft_strncmp(env_list->var, "PATH=", 5) != 0)
-        env_list = env_list->next;
-    paths = env_list ? ft_split(env_list->var + 5, ':') : NULL;
+	{
+		env_list = env_list->next;
+	}
+	if (env_list)
+		paths = ft_split(env_list->var + 5, ':');
+	else
+		paths = NULL;
     if (!paths)
         return (NULL);
     return (search_paths(paths, cmd));
