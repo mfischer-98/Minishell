@@ -26,7 +26,7 @@ static int	apply_heredoc(int fd)
 /* Apply input: < file -> stdin */
 static int	apply_input(t_tokens *token, t_mshell_data *data)
 {
-	int	fd;
+	int		fd;
 	char	*file;
 
 	file = strip_file_quotes(token->redir_file);
@@ -43,7 +43,7 @@ static int	apply_input(t_tokens *token, t_mshell_data *data)
 /* Apply output: > file -> stdout truncate */
 static int	apply_output(t_tokens *token, t_mshell_data *data)
 {
-	int	fd;
+	int		fd;
 	char	*file;
 
 	file = strip_file_quotes(token->redir_file);

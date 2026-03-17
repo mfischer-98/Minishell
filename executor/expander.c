@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 09:21:16 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/05 09:43:55 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/17 16:16:36 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ char	*get_env_var(char *token, t_mshell_data *data)
 	{
 		if (!ft_strncmp(token, temp->var, len)
 			&& ((temp->var[len] == '=' || temp->var[len] == '\0')))
-			return (ft_strdup(temp->var + len + 1));
+			return (ft_strdup(temp->var + len + 1));//free
 		temp = temp->next;
 	}
 	return (ft_strdup(""));

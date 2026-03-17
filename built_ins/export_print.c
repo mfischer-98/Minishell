@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 09:20:57 by mefische          #+#    #+#             */
-/*   Updated: 2026/02/13 10:09:39 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/17 16:16:07 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ char	*trim_outer_quotes(char	*str)
 		len -= 2;
 		return (ft_substr(str, 1, len - 2));
 	}
-	return (ft_strdup(str));
+	return (ft_strdup(str));//free
 }
 
 void	print_variable(char *str)

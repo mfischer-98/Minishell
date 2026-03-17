@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 11:19:33 by mefische          #+#    #+#             */
-/*   Updated: 2026/02/17 18:05:43 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/17 16:18:27 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ char	**array_join(t_tokens *tokens)
 
 	size = array_size(tokens);
 	i = 0;
-	array = malloc(sizeof(char *) * (size + 1));
+	array = malloc(sizeof(char *) * (size + 1));//free
 	if (!array)
 		return (NULL);
 	temp = tokens;

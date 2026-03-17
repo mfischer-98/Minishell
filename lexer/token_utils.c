@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 09:21:23 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/16 17:06:05 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/17 16:13:42 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	add_redir_info(t_tokens *token)
 {
 	if (token->next)
 	{
-		token->redir_file = ft_strdup(token->next->input);
+		token->redir_file = ft_strdup(token->next->input); //free
 		token->next->is_redir_name = 1;
 	}
 }
