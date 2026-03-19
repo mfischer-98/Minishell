@@ -20,6 +20,7 @@ int	prep_heredoc(t_mshell_data *data)
 {
 	t_tokens	*temp;
 	int			heredoc;
+	char		*file;
 
 	heredoc = 0;
 	temp = data->tokens;
@@ -27,6 +28,13 @@ int	prep_heredoc(t_mshell_data *data)
 	{
 		if (temp->type == NODE_HERE)
 		{
+			if (here_quotes(temp->redir_file))
+			{
+				temp->quote_delim = 1;
+				file = strip_file_quotes(temp->redir_file);
+				free(temp->redir_file);
+				temp->redir_file = file;
+			}
 			heredoc = handle_heredoc(temp, data);
 			if (heredoc < 0)
 			{

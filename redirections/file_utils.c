@@ -50,3 +50,18 @@ int	check_fd_error(char *name, t_mshell_data *data)
 	data->exit_status = 1;
 	exit(1);
 }
+
+/* Checks if delimeter has quotes, if yes do not expand */
+int	here_quotes(char *str)
+{
+	int	i;
+	int	len;
+
+	i = 0;
+	len = ft_strlen(str);
+	if (str[i] == '\'' && str[len - 1] == '\'')
+		return (1);
+	if (str[i] == '\"' && str[len - 1] == '\"')
+		return (1);
+	return (0);
+}
