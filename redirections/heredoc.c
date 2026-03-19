@@ -39,10 +39,7 @@ int	prep_heredoc(t_mshell_data *data)
 				temp->quote_delim = 2;
 			heredoc = handle_heredoc(temp, data);
 			if (heredoc < 0)
-			{
-				data->exit_status = 1;
-				return (0);
-			}
+				return (data->exit_status = 1, 0);
 		}
 		temp = temp->next;
 	}
