@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/05 00:00:00 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/19 12:07:11 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/19 16:39:07 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,11 @@ static void	handle_child(int pipefd[], char **cmd, t_mshell_data *data,
 	t_tokens *segment)
 {
 	if (pipefd[1] != -1)
-	{
 		dup2(pipefd[1], STDOUT_FILENO);
-	}
-	close(pipefd[0]);
-	close(pipefd[1]);
+	if (pipefd[0] >= 0)
+		close(pipefd[0]);
+	if (pipefd[1] >= 0)
+		close(pipefd[1]);
 	data->exit_status = apply_redirects(segment, data);
 	if (data->exit_status != 0)
 		exit(data->exit_status);
@@ -51,7 +51,8 @@ static int	handle_parent(int pipefd[], int saved, t_mshell_data *data,
 			data->exit_status = 128 + WTERMSIG(status);
 		return (0);
 	}
-	close(pipefd[1]);
+	if (pipefd[1] >= 0)
+		close(pipefd[1]);
 	return (1);
 }
 
@@ -95,7 +96,8 @@ static int	process_segment(t_mshell_data *data, t_tokens **tokens, int saved)
 	if (!cmd || (next && pipe(pipefd) == -1))
 	{
 		dup2(saved, STDIN_FILENO);
-		close(saved);
+		if (saved >= 0)
+			close(saved);
 		return (0);
 	}
 	fork_data.data = data;
@@ -116,4 +118,5 @@ void	execute_piped_commands(t_mshell_data *data, t_tokens *tokens)
 		return ;
 	while (tokens && process_segment(data, &tokens, saved))
 		;
+	close(saved);
 }
