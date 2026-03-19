@@ -120,7 +120,7 @@ void	add_token(t_tokens **tokens, char *input, t_node_type type)
 		return ;
 	}
 	node = *tokens;
-	while (node->next)
+	while (node->next)	
 		node = node->next;
 	node->next = new_node;
 }

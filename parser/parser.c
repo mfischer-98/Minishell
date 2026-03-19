@@ -6,16 +6,12 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/02 12:27:39 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/16 17:12:59 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/19 11:11:22 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-/* Syntax errors:
-	- unclosed quotes, pipe at the end of commandline or start alone,
-		malformed redirs
-	- Error message + exit 2 */
 void	parser(t_mshell_data *data)
 {
 	if (!data || !data->tokens)
@@ -42,10 +38,6 @@ void	parser(t_mshell_data *data)
 	update_underscore(data);
 }
 
-/* Pipe syntax errors: 
-	- pipe at start or end
-	- consecutive pipes | | or ||
-	- redirection followed by pipe */
 int	check_pipe_syntax(t_tokens *tokens)
 {
 	t_tokens	*temp;
@@ -99,11 +91,6 @@ static int	node_redir(t_node_type type)
 	return (0);
 }
 
-/* Redirect syntax errors:
-	- consecutive redirects
-	- missing file name
-	- invalid name token: commands or pipe
-*/
 int	check_redir_syntax(t_tokens *tokens)
 {
 	t_tokens	*temp;

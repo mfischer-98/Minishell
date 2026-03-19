@@ -6,13 +6,13 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 09:21:41 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/02 14:20:43 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/19 11:10:03 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	initialize(t_mshell_data **data, char **envp)
+void		initialize(t_mshell_data **data, char **envp)
 {
 	*data = malloc(sizeof(t_mshell_data));
 	if (!data)

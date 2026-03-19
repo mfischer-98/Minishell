@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/05 00:00:00 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/17 16:37:29 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/19 11:50:44 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,14 +99,16 @@ void	execute_external_command(char **commandline, t_mshell_data *data,
 	if (!cmd_path)
 	{
 		print_cmd_not_found(commandline[0]);
+		free_list(data->tokens);
 		exit(127);
 	}
 	err_code = validate_cmd_path(commandline[0], cmd_path);
-	if (err_code != 0)
+	if (err_code != 0)	
 		exit(err_code);
 	envp = get_envp_or_exit(data->env_var);
 	execve(cmd_path, commandline, envp);
 	perror("execve");
 	free_array(envp, env_size(data->env_var));
+	free_list(data->tokens);
 	exit(1);
 }

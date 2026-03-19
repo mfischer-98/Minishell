@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/02 14:47:45 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/17 16:15:13 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/19 11:36:20 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,6 @@ int	check_unclosed_quotes(t_tokens *tokens)
 	return (in_sq || in_dq);
 }
 
-/*Update underscore variable
-	- holds last argument of previous command
-	- call executor
-	- after executor keep last command */
 void	update_underscore(t_mshell_data *data)
 {
 	t_env		*vars;
