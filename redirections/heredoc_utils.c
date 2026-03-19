@@ -19,9 +19,9 @@ void	write_line(int fd, char *line, t_tokens *token, t_mshell_data *data)
 {
 	char	*expanded;
 
-	if (!token->quote_delim)
+	if (token->quote_delim != 1)
 	{
-		expanded = expand_heredoc_line(line, data);
+		expanded = expand_heredoc_line(line, data, token);
 		write(fd, expanded, ft_strlen(expanded));
 		free(expanded);
 	}

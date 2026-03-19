@@ -35,6 +35,8 @@ int	prep_heredoc(t_mshell_data *data)
 				free(temp->redir_file);
 				temp->redir_file = file;
 			}
+ 			else
+				temp->quote_delim = 2;
 			heredoc = handle_heredoc(temp, data);
 			if (heredoc < 0)
 			{
@@ -48,11 +50,11 @@ int	prep_heredoc(t_mshell_data *data)
 }
 
 /* Expand heredoc: expands variables in heredoc line */
-char	*expand_heredoc_line(char *line, t_mshell_data *data)
+char	*expand_heredoc_line(char *line, t_mshell_data *data, t_tokens *token)
 {
 	char	*expanded;
 
-	expanded = expand_tokens(line, data);
+	expanded = expand_tokens(line, data, token->quote_delim);
 	return (expanded);
 }
 
@@ -121,6 +123,7 @@ int	handle_heredoc(t_tokens *token, t_mshell_data *data)
 	{
 		set_heredoc_signals();
 		heredoc_loop(fd, token, data);
+		token->quote_delim = 0;
 		close(fd);
 		exit(0);
 	}

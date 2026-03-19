@@ -59,7 +59,7 @@ typedef struct s_token_state
 }			t_token_state;
 
 /*	redir_file = file name for redirects
-	quote_delim = 1 if was quoted
+	quote_delim = 0 if was quoted
 	redi_name = if there was a redirect before, 
 	this is not a command for executor, so skip
 */
@@ -152,7 +152,7 @@ void			append_result(char	*str, t_mshell_data *data);
 // Expander
 void			check_command(t_mshell_data *data);
 char			*get_env_var(char *token, t_mshell_data *data);
-char			*expand_tokens(char *token, t_mshell_data *data);
+char			*expand_tokens(char *token, t_mshell_data *data, int delim);
 void			special_char(char c, t_mshell_data *data);
 
 // Redirections
@@ -169,7 +169,7 @@ void			reset_signals(void);
 void			write_line(int fd, char *line, t_tokens *token,
 					t_mshell_data *data);
 int				process_delimeter_quotes(t_tokens *token);
-char			*expand_heredoc_line(char *line, t_mshell_data *data);
+char			*expand_heredoc_line(char *line, t_mshell_data *data, t_tokens *token);
 int				has_redirect(t_tokens *tokens);
 void			run_builtin_redirects(char **commandline, t_mshell_data *data);
 char			*strip_file_quotes(char *name);

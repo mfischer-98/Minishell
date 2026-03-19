@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 09:21:16 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/17 16:16:36 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/19 16:12:50 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ static void	handle_var(char *input, t_mshell_data *data)
 	return (append_result(value, data), free(value), free(var_name));
 }
 
-char	*expand_tokens(char *input, t_mshell_data *data)
+char	*expand_tokens(char *input, t_mshell_data *data, int delim)
 {
 	char		*temp;
 	t_expander	*exp;
@@ -118,9 +118,9 @@ char	*expand_tokens(char *input, t_mshell_data *data)
 	exp = data->expander;
 	while (input[exp->i])
 	{
-		if (handle_quotes(input[exp->i], exp))
+		if (delim != 2 && handle_quotes(input[exp->i], exp))
 			continue ;
-		if (input[exp->i] == '$' && !exp->in_single)
+		if ((input[exp->i] == '$' && delim == 2) || (input[exp->i] == '$' && !exp->in_single))
 		{
 			handle_var(input, data);
 			continue ;
