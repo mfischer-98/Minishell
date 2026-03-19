@@ -111,7 +111,8 @@ void	add_token(t_tokens **tokens, char *input, t_node_type type)
 	new_node->type = type;
 	new_node->redir_file = NULL;
 	new_node->heredoc_fd = -1;
-	new_node->quote_delim = 0;
+	if (!new_node->quote_delim)
+		new_node->quote_delim = 0;
 	new_node->is_redir_name = 0;
 	new_node->next = NULL;
 	if (*tokens == NULL)

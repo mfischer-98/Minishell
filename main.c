@@ -53,7 +53,7 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
-	print_banner();
+	//print_banner();
 	initialize(&data, envp);
 	rl_catch_signals = 0;
 	sig_init();

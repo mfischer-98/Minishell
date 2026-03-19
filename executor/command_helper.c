@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 15:48:36 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/17 16:39:24 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/19 15:20:00 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ void	expand_all_tokens(t_mshell_data *data)
 	temp = data->tokens;
 	while (temp)
 	{
-		expanded = expand_tokens(temp->input, data);
+		expanded = expand_tokens(temp->input, data, 0);
 		free(temp->input);
 		temp->input = expanded;
 		temp = temp->next;
