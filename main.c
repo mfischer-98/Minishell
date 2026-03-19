@@ -64,7 +64,7 @@ int	main(int argc, char **argv, char **envp)
 }
 
 /* int	main(int argc, char **argv, char **envp)
-{
+{ ola
 	t_mshell_data	*data;
 	int				exit_status;
 
