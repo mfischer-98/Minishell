@@ -48,7 +48,7 @@ int	check_fd_error(char *name, t_mshell_data *data)
 	else if (errno == EACCES)
 		ft_putstr_fd("Permission denied\n", 2);
 	data->exit_status = 1;
-	exit(1);
+	return (1);
 }
 
 /* Checks if delimeter has quotes, if yes do not expand */
@@ -64,4 +64,18 @@ int	here_quotes(char *str)
 	if (str[i] == '\"' && str[len - 1] == '\"')
 		return (1);
 	return (0);
+}
+
+/* Heredoc open: open, create or reset temp file for heredoc 
+	- O_TRUNC = empty file if it already exists
+	- 0600 give permissions to read and write
+*/
+int	open_heredoc_file(void)
+{
+	int	fd;
+
+	fd = open(".heredoc_temp", O_WRONLY | O_CREAT | O_TRUNC, 0600);
+	if (fd < 0)
+		return (perror("heredoc"), -1);
+	return (fd);
 }

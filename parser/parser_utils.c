@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/02 14:47:45 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/19 11:36:20 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/20 12:28:59 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	update_underscore(t_mshell_data *data)
 		if (!ft_strncmp(vars->var, "_=", 2))
 		{
 			free(vars->var);
-			vars->var = ft_strjoin("_=", last_command);//free
+			vars->var = ft_strjoin("_=", last_command);
 			break ;
 		}
 		vars = vars->next;

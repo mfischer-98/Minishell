@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 09:21:16 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/19 16:12:50 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/20 12:31:03 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static int	get_var_len(char *str)
 	i = 0;
 	if (!str[0] || (!ft_isalpha((unsigned char)str[0]) && str[0] != '_'))
 		return (0);
-	while (str[i] && (ft_isalnum((unsigned char)str[i]) || str[i] == '_'))
+	while (str[i] && (ft_isalpha((unsigned char)str[i]) || str[i] == '_'))
 		i++;
 	return (i);
 }
@@ -69,7 +69,7 @@ char	*get_env_var(char *token, t_mshell_data *data)
 	{
 		if (!ft_strncmp(token, temp->var, len)
 			&& ((temp->var[len] == '=' || temp->var[len] == '\0')))
-			return (ft_strdup(temp->var + len + 1));//free
+			return (ft_strdup(temp->var + len + 1));
 		temp = temp->next;
 	}
 	return (ft_strdup(""));
@@ -120,7 +120,8 @@ char	*expand_tokens(char *input, t_mshell_data *data, int delim)
 	{
 		if (delim != 2 && handle_quotes(input[exp->i], exp))
 			continue ;
-		if ((input[exp->i] == '$' && delim == 2) || (input[exp->i] == '$' && !exp->in_single))
+		if ((input[exp->i] == '$' && delim == 2)
+			|| (input[exp->i] == '$' && !exp->in_single))
 		{
 			handle_var(input, data);
 			continue ;

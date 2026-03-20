@@ -63,12 +63,14 @@ void	run_builtin_redirects(char **commandline, t_mshell_data *data)
 {
 	int	old_stdin;
 	int	old_stdout;
+	int	result;
 
 	old_stdin = dup(0);
 	old_stdout = dup(1);
 	if (old_stdin < 0 || old_stdout < 0)
 		return (perror("dup"), (void)0);
-	if (apply_redirects(data->tokens, data) == 0)
+	result = apply_redirects(data->tokens, data);
+	if (result == 0)
 		run_command(commandline, data);
 	dup2(old_stdin, 0);
 	dup2(old_stdout, 1);

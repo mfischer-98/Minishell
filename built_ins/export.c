@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 09:21:04 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/04 16:49:23 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/20 13:51:04 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ int	handle_equal(char *arg, t_mshell_data *data)
 int	process_export(char *str, t_mshell_data *data)
 {
 	char	*new_str;
+	int		ret;
 
 	if (str[0] == '-')
 	{
@@ -73,10 +74,13 @@ int	process_export(char *str, t_mshell_data *data)
 	}
 	new_str = trim_outer_quotes(str);
 	if (ft_strnstr(new_str, "+=", ft_strlen(new_str)))
-		return (handle_append(new_str, data));
-	if (ft_strchr(new_str, '='))
-		return (handle_equal(new_str, data));
-	return (handle_no_equal(new_str, data));
+		ret = handle_append(new_str, data);
+	else if (ft_strchr(new_str, '='))
+		ret = handle_equal(new_str, data);
+	else
+		ret = handle_no_equal(new_str, data);
+	free(new_str);
+	return (ret);
 }
 
 int	export(char **commandline, t_mshell_data *data)

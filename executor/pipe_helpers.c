@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/05 00:00:00 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/20 10:34:45 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/20 12:30:34 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static void	handle_child(t_fork_data *fork,	t_tokens *segment)
 {
 	int	exit_code;
-	
+
 	close(fork->saved);
 	if (fork->pipefd[1] != -1)
 		dup2(fork->pipefd[1], STDOUT_FILENO);

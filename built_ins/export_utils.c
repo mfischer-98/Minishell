@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 09:21:01 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/17 16:17:47 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/20 13:58:54 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,10 +67,12 @@ int	add_env_list(char *str, t_mshell_data *data)
 
 	if (!data || !data->env_var || !str)
 		return (0);
-	new_node = malloc(sizeof(t_env));//free
+	new_node = malloc(sizeof(t_env));
 	if (!new_node)
 		return (1);
-	new_node->var = str;
+	new_node->var = ft_strdup(str);
+	if (!new_node->var)
+		return (free(new_node), 1);
 	new_node->next = NULL;
 	if (!data->env_var)
 	{
@@ -103,7 +105,7 @@ int	update_env_list(char *str, t_mshell_data *data)
 			if (ft_strchr(str, '='))
 			{
 				free(temp->var);
-				temp->var = str;
+				temp->var = ft_strdup(str);
 			}
 			return (0);
 		}

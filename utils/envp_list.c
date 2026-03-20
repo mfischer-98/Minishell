@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 09:21:33 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/19 11:23:12 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/20 12:29:27 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,10 @@ void	envp_add(t_mshell_data *data, char *input)
 	t_env	*new_node;
 	t_env	*node;
 
-	new_node = malloc(sizeof(t_env));//free
+	new_node = malloc(sizeof(t_env));
 	if (!new_node)
 		return ;
-	new_node->var = ft_strdup(input);//free
+	new_node->var = ft_strdup(input);
 	new_node->next = NULL;
 	if ((*data).env_var == NULL)
 	{

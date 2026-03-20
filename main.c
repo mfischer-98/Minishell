@@ -53,6 +53,11 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
+	if (argc > 1)
+	{
+		ft_putstr_fd("Error: Do not add args.\n", 2);
+		return (2);
+	}
 	//print_banner();
 	initialize(&data, envp);
 	rl_catch_signals = 0;

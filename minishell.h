@@ -169,12 +169,15 @@ void			reset_signals(void);
 void			write_line(int fd, char *line, t_tokens *token,
 					t_mshell_data *data);
 int				process_delimeter_quotes(t_tokens *token);
-char			*expand_heredoc_line(char *line, t_mshell_data *data, t_tokens *token);
+char			*expand_heredoc_line(char *line, t_mshell_data *data,
+					t_tokens *token);
 int				has_redirect(t_tokens *tokens);
 void			run_builtin_redirects(char **commandline, t_mshell_data *data);
 char			*strip_file_quotes(char *name);
 int				check_fd_error(char *name, t_mshell_data *data);
 int				here_quotes(char *str);
+int				open_heredoc_file(void);
+void			heredoc_loop(int fd, t_tokens *token, t_mshell_data *data);
 
 // Utils and list functions
 void			list_add(t_tokens **tokens, char *input);

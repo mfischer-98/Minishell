@@ -32,9 +32,9 @@ static int	apply_input(t_tokens *token, t_mshell_data *data)
 	file = strip_file_quotes(token->redir_file);
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
-		return (check_fd_error(file, data));
+		return (free(file), check_fd_error(token->redir_file, data));
 	if (dup2(fd, STDIN_FILENO) == -1)
-		return (perror("dup2"), close(fd), 1);
+		return (perror("dup2"), close(fd), free(file), 1);
 	close(fd);
 	free(file);
 	return (0);
@@ -49,9 +49,9 @@ static int	apply_output(t_tokens *token, t_mshell_data *data)
 	file = strip_file_quotes(token->redir_file);
 	fd = open(file, O_CREAT | O_TRUNC | O_WRONLY, 0644);
 	if (fd < 0)
-		return (check_fd_error(file, data));
+		return (free(file), check_fd_error(token->redir_file, data));
 	if (dup2(fd, STDOUT_FILENO) == -1)
-		return (perror("dup2"), close(fd), 1);
+		return (perror("dup2"), close(fd), free(file), 1);
 	close(fd);
 	free(file);
 	return (0);
@@ -66,9 +66,9 @@ static int	apply_append(t_tokens *token, t_mshell_data *data)
 	file = strip_file_quotes(token->redir_file);
 	fd = open(file, O_CREAT | O_APPEND | O_WRONLY, 0644);
 	if (fd < 0)
-		return (check_fd_error(file, data));
+		return (free(file), check_fd_error(token->redir_file, data));
 	if (dup2(fd, STDOUT_FILENO) == -1)
-		return (perror("dup2"), close(fd), 1);
+		return (perror("dup2"), close(fd), free(file), 1);
 	close(fd);
 	free(file);
 	return (0);

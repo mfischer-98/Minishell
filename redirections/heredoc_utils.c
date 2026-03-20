@@ -78,8 +78,13 @@ void	set_heredoc_signals(void)
 */
 void	heredoc_sigint(int sig)
 {
+	int	i;
+
 	(void)sig;
 	g_signal = 130;
+	i = 3;
+	while (i < 1024)
+		close(i++);
 	unlink(".heredoc_temp");
 	write(1, "^C", 3);
 	rl_cleanup_after_signal();

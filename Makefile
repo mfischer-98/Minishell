@@ -30,21 +30,25 @@ LIBFT = $(LIBFT_DIR)/libft.a
 all: $(LIBFT) $(NAME)
 
 $(LIBFT):
-	$(MAKE) -C $(LIBFT_DIR)
+	@echo "✨ Preparing libft..."
+	@$(MAKE) -C $(LIBFT_DIR) --silent
 
 $(NAME): $(OBJ)
-		$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -o $(NAME) -lreadline
+		@echo "✨ Linking minishell..."
+		$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -o $(NAME) -lreadline 
+		@echo "✅ minishell ready!"
 
 %.o: %.c
-		$(CC) $(CFLAGS) -c $< -o $@
+		@$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-		rm -f $(OBJ)
-		$(MAKE) -C $(LIBFT_DIR) clean
+		@rm -f $(OBJ)
+		@$(MAKE) -C $(LIBFT_DIR) clean --silent
 
 fclean: clean
-		rm -f $(NAME)
-		$(MAKE) -C $(LIBFT_DIR) fclean
+		@rm -f $(NAME)
+		@$(MAKE) -C $(LIBFT_DIR) fclean --silent
+		@echo "✅ cleanup done!"
 
 valgrind: 
 	@echo "{\n   leak readline\n   Memcheck:Leak\n...\n   fun:readline\n}\n{\n   leak add_history\n   Memcheck:Leak\n...\n   fun:add_history\n}" > readline.supp

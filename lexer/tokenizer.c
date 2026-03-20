@@ -93,7 +93,7 @@ void	create_tokens(char *prompt, t_tokens **tokens)
 		else
 			type = NODE_UNKNOWN;
 		add_token(tokens, ft_substr(prompt, state->start,
-				state->i - state->start), type);//free
+				state->i - state->start), type);
 	}
 	add_type(tokens);
 	free(state);
@@ -120,7 +120,7 @@ void	add_token(t_tokens **tokens, char *input, t_node_type type)
 		return ;
 	}
 	node = *tokens;
-	while (node->next)	
+	while (node->next)
 		node = node->next;
 	node->next = new_node;
 }

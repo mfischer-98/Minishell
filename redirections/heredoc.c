@@ -22,7 +22,6 @@ int	prep_heredoc(t_mshell_data *data)
 	int			heredoc;
 	char		*file;
 
-	heredoc = 0;
 	temp = data->tokens;
 	while (temp)
 	{
@@ -35,7 +34,7 @@ int	prep_heredoc(t_mshell_data *data)
 				free(temp->redir_file);
 				temp->redir_file = file;
 			}
- 			else
+			else
 				temp->quote_delim = 2;
 			heredoc = handle_heredoc(temp, data);
 			if (heredoc < 0)
@@ -55,24 +54,19 @@ char	*expand_heredoc_line(char *line, t_mshell_data *data, t_tokens *token)
 	return (expanded);
 }
 
-/* Heredoc open: open, create or reset temp file for heredoc 
-	- O_TRUNC = empty file if it already exists
-	- 0600 give permissions to read and write
-*/
-static int	open_heredoc_file(void)
+static void	heredoc_child(int fd, t_tokens *token, t_mshell_data *data)
 {
-	int	fd;
-
-	fd = open(".heredoc_temp", O_WRONLY | O_CREAT | O_TRUNC, 0600);
-	if (fd < 0)
-		return (perror("heredoc"), -1);
-	return (fd);
+	set_heredoc_signals();
+	heredoc_loop(fd, token, data);
+	free_data(data);
+	close(fd);
+	exit(0);
 }
 
 /* Heredoc loop: reads user input and calls write line to put it in fd
 	- if delimeter = free line and break
 	- reset signals in the end to go back to my shell stuff */
-static void	heredoc_loop(int fd, t_tokens *token, t_mshell_data *data)
+void	heredoc_loop(int fd, t_tokens *token, t_mshell_data *data)
 {
 	char	*line;
 
@@ -117,14 +111,7 @@ int	handle_heredoc(t_tokens *token, t_mshell_data *data)
 	if (pid < 0)
 		return (close(fd), perror("fork"), -1);
 	if (pid == 0)
-	{
-		set_heredoc_signals();
-		heredoc_loop(fd, token, data);
-		token->quote_delim = 0;
-		free_data(data);
-		close(fd);
-		exit(0);
-	}
+		heredoc_child(fd, token, data);
 	close(fd);
 	waitpid(pid, &status, 0);
 	if (WEXITSTATUS(status) == 130)

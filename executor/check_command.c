@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 09:21:13 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/20 10:33:50 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/20 12:30:47 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 static void	execute_single_command(t_mshell_data *data)
 {
 	char	**commands;
+
 	commands = array_join(data->tokens);
 	if (!commands)
 		return ;
