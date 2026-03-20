@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 15:48:36 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/19 15:20:00 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/20 10:14:53 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ char	**build_command(t_tokens **tokens)
 	while (temp && temp->type != NODE_PIPE)
 	{
 		if (temp->type == NODE_WORD && !temp->is_redir_name)
-			cmd[i++] = temp->input;
+			cmd[i++] = ft_strdup(temp->input);
 		temp = temp->next;
 	}
 	cmd[i] = NULL;

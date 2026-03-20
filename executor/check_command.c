@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 09:21:13 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/19 11:57:26 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/20 10:33:50 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,13 @@
 static void	execute_single_command(t_mshell_data *data)
 {
 	char	**commands;
-	int		size;
-
 	commands = array_join(data->tokens);
 	if (!commands)
 		return ;
-	size = 0;
-	while (commands[size])
-		size++;
 	if (!ft_strcmp(data->tokens->input, ">") || !ft_strcmp(data->tokens->input,
 			">>") || !ft_strcmp(data->tokens->input, "<"))
 	{
-		free_array(commands, size);
+		free_array(commands, array_size(commands));
 		return (redirect_start(data->tokens, data));
 	}
 	if (commands && commands[0] && data->tokens->type == NODE_WORD)
@@ -38,7 +33,7 @@ static void	execute_single_command(t_mshell_data *data)
 		else
 			ft_execve(commands, data);
 	}
-	free_array(commands, size);
+	free_array(commands, array_size(commands));
 }
 
 void	ft_execve(char **commandline, t_mshell_data *data)

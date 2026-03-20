@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 11:19:33 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/17 16:18:27 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/20 10:32:30 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	print_list(t_tokens *tokens)
 	}
 }
 
-int	array_size(t_tokens *tokens)
+int	token_size(t_tokens *tokens)
 {
 	t_tokens	*temp;
 	int			size;
@@ -65,6 +65,16 @@ int	array_size(t_tokens *tokens)
 	return (size);
 }
 
+int	array_size(char **array)
+{
+	int			size;
+
+	size = 0;
+	while (array[size])
+		size++;
+	return (size);
+}
+
 char	**array_join(t_tokens *tokens)
 {
 	char		**array;
@@ -72,7 +82,7 @@ char	**array_join(t_tokens *tokens)
 	int			i;
 	int			size;
 
-	size = array_size(tokens);
+	size = token_size(tokens);
 	i = 0;
 	array = malloc(sizeof(char *) * (size + 1));//free
 	if (!array)

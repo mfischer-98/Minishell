@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/05 00:00:00 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/19 11:50:44 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/20 10:40:44 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	print_perm_denied(char *cmd)
 {
 	struct stat	st;
 
+	ft_memset(&st, 0, sizeof(st));
 	if (access(cmd, F_OK) != 0)
 	{
 		if (!S_ISDIR(st.st_mode))
@@ -63,6 +64,7 @@ static int	validate_cmd_path(char *cmd_name, char *cmd_path)
 
 	(void)cmd_name;
 	(void)cmd_path;
+	ft_memset(&st, 0, sizeof(st));
 	if (stat(cmd_path, &st) == 0 && S_ISDIR(st.st_mode))
 	{
 		if (S_ISDIR(st.st_mode))
@@ -92,23 +94,23 @@ void	execute_external_command(char **commandline, t_mshell_data *data,
 
 	if (ft_strchr(commandline[0], '/'))
 		print_perm_denied(commandline[0]);
-	data->exit_status = apply_redirects(segment, data);
-	if (data->exit_status != 0)
-		exit(data->exit_status);
+	err_code = apply_redirects(segment, data);
+	if (err_code != 0)
+		return(free_array(commandline, array_size(commandline)),
+			free_data(data), exit(err_code), (void)0);
 	cmd_path = find_command_in_path(commandline[0], data->env_var);
 	if (!cmd_path)
 	{
 		print_cmd_not_found(commandline[0]);
-		free_list(data->tokens);
-		exit(127);
+		return(free_array(commandline, array_size(commandline)),
+			free_data(data), exit(127), (void)0);
 	}
 	err_code = validate_cmd_path(commandline[0], cmd_path);
-	if (err_code != 0)	
-		exit(err_code);
+	if (err_code != 0)
+		return(free(cmd_path), free_array(commandline, array_size(commandline)),
+			free_data(data), exit(err_code), (void)0);
 	envp = get_envp_or_exit(data->env_var);
 	execve(cmd_path, commandline, envp);
-	perror("execve");
-	free_array(envp, env_size(data->env_var));
-	free_list(data->tokens);
-	exit(1);
+	return(perror("execve"), free_array(commandline, array_size(commandline)),
+			free_data(data), exit(1), (void)0);
 }

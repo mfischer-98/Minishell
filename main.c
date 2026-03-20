@@ -42,14 +42,14 @@ static void	main_loop(t_mshell_data *data)
 		if (g_signal != 0)
 			update_sig_status(data);
 		sig_init();
-		free_list(data->tokens);
-		data->tokens = NULL;
+		free_loop(data);
 	}
 }
 
 int	main(int argc, char **argv, char **envp)
 {
 	t_mshell_data	*data;
+	int				exit_code;
 
 	(void)argc;
 	(void)argv;
@@ -58,9 +58,10 @@ int	main(int argc, char **argv, char **envp)
 	rl_catch_signals = 0;
 	sig_init();
 	main_loop(data);
+	exit_code = data->exit_status;
 	free_data(data);
 	rl_clear_history();
-	return (data->exit_status);
+	return (exit_code);
 }
 
 /* int	main(int argc, char **argv, char **envp)

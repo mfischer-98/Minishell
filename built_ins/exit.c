@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 11:08:33 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/05 09:37:37 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/20 10:33:27 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ int	check_exit(char **command, t_mshell_data *data)
 	if (command[1])
 		exit_code = exit_arg(command, data);
 	ft_printf("exit\n");
+	free_array(command, array_size(command));
 	free_data(data);
 	rl_clear_history();
 	exit(exit_code);

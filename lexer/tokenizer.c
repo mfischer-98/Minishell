@@ -106,8 +106,8 @@ void	add_token(t_tokens **tokens, char *input, t_node_type type)
 
 	new_node = malloc(sizeof(t_tokens));
 	if (!new_node)
-		return ;
-	new_node->input = ft_strdup(input);//free
+		return (free(input), (void)0);
+	new_node->input = input;
 	new_node->type = type;
 	new_node->redir_file = NULL;
 	new_node->heredoc_fd = -1;

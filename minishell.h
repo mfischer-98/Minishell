@@ -178,7 +178,8 @@ int				here_quotes(char *str);
 
 // Utils and list functions
 void			list_add(t_tokens **tokens, char *input);
-int				array_size(t_tokens *tokens);
+int				token_size(t_tokens *tokens);
+int				array_size(char **array);
 void			initialize(t_mshell_data **data, char **envp);
 void			init_expander(t_expander **expander);
 t_token_state	*init_state(void);
@@ -196,7 +197,7 @@ void			print_env(t_mshell_data *data);
 void			run_builtin(char **commandline, t_mshell_data *data);
 t_env			*ft_env_var(t_env *env_list, char *var_name);
 void			print_cmd_not_found(char *cmd);
-void			free_prev_data(char **commands, t_mshell_data *data);
+void			free_loop(t_mshell_data *data);
 
 // Built ins
 int				pwd(void);

@@ -6,31 +6,38 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/05 00:00:00 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/19 16:39:07 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/20 10:34:45 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static void	handle_child(int pipefd[], char **cmd, t_mshell_data *data,
-	t_tokens *segment)
+static void	handle_child(t_fork_data *fork,	t_tokens *segment)
 {
-	if (pipefd[1] != -1)
-		dup2(pipefd[1], STDOUT_FILENO);
-	if (pipefd[0] >= 0)
-		close(pipefd[0]);
-	if (pipefd[1] >= 0)
-		close(pipefd[1]);
-	data->exit_status = apply_redirects(segment, data);
-	if (data->exit_status != 0)
-		exit(data->exit_status);
-	if (is_builtin(cmd))
+	int	exit_code;
+	
+	close(fork->saved);
+	if (fork->pipefd[1] != -1)
+		dup2(fork->pipefd[1], STDOUT_FILENO);
+	if (fork->pipefd[0] >= 0)
+		close(fork->pipefd[0]);
+	if (fork->pipefd[1] >= 0)
+		close(fork->pipefd[1]);
+	fork->data->exit_status = apply_redirects(segment, fork->data);
+	exit_code = fork->data->exit_status;
+	if (exit_code != 0)
 	{
-		run_command(cmd, data);
-		exit(data->exit_status);
+		free_data(fork->data);
+		exit(exit_code);
+	}
+	if (is_builtin(fork->cmd))
+	{
+		run_command(fork->cmd, fork->data);
+		free_data(fork->data);
+		exit(exit_code);
 	}
 	else
-		execute_external_command(cmd, data, segment);
+		execute_external_command(fork->cmd, fork->data, segment);
 }
 
 static int	handle_parent(int pipefd[], int saved, t_mshell_data *data,
@@ -63,8 +70,7 @@ static int	handle_fork(t_fork_data *fork_data)
 
 	pid = fork();
 	if (pid == 0)
-		handle_child(fork_data->pipefd, fork_data->cmd, fork_data->data,
-			*fork_data->tokens);
+		handle_child(fork_data, *fork_data->tokens);
 	else if (pid > 0)
 	{
 		result = handle_parent(fork_data->pipefd, fork_data->saved,
@@ -74,9 +80,10 @@ static int	handle_fork(t_fork_data *fork_data)
 			close(fork_data->pipefd[0]);
 			*fork_data->tokens = fork_data->next->next;
 		}
-		return (free(fork_data->cmd), result);
+		return (free_array(fork_data->cmd, array_size(fork_data->cmd)), result);
 	}
-	return (free(fork_data->cmd), (dup2(fork_data->saved, STDIN_FILENO),
+	free_array(fork_data->cmd, array_size(fork_data->cmd));
+	return ((dup2(fork_data->saved, STDIN_FILENO),
 			close(fork_data->saved), 0));
 }
 

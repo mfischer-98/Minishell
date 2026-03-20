@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 09:21:41 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/19 11:10:03 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/20 09:54:06 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,21 @@ void		initialize(t_mshell_data **data, char **envp)
 
 void	init_expander(t_expander **expander)
 {
+	if (!*expander)
+	{
+		*expander = malloc(sizeof(t_expander));
+		(*expander)->result = NULL;
+		(*expander)->i = 0;
+		(*expander)->in_single = 0;
+		(*expander)->in_double = 0;
+	}
 	if ((*expander)->result)
 		free((*expander)->result);
 	(*expander)->result = ft_strdup("");
 	(*expander)->i = 0;
 	(*expander)->in_single = 0;
 	(*expander)->in_double = 0;
+
 }
 
 t_token_state	*init_state(void)
