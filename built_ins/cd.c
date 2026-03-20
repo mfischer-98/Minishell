@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/14 14:12:02 by mefische          #+#    #+#             */
-/*   Updated: 2026/02/13 10:10:59 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/20 11:30:50 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,9 +86,13 @@ int	cd(t_mshell_data *data, char **args)
 	dest = ft_destination(data, args[1]);
 	old_pwd = getcwd(NULL, 0);
 	if (!dest || !old_pwd)
-		return (1);
+		return (free(old_pwd), 1);
 	if (!chdir(dest))
-		return (ft_cd_env(data, old_pwd));
+	{
+		result = ft_cd_env(data, old_pwd);
+		free(old_pwd);
+		return (result);
+	}
 	result = ft_try_cdpath(data, dest, old_pwd);
 	if (dest[0] != '/' && result >= 0)
 		return (free(old_pwd), result);

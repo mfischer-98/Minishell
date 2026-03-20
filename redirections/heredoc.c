@@ -121,6 +121,7 @@ int	handle_heredoc(t_tokens *token, t_mshell_data *data)
 		set_heredoc_signals();
 		heredoc_loop(fd, token, data);
 		token->quote_delim = 0;
+		free_data(data);
 		close(fd);
 		exit(0);
 	}

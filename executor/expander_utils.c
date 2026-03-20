@@ -86,7 +86,7 @@ void	special_char(char c, t_mshell_data *data)
 	if (c == '?')
 	{
 		value = ft_itoa(data->exit_status);
-		append_result(ft_itoa(data->exit_status), data);
+		append_result(value, data);
 		free(value);
 	}
 	else if (c == '_')
