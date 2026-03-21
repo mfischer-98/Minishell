@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/20 08:35:41 by mefische          #+#    #+#             */
-/*   Updated: 2026/02/20 08:35:44 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/21 15:22:50 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,4 +35,5 @@ void	ft_set_env_var(t_mshell_data *data, char *name, char *value)
 		return ;
 	if (update_env_list(env_str, data))
 		add_env_list(env_str, data);
+	free(env_str);
 }
