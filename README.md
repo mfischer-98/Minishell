@@ -1,4 +1,4 @@
-*This project has been created as part of the 42 curriculum by <mefische> and <ntomas-g>.*
+*This project has been created as part of the 42 curriculum by mefische and ntomas-g.*
 
 # Minishell
 
