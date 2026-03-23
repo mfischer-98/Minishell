@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/05 00:00:00 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/23 10:50:41 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/23 12:08:57 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,8 @@ static char	**get_envp_or_exit(t_env *env)
 
 /* Validates that cmd_path is not a directory and is executable
 	- Uses stat() to check file metadata, S_ISDIR to detect directories
-	- tat() asks the OS: "tell me everything about this file" and fills a struct stat with metadata
+	- tat() asks the OS: "tell me everything about this file" and 
+	fills a struct stat with metadata
 		- it doesn't open the file, just reads its info
 	- Returns 126 for "is a directory" or "permission denied", 0 if valid */
 static int	validate_cmd_path(char *cmd_name, char *cmd_path)

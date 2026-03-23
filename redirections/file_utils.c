@@ -12,6 +12,9 @@
 
 #include "../minishell.h"
 
+/* Strips quotes from a filename and removes ./ prefix if present
+	- Copies result into a new string, skipping all ' and " chars
+	- Needed so > "file.txt" and > file.txt behave identically */
 char	*strip_file_quotes(char *name)
 {
 	char	*result;
@@ -33,6 +36,9 @@ char	*strip_file_quotes(char *name)
 	return (result);
 }
 
+/* Prints bash-style error for failed file open using errno
+	- Handles ENOENT (no such file), EISDIR (is a directory),
+	- EACCES (permission denied). Sets exit_status to 1 and returns 1 */
 int	check_fd_error(char *name, t_mshell_data *data)
 {
 	ft_putstr_fd("minishell: ", 2);

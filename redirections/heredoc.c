@@ -54,6 +54,8 @@ char	*expand_heredoc_line(char *line, t_mshell_data *data, t_tokens *token)
 	return (expanded);
 }
 
+/* Runs the child process for heredoc: sets heredoc-specific signals,
+	runs the input loop, then frees data, closes fd and exits cleanly */
 static void	heredoc_child(int fd, t_tokens *token, t_mshell_data *data)
 {
 	set_heredoc_signals();
