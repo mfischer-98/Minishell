@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 11:19:33 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/20 12:29:29 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/23 09:29:31 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,8 @@ void	print_list(t_tokens *tokens)
 	temp = tokens;
 	while (temp)
 	{
-		printf("Input: %s\n", temp->input);
-		printf("Type: %d\n", temp->type);
+		ft_printf("Input: %s\n", temp->input);
+		ft_printf("Type: %d\n", temp->type);
 		temp = temp->next;
 	}
 }
