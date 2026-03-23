@@ -6,18 +6,11 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/05 00:00:00 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/20 13:28:16 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/23 09:15:30 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-void	print_cmd_not_found(char *cmd)
-{
-	ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd(cmd, 2);
-	ft_putstr_fd(": command not found\n", 2);
-}
 
 static void	print_perm_denied(char **cmd, t_mshell_data *data)
 {
@@ -31,8 +24,7 @@ static void	print_perm_denied(char **cmd, t_mshell_data *data)
 			ft_putstr_fd("minishell: ", 2);
 			ft_putstr_fd(cmd[0], 2);
 			ft_putstr_fd(": No such file or directory\n", 2);
-			free_array(cmd, array_size(cmd));
-			free_data(data);
+			error_free(data, cmd);
 			exit(127);
 		}
 		print_cmd_not_found(cmd[0]);
@@ -43,8 +35,7 @@ static void	print_perm_denied(char **cmd, t_mshell_data *data)
 		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(cmd[0], 2);
 		ft_putstr_fd(": Permission denied\n", 2);
-		free_array(cmd, array_size(cmd));
-		free_data(data);
+		error_free(data, cmd);
 		exit(126);
 	}
 }

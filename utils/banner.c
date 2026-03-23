@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 09:20:35 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/02 15:04:15 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/23 09:28:11 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	print_banner(void)
 {
-	printf("\n"
+	ft_printf("\n"
 		YELLOW"   ∧＿∧  \n"
 		"  (｡･ω ･)つ"RESET"━☆"MAGENTA" ・*"RESET"。\n"
 		YELLOW " ⊂/    /  "MAGENTA"      ・゜\n"

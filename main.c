@@ -58,7 +58,7 @@ int	main(int argc, char **argv, char **envp)
 		ft_putstr_fd("Error: Do not add args.\n", 2);
 		return (2);
 	}
-	//print_banner();
+	print_banner();
 	initialize(&data, envp);
 	rl_catch_signals = 0;
 	sig_init();

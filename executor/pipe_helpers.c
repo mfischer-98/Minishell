@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/05 00:00:00 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/21 13:47:02 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/23 09:19:12 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,15 +27,13 @@ static void	handle_child(t_fork_data *fork,	t_tokens *segment)
 	exit_code = fork->data->exit_status;
 	if (exit_code != 0)
 	{
-		free_array(fork->cmd, array_size(fork->cmd));
-		free_data(fork->data);
+		error_free(fork->data, fork->cmd);
 		exit(exit_code);
 	}
 	if (is_builtin(fork->cmd))
 	{
 		run_command(fork->cmd, fork->data);
-		free_array(fork->cmd, array_size(fork->cmd));
-		free_data(fork->data);
+		error_free(fork->data, fork->cmd);
 		exit(exit_code);
 	}
 	else

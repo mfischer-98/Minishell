@@ -148,6 +148,7 @@ char			*handle_brackets(char	*str, int len, int start,
 					t_mshell_data *data);
 void			var_name_error(char *input, t_mshell_data *data);
 void			append_result(char	*str, t_mshell_data *data);
+void			error_free(t_mshell_data *data, char **cmd);
 
 // Expander
 void			check_command(t_mshell_data *data);
