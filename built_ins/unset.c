@@ -6,20 +6,15 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 09:21:09 by mefische          #+#    #+#             */
-/*   Updated: 2026/02/13 14:27:42 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/23 11:37:46 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-/* Bash variable names:
- Must be non-empty.
- Must start with a letter or underscore.
- Remaining chars must be letters, digits, or underscore.
- Anything else (starting with a digit, -, @, !, etc.) is invalid as an identifier
- return 1 if valid, 0 if invalid
-*/
-
+/* Removes a variable from the env linked list by name
+	- Matches exact name or name= prefix
+	- Stitches prev->next around the removed node, then frees it */
 void	unset_env(char *str, t_mshell_data *data)
 {
 	t_env	*temp;
@@ -49,6 +44,10 @@ void	unset_env(char *str, t_mshell_data *data)
 	}
 }
 
+/* Entry point for unset builtin:
+	- Rejects flag-style args (e.g. unset -f → not supported)
+	- For each valid identifier argument, removes it from env list
+	- Silently non-existent variables — same as bash */
 int	unset(char **commandline, t_mshell_data *data)
 {
 	int	i;

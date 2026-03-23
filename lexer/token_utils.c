@@ -6,12 +6,14 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 09:21:23 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/20 12:29:22 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/23 10:13:14 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+/* Marks start of quoted section and saves quote char (" or ')
+	- sets in_quote flag so special chars are ignored until closing quote */
 void	handle_quote_start(char *prompt, t_token_state *state)
 {
 	state->in_quote = 1;
@@ -19,12 +21,15 @@ void	handle_quote_start(char *prompt, t_token_state *state)
 	state->i++;
 }
 
+/* Marks exit of quoted section, clears in_quote flag and advances i */
 void	handle_quote_end(t_token_state *state)
 {
 	state->in_quote = 0;
 	state->i++;
 }
 
+/* Adds current word (if any) as a token
+	- skips all consecutive spaces and resets start to next non-space char */
 void	handle_space(t_tokens **tokens, char *prompt, t_token_state *state)
 {
 	if (state->i > state->start)
@@ -45,6 +50,8 @@ void	add_redir_info(t_tokens *token)
 	}
 }
 
+/* If a quoted token has both quote chars,
+	it was a complete quoted word so convert it to NODE_WORD */
 void	set_quote_type(t_tokens *token)
 {
 	int	len;

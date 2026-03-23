@@ -6,12 +6,18 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 09:21:13 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/20 12:30:47 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/23 10:40:56 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+/* Handles a single command (no pipes)
+	- builds a string array from tokens, then checks:
+	- redirect-only input (>, >>, <) → redirect_start
+	- no redirects → run_command (builtins or external)
+	- has redirects + builtin → run_builtin_redirects
+	- has redirects + external → ft_execve */
 static void	execute_single_command(t_mshell_data *data)
 {
 	char	**commands;
@@ -37,6 +43,10 @@ static void	execute_single_command(t_mshell_data *data)
 	free_array(commands, array_size(commands));
 }
 
+/* Forks a child to run an external command (non-builtin)
+	- Child resets signals to default and calls execute_external_command.
+	- Parent waits and captures exit status, WIFEXITED for normal exit
+	- WIFSIGNALED for signal death (128 + signal number) */
 void	ft_execve(char **commandline, t_mshell_data *data)
 {
 	pid_t	pid;
@@ -83,6 +93,9 @@ void	run_command(char **commandline, t_mshell_data *data)
 		ft_execve(commandline, data);
 }
 
+/* Walks the token list and removes any token with null or empty input
+	- needed after expansion, where $EMPTY becomes "" and must be skipped
+	- before execution to avoid passing empty tokens */
 static void	skip_empty_tokens(t_tokens **tokens)
 {
 	t_tokens	*current;
@@ -111,6 +124,9 @@ static void	skip_empty_tokens(t_tokens **tokens)
 	}
 }
 
+/* EXECUTOR: expands variables, skips empty tokens, preps heredocs
+	- if any pipe is found goes to piped execution
+	- otherwise runs a single command */
 void	executor(t_mshell_data *data)
 {
 	t_tokens	*temp;

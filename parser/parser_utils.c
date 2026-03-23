@@ -6,12 +6,14 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/02 14:47:45 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/20 12:28:59 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/23 10:25:23 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+/* Checks token input char by char, tracking quote state
+	- returns 1 if any single or double quote was opened but never closed */
 int	check_unclosed_quotes(t_tokens *tokens)
 {
 	int		i;
@@ -38,6 +40,8 @@ int	check_unclosed_quotes(t_tokens *tokens)
 	return (in_sq || in_dq);
 }
 
+/* Finds the last token in the list and updates $_ env var to its value
+	$_ always holds the last argument of the last command, like bash */
 void	update_underscore(t_mshell_data *data)
 {
 	t_env		*vars;

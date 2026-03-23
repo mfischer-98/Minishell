@@ -6,12 +6,14 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 09:20:57 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/20 12:28:37 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/23 11:23:59 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+/* Converts env linked list to a NULL-terminated char** array
+	- Needed for sorting, can't sort a linked list directly */
 char	**list_to_array(t_env *env_list, int size)
 {
 	char	**env_array;
@@ -33,6 +35,7 @@ char	**list_to_array(t_env *env_list, int size)
 	return (env_array);
 }
 
+/* Sorts the env array alphabetically using bubble sort */
 void	bubble_sort_export(char **env_array, int size)
 {
 	int		i;
@@ -57,6 +60,8 @@ void	bubble_sort_export(char **env_array, int size)
 	}
 }
 
+/* Strips matching outer quote pair (' ' or " ") from a string
+	- Returns a new string without the surrounding quotes */
 char	*trim_outer_quotes(char	*str)
 {
 	int	len;
@@ -72,6 +77,7 @@ char	*trim_outer_quotes(char	*str)
 	return (ft_strdup(str));
 }
 
+/* Prints one env variable in bash declare -x format */
 void	print_variable(char *str)
 {
 	char	*equal_sign;
@@ -100,6 +106,9 @@ void	print_variable(char *str)
 	free(name);
 }
 
+/* Prints all exported variables sorted alphabetically
+	- Skips $_ (internal variable, not shown in bash export output)
+	- Converts list → array → sort → print → free */
 int	print_export(t_mshell_data *data)
 {
 	char	**env_array;

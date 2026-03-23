@@ -12,6 +12,9 @@
 
 #include "../minishell.h"
 
+/* If word before redirect exists, have it as token
+	- Add <, > << or >> token with correct type
+	- Advance i and reset start to after the redirect symbol */
 static void	handle_redirect(t_tokens **tokens, char *prompt,
 	t_token_state *state, int is_double)
 {
@@ -41,7 +44,9 @@ static void	handle_redirect(t_tokens **tokens, char *prompt,
 	state->i++;
 	state->start = state->i;
 }
-
+/* Reads current char and decides what to do:
+	- redirect, pipe, quote open/close, space or just i++
+	- skips = inside quotes to be plain character */
 void	handle_tok_type(t_tokens **tokens, char *prompt, t_token_state *state)
 {
 	if (!state->in_quote && prompt[state->i] == '<')
@@ -70,7 +75,9 @@ void	handle_tok_type(t_tokens **tokens, char *prompt, t_token_state *state)
 		return (handle_space(tokens, prompt, state), (void)0);
 	state->i++;
 }
-
+/* Entry point of lexer
+	- walks the full input string char by char with handle_tok_type
+	- assigns quote type if unclosed then calls add_type to finalize */
 void	create_tokens(char *prompt, t_tokens **tokens)
 {
 	t_token_state	*state;
@@ -99,6 +106,8 @@ void	create_tokens(char *prompt, t_tokens **tokens)
 	free(state);
 }
 
+/* Create new token node, sets input, type and default fields,
+   then appends it to the end of the token linked list */
 void	add_token(t_tokens **tokens, char *input, t_node_type type)
 {
 	t_tokens	*new_node;
@@ -124,7 +133,9 @@ void	add_token(t_tokens **tokens, char *input, t_node_type type)
 		node = node->next;
 	node->next = new_node;
 }
-
+/* Adds type to node
+	- word if inside quotes
+	- redir if is redir */
 void	add_type(t_tokens **tokens)
 {
 	t_tokens	*temp;

@@ -6,12 +6,14 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 09:21:04 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/20 13:51:04 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/23 11:19:11 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+/* Skips leading spaces and tabs - used before printing invalid
+	identifier errors so the message matches bash output */
 static char	*trim_left(char *str)
 {
 	while (*str == ' ' || *str == '\t')
@@ -19,6 +21,8 @@ static char	*trim_left(char *str)
 	return (str);
 }
 
+/* Handles export with no = sign (e.g. export VAR)
+	- Validates identifier, then adds to env list without a value */
 int	handle_no_equal(char *arg, t_mshell_data *data)
 {
 	if (arg[0] == '\0')
@@ -33,6 +37,9 @@ int	handle_no_equal(char *arg, t_mshell_data *data)
 	return (add_env_list(arg, data));
 }
 
+/* Handles export with = sign (e.g. export VAR=value)
+	- Extracts name before =, validates it
+	- adds (if new) or updates (if exists) the env list */
 int	handle_equal(char *arg, t_mshell_data *data)
 {
 	char	*equal_sign;
@@ -60,6 +67,10 @@ int	handle_equal(char *arg, t_mshell_data *data)
 	return (0);
 }
 
+/* Export argument goes to the right handler
+	- rejects if starts with -
+	- strips outer quotes
+	- then dispatches to append (+=), equal (=) or no equal handler */
 int	process_export(char *str, t_mshell_data *data)
 {
 	char	*new_str;
@@ -83,6 +94,10 @@ int	process_export(char *str, t_mshell_data *data)
 	return (ret);
 }
 
+/* Entry point for the export builtin:
+	- no args = prints all exported variables
+	- with args = processes each one
+	- keeps worst error as final status */
 int	export(char **commandline, t_mshell_data *data)
 {
 	int	status;

@@ -6,12 +6,16 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/02 12:27:39 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/19 11:11:22 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/23 10:23:31 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+/* Runs syntax errors:
+	- unclosed quotes, shell_level, pipes e redirs 
+	- if okay, calls executor
+	- then updates _ variable */
 void	parser(t_mshell_data *data)
 {
 	if (!data || !data->tokens)
@@ -38,6 +42,9 @@ void	parser(t_mshell_data *data)
 	update_underscore(data);
 }
 
+/* Catches invalid pipe positions:
+	- pipe at start, two pipes in a row, 
+	- redirect immediately followed by pipe, pipe at end */
 int	check_pipe_syntax(t_tokens *tokens)
 {
 	t_tokens	*temp;
@@ -60,6 +67,7 @@ int	check_pipe_syntax(t_tokens *tokens)
 	return (0);
 }
 
+/* Prints the correct syntax error message for each redirect type */
 static void	redir_error(t_node_type type)
 {
 	if (type == NODE_IN)
@@ -75,9 +83,9 @@ static void	redir_error(t_node_type type)
 		ft_putstr_fd("minishell: syntax error near ", 2);
 		ft_putstr_fd("unexpected token `newline'\n", 2);
 	}
-	return ;
 }
 
+/* Helper to see if node is redirect */
 static int	node_redir(t_node_type type)
 {
 	if (type == NODE_IN)
@@ -91,6 +99,8 @@ static int	node_redir(t_node_type type)
 	return (0);
 }
 
+/* Checks that every redirect token is followed by a valid filename word:
+	- not empty, not another redirect, not a pipe */
 int	check_redir_syntax(t_tokens *tokens)
 {
 	t_tokens	*temp;

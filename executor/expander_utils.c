@@ -12,7 +12,7 @@
 
 #include "../minishell.h"
 
-//checks if we have closed brackets
+/* Checks if we have closed brackets */
 static int	valid_bracket(char	*str)
 {
 	int	i;
@@ -35,7 +35,7 @@ static int	valid_bracket(char	*str)
 	return (1);
 }
 
-/*finds brackets and expands what is inside followed by text*/
+/* Finds brackets and expands what is inside followed by text */
 char	*handle_brackets(char	*str, int len, int start, t_mshell_data *data)
 {
 	char	*var_name;
@@ -56,6 +56,9 @@ char	*handle_brackets(char	*str, int len, int start, t_mshell_data *data)
 	return (var_name);
 }
 
+/* Error handler for unclosed ${VAR
+	- prints error, skips rest of input
+	- exit_status to 127 */
 void	var_name_error(char *input, t_mshell_data *data)
 {
 	ft_printf("minishell: unclosed the brackets\n");
@@ -63,6 +66,9 @@ void	var_name_error(char *input, t_mshell_data *data)
 	data->exit_status = 127;
 }
 
+/* Appends a string to expander->result with ft_strjoin
+	- Handles NULL input safely by substituting empty string
+	- Always frees old result after joining */
 void	append_result(char	*str, t_mshell_data *data)
 {
 	char	*temp;
@@ -78,6 +84,9 @@ void	append_result(char	*str, t_mshell_data *data)
 	free(temp);
 }
 
+/* Handles $? and $_ special variables
+	- $? → converts exit_status int to string and appends
+	- $_ → finds "_=" in env list and appends its value */
 void	special_char(char c, t_mshell_data *data)
 {
 	t_env	*temp;

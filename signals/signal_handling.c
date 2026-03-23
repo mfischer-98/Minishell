@@ -38,7 +38,8 @@ void	sig_exec(int sig)
 }
 
 /*	For child process
-	- let command die as usual */
+	- reset signals when child starts
+	- SIG_DFL = default */
 void	sig_default(int sig)
 {
 	(void)sig;
@@ -46,11 +47,11 @@ void	sig_default(int sig)
 	signal(SIGQUIT, SIG_DFL);
 }
 
-/*Used in prompt mode
+/*	Used in prompt mode
 	- Ctrl+C prompt again and Ctrl+\ ignored 
 	- restarts readline if interrupted (RESTART)
 	- Ctr + C calls sigint interactive 
-	- Ctr + \ ignored (SIG_IGN)*/
+	- Ctr + \ ignored (SIG_IGN) */
 void	sig_init(void)
 {
 	struct sigaction	sa;
@@ -63,12 +64,12 @@ void	sig_init(void)
 	sigaction(SIGQUIT, &sa, NULL);
 }
 
-/*Setting up silent status for signals in execve children
+/*	Setting up silent status for signals in execve children
 	- create sigaction struct
 	- RESTART = if system call interrupted retry
-	- set ctrl+c = 130
+	- set ctrl+C = 130
 	- add SIGINT and SIGQUIT with same sa 
-	- new confif (sa) and dont use old handlers (NULL) */
+	- new config (sa) and dont use old handlers (NULL) */
 void	sig_init_exec(void)
 {
 	struct sigaction	sa;

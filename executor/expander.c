@@ -6,23 +6,16 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 09:21:16 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/20 12:31:03 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/23 10:55:40 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-/*Expander
-** If $VAR:
-		1- If VAR exists -> replace by value
-		2- If VAR does not exist new line
-		3- id '$VAR' -> do not expand
-** If $?: replace by exit status number
-** Get_var_len
-** Calculates valid variable name length after $
-** Valid: [a-zA-Z_][a-zA-Z0-9_]*
-** Returns: length or 0 if invalid
-*/
+/* Get_var_len
+	- Calculates valid variable name length after $
+	- Valid = letters and numbers *
+	- Returns: length or 0 if invalid */
 static int	get_var_len(char *str)
 {
 	int	i;
@@ -35,10 +28,9 @@ static int	get_var_len(char *str)
 	return (i);
 }
 
-/*
-** Toggles single/double quote states
-** Returns 1 if quote handled (skip char), 0 otherwise
-** Updates expander->i on toggle
+/* Toggles single/double quote states
+	- Returns 1 if quote handled (skip char), 0 otherwise
+	- Updates expander->i on toggle
 */
 static int	handle_quotes(char c, t_expander *expander)
 {
@@ -57,7 +49,7 @@ static int	handle_quotes(char c, t_expander *expander)
 	return (0);
 }
 
-// Finds environment variable value in the list
+/* Finds environment variable value in the list */
 char	*get_env_var(char *token, t_mshell_data *data)
 {
 	t_env	*temp;
@@ -75,10 +67,8 @@ char	*get_env_var(char *token, t_mshell_data *data)
 	return (ft_strdup(""));
 }
 
-/*
-** Handles $VAR or $? expansion
-** Updates expander->result and expander->i
-*/
+/* Handles $VAR or $? expansion
+	- Updates expander->result and expander->i */
 static void	handle_var(char *input, t_mshell_data *data)
 {
 	int		var_len;
@@ -108,6 +98,10 @@ static void	handle_var(char *input, t_mshell_data *data)
 	return (append_result(value, data), free(value), free(var_name));
 }
 
+/* Main expansion loop: walks input char by char
+	- Skips $ expansion inside single quotes
+	- Always expands in heredoc (delim=2)
+	- Builds result string char by char via append_result */
 char	*expand_tokens(char *input, t_mshell_data *data, int delim)
 {
 	char		*temp;

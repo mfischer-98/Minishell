@@ -6,12 +6,15 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 09:21:01 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/20 13:58:54 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/23 11:21:23 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+/* Validates that a string is a legal shell identifier:
+	- starts with letter or _, followed by alphanumerics or _
+	- handles leading quote char by skipping it before checking */
 int	identifier_valid(char *str)
 {
 	int		i;
@@ -39,8 +42,7 @@ int	identifier_valid(char *str)
 
 /* Checks env list and sees if there is a match
 	return 1 = match
-	return 0 = no match
-*/
+	return 0 = no match */
 int	check_env_list(char *str, t_mshell_data *data)
 {
 	t_env	*temp;
@@ -60,6 +62,8 @@ int	check_env_list(char *str, t_mshell_data *data)
 	return (0);
 }
 
+/* Allocates a new env node and appends it to the end of the envlist
+	- used for new variables */
 int	add_env_list(char *str, t_mshell_data *data)
 {
 	t_env	*temp;
@@ -86,6 +90,8 @@ int	add_env_list(char *str, t_mshell_data *data)
 	return (0);
 }
 
+/* Finds existing variable in env list by name length match
+	- then replaces its var string with the new one (ft_strdup) */
 int	update_env_list(char *str, t_mshell_data *data)
 {
 	t_env	*temp;

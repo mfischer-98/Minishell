@@ -6,12 +6,13 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 09:20:55 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/20 14:02:39 by mefische         ###   ########.fr       */
+/*   Updated: 2026/03/23 11:26:42 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+/* Returns length of name before the + in name+=value */
 int	get_name_len(char	*str)
 {
 	int	i;
@@ -22,6 +23,8 @@ int	get_name_len(char	*str)
 	return (i);
 }
 
+/* Extracts the value after += from the full name+=value string
+	- Returns NULL if += not found */
 char	*get_append_value(char	*str)
 {
 	char	*value;
@@ -32,6 +35,9 @@ char	*get_append_value(char	*str)
 	return (ft_strdup(value + 2));
 }
 
+/* Finds the var string in env list matching name
+	- Returns pointer directly into the list
+	- Read old value before building the new appended string */
 char	*get_old_var(char *name, int len, t_mshell_data *data)
 {
 	t_env	*temp;
@@ -47,6 +53,9 @@ char	*get_old_var(char *name, int len, t_mshell_data *data)
 	return (NULL);
 }
 
+/* Builds the new var string by appending new_value to old
+	- If old_var has = already (NAME=old), just joins old+new
+	- If no = (unset var), builds NAME=new from scratch */
 char	*build_var(char *name, char *old_var, char *new_value)
 {
 	char	*temp;
@@ -70,7 +79,11 @@ char	*build_var(char *name, char *old_var, char *new_value)
 	return (temp);
 }
 
-int	handle_append(char *str, t_mshell_data *data) //str: name+=value
+/* Main handler for += append operator
+	- Extracts name and value, finds old var, builds new string,
+	updates env list
+	- If var doesn't exist yet, adds value */
+int	handle_append(char *str, t_mshell_data *data)
 {
 	int		name_len;
 	char	*name;

@@ -18,6 +18,9 @@ void	update_sig_status(t_mshell_data *data)
 	g_signal = 0;
 }
 
+/* Loops prompt forever 
+	- show prompt -> read input -> tokenize
+	-> parser executor -> cleanup -> repeat */
 static void	main_loop(t_mshell_data *data)
 {
 	char	*prompt;
@@ -68,21 +71,3 @@ int	main(int argc, char **argv, char **envp)
 	rl_clear_history();
 	return (exit_code);
 }
-
-/* int	main(int argc, char **argv, char **envp)
-{
-	t_mshell_data	*data;
-	int				exit_status;
-
-	(void)argc;
-	(void)argv;
-	print_banner();
-	initialize(&data, envp);
-	rl_catch_signals = 0;
-	sig_init();
-	main_loop(data);
-	exit_status = data->exit_status;
-	free_data(data);
-	rl_clear_history();
-	return (exit_status);
-} */
