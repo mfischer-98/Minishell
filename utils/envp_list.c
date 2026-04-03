@@ -6,7 +6,7 @@
 /*   By: mefische <mefische@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 09:21:33 by mefische          #+#    #+#             */
-/*   Updated: 2026/03/20 12:29:27 by mefische         ###   ########.fr       */
+/*   Updated: 2026/04/03 12:22:01 by mefische         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,8 @@ void	print_env(t_mshell_data *data)
 	temp = data->env_var;
 	while (temp)
 	{
-		ft_printf("%s\n", temp->var);
+		if (ft_strchr(temp->var, '='))
+			ft_printf("%s\n", temp->var);
 		temp = temp->next;
 	}
 }
