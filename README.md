@@ -2,6 +2,8 @@
 
 # Minishell
 
+<img width="800" height="247" alt="ezgif com-video-to-gif-converter" src="https://github.com/user-attachments/assets/4f874cbf-018a-423f-a127-a207fb3775a4" />
+
 ## Description
 
 Minishell is a project where we built our own simple Unix shell from scratch. The idea was to better understand how shells like bash actually work behind the scenes.
